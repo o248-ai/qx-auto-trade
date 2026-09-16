@@ -486,10 +486,10 @@ router.post('/admin-login', async (req, res) => {
     const users = db.get('users') || [];
     const adminUser = users.find(u => 
       u.email.toLowerCase() === normalizedEmail ||
-      (u.role === 'MASTER_ADMIN' && (normalizedEmail === 'admin@qxautotrade.com' || normalizedEmail === 'admin@quotexautotrade.com'))
+      (u.role === 'MASTER_ADMIN' && normalizedEmail === 'admin@qxautotrade.com')
     );
 
-    const isMasterEmail = (normalizedEmail === 'admin@qxautotrade.com' || normalizedEmail === 'admin@quotexautotrade.com' || adminUser?.role === 'MASTER_ADMIN' || adminUser?.role === 'ADMIN');
+    const isMasterEmail = (normalizedEmail === 'admin@qxautotrade.com' || adminUser?.role === 'MASTER_ADMIN' || adminUser?.role === 'ADMIN');
     if (!isMasterEmail && !adminUser) {
       return res.status(401).json({ error: 'Invalid Master Admin credentials.' });
     }

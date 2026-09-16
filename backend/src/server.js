@@ -130,11 +130,10 @@ if (!fs.existsSync(frontendDist)) {
 console.log(`[Static Files] Serving fresh frontend production build from: ${frontendDist}`);
 
 const dashboardDist = path.join(frontendDist, 'dashboard-app');
-const dashboardRoutes = ['/dashboard', '/strategies', '/settings', '/history', '/performance', '/subscriptions', '/support'];
-const adminRoutes2 = ['/admin', '/admin/login', '/admin/dashboard', '/admin/users', '/admin/strategies', '/admin/subscriptions', '/admin/deposits', '/admin/live-sessions', '/admin/plan-manager', '/admin/site-config', '/admin/announcements', '/admin/emergency', '/admin/trade-logs', '/admin/activity-logs', '/admin/audit', '/admin/error-logs', '/admin/security'];
 
-// Serve dashboard static assets
+// Serve dashboard and admin static assets
 app.use('/dashboard', express.static(dashboardDist));
+app.use('/admin', express.static(dashboardDist));
 
 // Explicit APK Download Route
 app.get([
@@ -172,18 +171,9 @@ app.get([
   res.status(404).send('APK file not found');
 });
 
-// Dashboard SPA routes
-dashboardRoutes.forEach((route) => {
-  app.get(route, (req, res) => {
-    res.sendFile(path.join(dashboardDist, 'index.html'));
-  });
-});
-
-// Admin SPA routes - serve dashboard app
-adminRoutes2.forEach((route) => {
-  app.get(route, (req, res) => {
-    res.sendFile(path.join(dashboardDist, 'index.html'));
-  });
+// Explicit routes for dashboard & admin entry
+app.get(['/dashboard', '/admin'], (req, res) => {
+  res.sendFile(path.join(dashboardDist, 'index.html'));
 });
 
 // Serve original frontend for everything else
