@@ -1,6 +1,21 @@
 {
   "users": [
     {
+      "id": "user-1789592876507",
+      "name": "ok",
+      "email": "test@gmail.com",
+      "role": "USER",
+      "subscriptionPlan": "Free Trial",
+      "plan": "Free Trial",
+      "subExpiresAt": "2026-10-16T21:07:56.507Z",
+      "planExpiresAt": "2026-10-16T21:07:56.507Z",
+      "isLifetimeApproved": false,
+      "isActive": true,
+      "createdAt": "2026-09-16T21:07:56.507Z",
+      "isFreeTrialExpired": false,
+      "passwordHash": "$2a$10$w8T06o3Y0H1KjJ0z4l2a2.0A/Wc9hFq7y1D9e8g7f6e5d4c3b2a1"
+    },
+    {
       "id": "qx-1754407",
       "name": "Trader qx-17544",
       "email": "qx-1754407@trader.quotex",
@@ -20,15 +35,16 @@
       "name": "trader",
       "email": "trader@quotex.com",
       "role": "USER",
-      "subscriptionPlan": "Free Trial",
-      "plan": "Free Trial",
-      "subExpiresAt": "2026-09-16T21:49:15.380Z",
-      "planExpiresAt": "2026-09-16T21:49:15.380Z",
+      "subscriptionPlan": "Basic Plan",
+      "plan": "Basic Plan",
+      "subExpiresAt": "2026-09-16T21:49",
+      "planExpiresAt": "2026-09-16T21:49",
       "isLifetimeApproved": false,
       "isActive": true,
       "createdAt": "2026-09-16T20:49:15.380Z",
       "isFreeTrialExpired": false,
-      "passwordHash": "$2a$10$w8T06o3Y0H1KjJ0z4l2a2.0A/Wc9hFq7y1D9e8g7f6e5d4c3b2a1"
+      "passwordHash": "$2a$10$w8T06o3Y0H1KjJ0z4l2a2.0A/Wc9hFq7y1D9e8g7f6e5d4c3b2a1",
+      "active": true
     },
     {
       "id": "admin-1",
@@ -47,22 +63,6 @@
       "plan": "Premium Plan",
       "isFreeTrialExpired": false,
       "planExpiresAt": "2099-12-31T23:59:59.000Z"
-    },
-    {
-      "id": "user-1788612470060",
-      "name": "Om",
-      "email": "omchoubey123@gmail.com",
-      "passwordHash": "$2a$10$w8T06o3Y0H1KjJ0z4l2a2.0A/Wc9hFq7y1D9e8g7f6e5d4c3b2a1",
-      "role": "USER",
-      "isActive": true,
-      "subscriptionPlan": "Lifetime VIP",
-      "subExpiresAt": "2099-12-31T23:59:59.000Z",
-      "planExpiresAt": "2099-12-31T23:59:59.000Z",
-      "isLifetimeApproved": true,
-      "depositVerified": true,
-      "createdAt": "2026-09-05T12:47:50.060Z",
-      "plan": "Lifetime VIP",
-      "isFreeTrialExpired": false
     },
     {
       "id": "user-demo-1",
@@ -145,7 +145,23 @@
       "plan": "Free Trial",
       "isFreeTrialExpired": false,
       "planExpiresAt": "2027-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "user-1788612470060",
+      "name": "Om",
+      "email": "omchoubey123@gmail.com",
+      "passwordHash": "$2a$10$w8T06o3Y0H1KjJ0z4l2a2.0A/Wc9hFq7y1D9e8g7f6e5d4c3b2a1",
+      "role": "USER",
+      "isActive": true,
+      "subscriptionPlan": "Lifetime VIP",
+      "subExpiresAt": "2099-12-31T23:59:59.000Z",
+      "planExpiresAt": "2099-12-31T23:59:59.000Z",
+      "isLifetimeApproved": true,
+      "depositVerified": true,
+      "createdAt": "2026-09-05T12:47:50.060Z",
+      "plan": "Lifetime VIP",
+      "isFreeTrialExpired": false
     }
   ],
-  "updatedAt": "2026-09-16T20:58:49.055Z"
+  "updatedAt": "2026-09-16T21:22:52.851Z"
 }

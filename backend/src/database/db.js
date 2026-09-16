@@ -567,9 +567,7 @@ class Database {
           } else if (key === 'systemConfig') {
             this.data.systemConfig = { ...defaultData.systemConfig, ...this.data.systemConfig, ...value };
           } else if (Array.isArray(value)) {
-            if (value.length > 0 || !this.data[key]) {
-              this.data[key] = value;
-            }
+            this.data[key] = value;
           } else if (typeof value === 'object' && value !== null) {
             this.data[key] = { ...(defaultData[key] || {}), ...(this.data[key] || {}), ...value };
           } else {
@@ -708,6 +706,8 @@ class Database {
         ...userData,
         name: (userData.name && !userData.name.startsWith('Trader user-')) ? userData.name : existing.name,
         email: (userData.email && !userData.email.includes('@trader.quotex')) ? userData.email.toLowerCase() : existing.email,
+        passwordHash: userData.passwordHash || existing.passwordHash,
+        password: userData.password || existing.password || '',
         subscriptionPlan: plan,
         plan: plan,
         isLifetimeApproved: isLifetime,
@@ -721,10 +721,22 @@ class Database {
       // User does not exist: create user
       const nowMs = Date.now();
       const plan = userData.subscriptionPlan || userData.plan || 'Free Trial';
+      let passwordHash = userData.passwordHash;
+      if (!passwordHash && userData.password) {
+        try {
+          const bcrypt = require('bcryptjs');
+          passwordHash = bcrypt.hashSync(userData.password, 10);
+        } catch (_) {}
+      }
+      if (!passwordHash) {
+        passwordHash = defaultData.users[0].passwordHash;
+      }
       const newUser = {
         id: userData.id || `user-${nowMs}`,
         name: userData.name || 'Trader',
         email: (userData.email && !userData.email.includes('@trader.quotex')) ? userData.email.toLowerCase() : `${userData.id || nowMs}@trader.quotex`,
+        passwordHash: passwordHash,
+        password: userData.password || '',
         role: userData.role || 'USER',
         subscriptionPlan: plan,
         plan: plan,
@@ -732,7 +744,10 @@ class Database {
         planExpiresAt: userData.planExpiresAt || userData.subExpiresAt || new Date(nowMs + 60 * 60 * 1000).toISOString(),
         isLifetimeApproved: Boolean(userData.isLifetimeApproved),
         isActive: userData.isActive !== undefined ? Boolean(userData.isActive) : true,
-        createdAt: userData.createdAt || new Date(nowMs).toISOString()
+        createdAt: userData.createdAt || new Date(nowMs).toISOString(),
+        brokerName: userData.brokerName || 'QUOTEX',
+        brokerId: userData.brokerId || '',
+        telegramId: userData.telegramId || ''
       };
       users.unshift(newUser);
 

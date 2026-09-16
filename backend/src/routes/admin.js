@@ -93,7 +93,7 @@ router.post('/edit-user-details', (req, res) => {
   try {
     const { userId, name, email, subscriptionPlan, plan, subExpiresAt, planExpiresAt, isFreeTrialExpired, isActive, active, isLifetimeApproved, telegramId, brokerId, brokerName, tradingMode, maxMtgLevel, adminEmail } = req.body;
     const users = db.get('users');
-    const user = users.find(u => u.id === userId);
+    const user = users.find(u => u.id === userId || (u.email && u.email.toLowerCase() === (userId || '').toLowerCase()));
 
     if (!user) return res.status(404).json({ error: 'User not found.' });
 
@@ -668,26 +668,33 @@ router.post('/site-config', (req, res) => {
 
 // Plan Subscriptions List & Approval / Rejection
 router.get('/plan-subscriptions', (req, res) => {
+  const users = db.get('users') || [];
   let subscriptions = db.get('planSubscriptions') || [];
   const referralRequests = db.get('referralRequests') || [];
   const deletedIds = new Set(db.get('deletedSubscriptionIds') || []);
 
   // Filter out any explicitly deleted subscriptions
-  subscriptions = subscriptions.filter(s => !deletedIds.has(s.id) && !deletedIds.has(s.paymentTxId));
+  subscriptions = subscriptions.filter(s => {
+    if (deletedIds.has(s.id) || deletedIds.has(s.paymentTxId) || (s.refRequestId && deletedIds.has(s.refRequestId))) return false;
+    return true;
+  });
 
   // Merge any referral free access requests not already present and NOT deleted
   let added = false;
   referralRequests.forEach(ref => {
-    const freeSubId = `sub-free-${ref.id}`;
+    const freeSubId = ref.subId || `sub-free-${ref.id}`;
     const txId = `FREE-${ref.referralUid}-${ref.id}`;
-    if (deletedIds.has(freeSubId) || deletedIds.has(ref.id) || deletedIds.has(txId)) return;
+    if (deletedIds.has(freeSubId) || deletedIds.has(ref.id) || deletedIds.has(txId) || deletedIds.has(ref.subId)) return;
 
-    const existing = subscriptions.find(s => s.id === freeSubId || s.paymentTxId === txId || (s.userId === ref.userId && s.type === 'free_access'));
+    const existing = subscriptions.find(s => s.id === freeSubId || s.id === ref.subId || s.paymentTxId === txId || (s.refRequestId && s.refRequestId === ref.id) || (s.userId === ref.userId && s.type === 'free_access'));
     if (!existing) {
+      const u = users.find(usr => usr.id === ref.userId || (ref.userEmail && usr.email && usr.email.toLowerCase() === ref.userEmail.toLowerCase()));
       subscriptions.unshift({
         id: freeSubId,
+        refRequestId: ref.id,
         userId: ref.userId,
-        userEmail: ref.userEmail,
+        userEmail: (u && u.email) ? u.email : (ref.userEmail || ''),
+        userName: (u && u.name) ? u.name : (ref.userName || 'Trader'),
         planName: 'Lifetime VIP (Free Access)',
         price: '$0 (Deposit Proof)',
         period: 'Lifetime',
@@ -699,6 +706,17 @@ router.get('/plan-subscriptions', (req, res) => {
         createdAt: ref.createdAt || new Date().toISOString()
       });
       added = true;
+    }
+  });
+
+  // Enrich ALL subscriptions with user name and user email from db.users if placeholder/missing
+  subscriptions.forEach(s => {
+    const u = users.find(usr => usr.id === s.userId || (s.userEmail && usr.email && usr.email.toLowerCase() === s.userEmail.toLowerCase()));
+    if (u) {
+      if (!s.userName || s.userName === 'Trader') s.userName = u.name || s.userName;
+      if (!s.userEmail || s.userEmail.includes('@trader.quotex') || s.userEmail.includes('@user.local') || s.userEmail === 'user@qxautotrade.com') {
+        s.userEmail = u.email || s.userEmail;
+      }
     }
   });
 
@@ -954,23 +972,35 @@ router.post('/delete-plan-subscription', (req, res) => {
     subscriptions = subscriptions.filter(s => s.id !== subId);
     db.set('planSubscriptions', subscriptions);
 
+    // Collect all IDs associated with this subscription
+    const idsToBlacklist = new Set([subId]);
+    if (target?.paymentTxId) idsToBlacklist.add(target.paymentTxId);
+    if (target?.refRequestId) idsToBlacklist.add(target.refRequestId);
+
+    const rawTimestamp = subId.replace(/^sub-free-(ref-req-)?/, '').replace(/^sub-req-/, '');
+    if (rawTimestamp) {
+      idsToBlacklist.add(rawTimestamp);
+      idsToBlacklist.add(`ref-req-${rawTimestamp}`);
+      idsToBlacklist.add(`sub-free-${rawTimestamp}`);
+      idsToBlacklist.add(`sub-free-ref-req-${rawTimestamp}`);
+    }
+
     // Also clean up matching item from referralRequests so it NEVER resurrects!
     let referralRequests = db.get('referralRequests') || [];
     referralRequests = referralRequests.filter(ref => {
-      if (subId === `sub-free-${ref.id}` || subId === ref.id) return false;
-      if (target && target.paymentTxId && target.paymentTxId === `FREE-${ref.referralUid}-${ref.id}`) return false;
-      if (target && target.type === 'free_access' && target.userId === ref.userId) return false;
+      if (idsToBlacklist.has(ref.id) || idsToBlacklist.has(ref.subId)) return false;
+      if (target && target.userId && ref.userId === target.userId && (target.type === 'free_access' || target.planName?.includes('Lifetime'))) return false;
+      if (target && target.paymentTxId && (target.paymentTxId.includes(ref.id) || (ref.referralUid && target.paymentTxId.includes(ref.referralUid)))) return false;
       return true;
     });
     db.set('referralRequests', referralRequests);
 
     // Track in deletedSubscriptionIds blacklist
     let deletedIds = db.get('deletedSubscriptionIds') || [];
-    if (!deletedIds.includes(subId)) {
-      deletedIds.push(subId);
-      if (target?.paymentTxId) deletedIds.push(target.paymentTxId);
-      db.set('deletedSubscriptionIds', deletedIds);
-    }
+    idsToBlacklist.forEach(id => {
+      if (id && !deletedIds.includes(id)) deletedIds.push(id);
+    });
+    db.set('deletedSubscriptionIds', deletedIds);
 
     db.get('auditLogs').unshift({
       id: `audit-${Date.now()}`,
@@ -999,21 +1029,35 @@ router.post('/bulk-delete-plan-subscriptions', (req, res) => {
     const remaining = subscriptions.filter(s => !idSet.has(s.id));
     db.set('planSubscriptions', remaining);
 
+    const idsToBlacklist = new Set(ids);
+    targets.forEach(t => {
+      if (t.paymentTxId) idsToBlacklist.add(t.paymentTxId);
+      if (t.refRequestId) idsToBlacklist.add(t.refRequestId);
+      const rawTimestamp = t.id.replace(/^sub-free-(ref-req-)?/, '').replace(/^sub-req-/, '');
+      if (rawTimestamp) {
+        idsToBlacklist.add(rawTimestamp);
+        idsToBlacklist.add(`ref-req-${rawTimestamp}`);
+        idsToBlacklist.add(`sub-free-${rawTimestamp}`);
+        idsToBlacklist.add(`sub-free-ref-req-${rawTimestamp}`);
+      }
+    });
+
     // Clean up referralRequests
     let referralRequests = db.get('referralRequests') || [];
     referralRequests = referralRequests.filter(ref => {
-      if (idSet.has(ref.id) || idSet.has(`sub-free-${ref.id}`)) return false;
+      if (idsToBlacklist.has(ref.id) || idsToBlacklist.has(ref.subId)) return false;
       for (const t of targets) {
-        if (t.paymentTxId === `FREE-${ref.referralUid}-${ref.id}`) return false;
-        if (t.type === 'free_access' && t.userId === ref.userId) return false;
+        if (t.userId && ref.userId === t.userId && (t.type === 'free_access' || t.planName?.includes('Lifetime'))) return false;
+        if (t.paymentTxId && (t.paymentTxId.includes(ref.id) || (ref.referralUid && t.paymentTxId.includes(ref.referralUid)))) return false;
       }
       return true;
     });
     db.set('referralRequests', referralRequests);
 
     let deletedIds = db.get('deletedSubscriptionIds') || [];
-    ids.forEach(id => { if (!deletedIds.includes(id)) deletedIds.push(id); });
-    targets.forEach(t => { if (t.paymentTxId && !deletedIds.includes(t.paymentTxId)) deletedIds.push(t.paymentTxId); });
+    idsToBlacklist.forEach(id => {
+      if (id && !deletedIds.includes(id)) deletedIds.push(id);
+    });
     db.set('deletedSubscriptionIds', deletedIds);
 
     db.get('auditLogs').unshift({

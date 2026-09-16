@@ -295,23 +295,18 @@ router.get('/profile/:userId', (req, res) => {
 
     // Calculate user's Free Access / Lifetime status
     let freeAccessStatus = 'NONE';
-    if (user.isLifetimeApproved) {
-      freeAccessStatus = 'APPROVED';
-    } else if (user.subscriptionPlan === 'Free Trial' || (user.subscriptionPlan && user.subscriptionPlan.toLowerCase() === 'free trial')) {
-      // If admin explicitly set user to Free Trial, freeAccessStatus is NONE
-      freeAccessStatus = 'NONE';
-    } else {
-      const uEmail = (user.email || '').toLowerCase().trim();
-      const userFreeSubs = planSubs.filter(s => (s.userId === user.id || (s.userEmail && s.userEmail.toLowerCase().trim() === uEmail)) && (s.type === 'free_access' || (s.planName && s.planName.includes('Lifetime'))));
-      const userRefReqs = referralRequests.filter(r => r.userId === user.id || (r.userEmail && r.userEmail.toLowerCase().trim() === uEmail));
+    const uEmail = (user.email || '').toLowerCase().trim();
+    const userFreeSubs = planSubs.filter(s => (s.userId === user.id || (s.userEmail && s.userEmail.toLowerCase().trim() === uEmail)) && (s.type === 'free_access' || (s.planName && s.planName.includes('Lifetime'))));
+    const userRefReqs = referralRequests.filter(r => r.userId === user.id || (r.userEmail && r.userEmail.toLowerCase().trim() === uEmail));
 
-      if (userFreeSubs.some(s => s.status === 'APPROVED') || userRefReqs.some(r => r.status === 'APPROVED')) {
-        freeAccessStatus = 'APPROVED';
-      } else if (userFreeSubs.some(s => s.status === 'PENDING') || userRefReqs.some(r => r.status === 'PENDING')) {
-        freeAccessStatus = 'PENDING';
-      } else if (userFreeSubs.some(s => s.status === 'REJECTED') || userRefReqs.some(r => r.status === 'REJECTED')) {
-        freeAccessStatus = 'REJECTED';
-      }
+    if (user.isLifetimeApproved || userFreeSubs.some(s => s.status === 'APPROVED') || userRefReqs.some(r => r.status === 'APPROVED')) {
+      freeAccessStatus = 'APPROVED';
+    } else if (userFreeSubs.some(s => s.status === 'PENDING') || userRefReqs.some(r => r.status === 'PENDING')) {
+      freeAccessStatus = 'PENDING';
+    } else if (userFreeSubs.some(s => s.status === 'REJECTED') || userRefReqs.some(r => r.status === 'REJECTED')) {
+      freeAccessStatus = 'REJECTED';
+    } else {
+      freeAccessStatus = 'NONE';
     }
 
     return res.json({
@@ -458,11 +453,16 @@ router.post('/subscribe-plan', (req, res) => {
       return res.status(400).json({ error: 'Please provide a valid Transaction Hash / UTR or Payment Reference.' });
     }
 
+    const users = db.get('users') || [];
+    const matchedUser = users.find(u => (userId && u.id === userId) || (userEmail && u.email && u.email.toLowerCase() === userEmail.toLowerCase()));
+    const finalEmail = (matchedUser && matchedUser.email) ? matchedUser.email : (userEmail || 'user@qxautotrade.com');
+    const finalName = (matchedUser && matchedUser.name) ? matchedUser.name : (userName || 'Trader');
+
     const newSub = {
       id: `sub-req-${Date.now()}`,
       userId,
-      userEmail: userEmail || 'user@qxautotrade.com',
-      userName: userName || 'Trader',
+      userEmail: finalEmail,
+      userName: finalName,
       planName,
       price: price || '$0',
       paymentMethod: paymentMethod || 'USDT',

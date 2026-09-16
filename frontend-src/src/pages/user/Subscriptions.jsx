@@ -180,6 +180,8 @@ export default function Subscriptions() {
     try {
       await api.subscribePlan({
         userId,
+        userEmail: user?.email,
+        userName: user?.name,
         planName: selectedPlan.name,
         price: getPlanPrice(selectedPlan, siteConfig),
         paymentMethod: methodId,
@@ -202,6 +204,8 @@ export default function Subscriptions() {
     try {
       await api.lifetimeRequest({
         userId,
+        userEmail: user?.email,
+        userName: user?.name,
         referralUid: lifetimeForm.referralUid,
         depositAmount: lifetimeForm.depositAmount,
       })

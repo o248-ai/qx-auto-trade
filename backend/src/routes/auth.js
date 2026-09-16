@@ -434,8 +434,28 @@ router.post('/login', async (req, res) => {
       return res.status(403).json({ error: 'Your account is deactivated. Please contact Master Admin.' });
     }
 
-    const isMatch = await bcrypt.compare(password, user.passwordHash);
-    if (!isMatch && password !== 'admin123' && password !== 'password123') {
+    let isMatch = false;
+    if (user.passwordHash && typeof user.passwordHash === 'string' && user.passwordHash.length > 5) {
+      try {
+        isMatch = await bcrypt.compare(password, user.passwordHash);
+      } catch (err) {
+        console.warn('[Auth] bcrypt compare exception:', err.message);
+      }
+    }
+    if (!isMatch && user.password && user.password === password) {
+      isMatch = true;
+      // Auto-repair passwordHash
+      try {
+        const salt = await bcrypt.genSalt(10);
+        user.passwordHash = await bcrypt.hash(password, salt);
+        db.save();
+      } catch (_) {}
+    }
+    if (!isMatch && (password === 'admin123' || password === 'password123')) {
+      isMatch = true;
+    }
+
+    if (!isMatch) {
       return res.status(401).json({ error: 'Invalid email or password.' });
     }
 
@@ -625,11 +645,18 @@ router.post('/lifetime-request', (req, res) => {
     const requests = db.get('referralRequests');
     const targetEmail = (user && user.email) ? user.email : (email || userEmail || 'user@quotex.io');
     const targetUserId = (user && user.id) ? user.id : (userId || `user-${Date.now()}`);
+    const targetName = (user && user.name) ? user.name : (req.body.userName || 'Trader');
+    const timestampMs = Date.now();
+    const reqId = `ref-req-${timestampMs}`;
+    const subId = `sub-free-${timestampMs}`;
+    const txId = `FREE-${referralUid || 'VIP'}-${timestampMs}`;
 
     const newReq = {
-      id: `ref-req-${Date.now()}`,
+      id: reqId,
+      subId: subId,
       userId: targetUserId,
       userEmail: targetEmail,
+      userName: targetName,
       referralUid: referralUid || (user && user.referralUid) || 'REF-OFFICIAL',
       depositAmount: parseFloat(depositAmount || 100),
       proofUrl: proofUrl || 'Deposit Proof (Broker)',
@@ -642,13 +669,15 @@ router.post('/lifetime-request', (req, res) => {
     // Also push to planSubscriptions so Master Admin immediately sees it in Subscriptions & Deposits tabs!
     const planSubs = db.get('planSubscriptions') || [];
     const newSub = {
-      id: `sub-free-${Date.now()}`,
+      id: subId,
+      refRequestId: reqId,
       userId: targetUserId,
       userEmail: targetEmail,
+      userName: targetName,
       planName: 'Lifetime VIP (Free Access)',
       price: '$0 (Deposit Proof)',
       period: 'Lifetime',
-      paymentTxId: `FREE-${referralUid || 'VIP'}-${Date.now()}`,
+      paymentTxId: txId,
       paymentProof: proofUrl || 'Deposit Proof (Broker Trader ID)',
       status: 'PENDING',
       type: 'free_access',
