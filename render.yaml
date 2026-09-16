@@ -3,6 +3,8 @@ services:
     name: qx-auto-trade
     runtime: node
     plan: free
+    branch: master
+    autoDeployTrigger: commit
     buildCommand: npm install --prefix backend
     startCommand: node backend/src/server.js
     envVars:
