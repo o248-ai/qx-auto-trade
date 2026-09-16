@@ -200,9 +200,20 @@ setupWebSocketServer(server);
 
 const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, () => {
-  console.log(`=======================================================`);
-  console.log(` QX AUTO TRADE Backend Server listening on port ${PORT}`);
-  console.log(` WebSocket Real-Time Server Ready`);
-  console.log(`=======================================================`);
-});
+async function startServer() {
+  try {
+    console.log('[Server] Connecting to MongoDB Atlas and restoring cloud snapshot...');
+    await db.initMongo();
+  } catch (err) {
+    console.error('[Server] Cloud sync on startup error (fallback active):', err.message);
+  }
+
+  server.listen(PORT, () => {
+    console.log(`=======================================================`);
+    console.log(` QX AUTO TRADE Backend Server listening on port ${PORT}`);
+    console.log(` WebSocket Real-Time Server Ready`);
+    console.log(`=======================================================`);
+  });
+}
+
+startServer();

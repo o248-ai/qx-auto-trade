@@ -228,7 +228,7 @@ const defaultData = {
     instagramLink: 'https://instagram.com/quotexautotrade',
     youtubeLink: 'https://youtube.com/c/quotexautotrade',
     youtubeEmbedCode: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    referralLink: 'https://quotex.com/ref/official',
+    referralLink: 'https://broker-qx.pro/sign-up/?lid=1650958',
     referralDepositAmount: 150,
     priceBasic: 49,
     pricePro: 129,
@@ -238,10 +238,10 @@ const defaultData = {
     enableBankTransfer: true,
     enableUSDT: true,
     brokerLinks: {
-      quotex: 'https://broker-qx.pro/sign-up/?lid=345678',
+      quotex: 'https://broker-qx.pro/sign-up/?lid=1650958',
       pocketOption: 'https://pocketoption.com/register',
-      binomo: 'https://binomo.com',
-      olympTrade: 'https://olymptrade.com'
+      binomo: 'https://binomo.com/register',
+      olympTrade: 'https://olymptrade.com/register'
     },
     footerText: 'QUOTEX AUTO TRADE © 2026. All rights reserved.',
     paymentUsdt: 'TQUOTEXautoTradeAddress1234567890USDT',
@@ -536,7 +536,12 @@ class Database {
       const mongoose = require('mongoose');
       mongooseInstance = mongoose;
       console.log('[DB-Mongo] Connecting to MongoDB Atlas cloud database...');
-      await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 10000 });
+      await mongoose.connect(mongoUri, {
+        serverSelectionTimeoutMS: 30000,
+        connectTimeoutMS: 30000,
+        socketTimeoutMS: 45000,
+        maxPoolSize: 10
+      });
       this.mongoConnected = true;
       console.log('[DB-Mongo] Connected to MongoDB Atlas successfully! Permanent cloud persistence active.');
 
@@ -572,6 +577,25 @@ class Database {
           }
         }
 
+        // Guarantee userRegistrationEnabled strictly defaults to true
+        if (!this.data.systemConfig.emergencyControls) {
+          this.data.systemConfig.emergencyControls = {
+            userRegistrationEnabled: true,
+            userLoginEnabled: true,
+            tradingStrategiesEnabled: true
+          };
+        }
+        if (this.data.systemConfig.emergencyControls.userRegistrationEnabled === undefined) {
+          this.data.systemConfig.emergencyControls.userRegistrationEnabled = true;
+        }
+
+        if (!this.data.siteConfig.emergencyControls) {
+          this.data.siteConfig.emergencyControls = { ...this.data.systemConfig.emergencyControls };
+        }
+        if (this.data.siteConfig.emergencyControls.userRegistrationEnabled === undefined) {
+          this.data.siteConfig.emergencyControls.userRegistrationEnabled = true;
+        }
+
         this.save();
         console.log(`[DB-Mongo] Cloud state restored. Total users: ${this.data.users?.length || 0}`);
       } else {
@@ -585,11 +609,24 @@ class Database {
   }
 
   async syncToMongo() {
+    if (!this.mongoConnected) {
+      try {
+        await this.initMongo();
+      } catch (_) {}
+    }
     if (!this.mongoConnected || !AppDataModel) return;
     try {
+      // Keep MongoDB payload lean (<50KB) so queries never time out
+      const payload = { ...this.data };
+      if (Array.isArray(payload.auditLogs) && payload.auditLogs.length > 100) {
+        payload.auditLogs = payload.auditLogs.slice(0, 100);
+      }
+      if (Array.isArray(payload.tradeLogs) && payload.tradeLogs.length > 100) {
+        payload.tradeLogs = payload.tradeLogs.slice(0, 100);
+      }
       await AppDataModel.findOneAndUpdate(
         { key: 'qx_app_data' },
-        { data: this.data, updatedAt: new Date() },
+        { data: payload, updatedAt: new Date() },
         { upsert: true, returnDocument: 'after' }
       );
       console.log('[DB-Mongo] State saved to MongoDB Atlas.');

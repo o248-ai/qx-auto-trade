@@ -1131,6 +1131,7 @@ router.post('/delete-announcement', (req, res) => {
     if (idx !== -1) {
       announcements.splice(idx, 1);
       db.set('announcements', announcements);
+      syncAnnouncementToSiteConfig(announcements);
       db.save();
     }
     return res.json({ message: 'Announcement deleted.' });

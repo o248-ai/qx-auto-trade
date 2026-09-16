@@ -44,10 +44,25 @@ export default function AdminEmergency() {
     catch (e) { showToast(e.message, 'error') } finally { setLoading(false) }
   }
 
+  const handleResetDefaults = async () => {
+    setLoading(true)
+    try {
+      await api.toggleEmergencyControl({ controlKey: 'userRegistrationEnabled', enabled: true })
+      await api.toggleEmergencyControl({ controlKey: 'userLoginEnabled', enabled: true })
+      await api.toggleEmergencyControl({ controlKey: 'tradingStrategiesEnabled', enabled: true })
+      showToast('All controls restored to Default ON (Active)')
+      fetchStats()
+    } catch (e) {
+      showToast(e.message, 'error')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const controls = [
-    { key: 'userRegistrationEnabled', label: 'User Registration', desc: 'Allow new user sign-ups', icon: UserPlus, enabled: stats.systemConfig?.emergencyControls?.userRegistrationEnabled !== false },
-    { key: 'userLoginEnabled', label: 'User Login', desc: 'Allow users to log in', icon: LogIn, enabled: stats.systemConfig?.emergencyControls?.userLoginEnabled !== false },
-    { key: 'tradingStrategiesEnabled', label: 'Trading Strategies', desc: 'Allow strategy execution', icon: Brain, enabled: stats.systemConfig?.emergencyControls?.tradingStrategiesEnabled !== false },
+    { key: 'userRegistrationEnabled', label: 'User Registration', desc: 'Allow new user sign-ups (Default: ON / ALLOWED)', icon: UserPlus, enabled: stats.systemConfig?.emergencyControls?.userRegistrationEnabled !== false },
+    { key: 'userLoginEnabled', label: 'User Login', desc: 'Allow users to log in (Default: ON / ACTIVE)', icon: LogIn, enabled: stats.systemConfig?.emergencyControls?.userLoginEnabled !== false },
+    { key: 'tradingStrategiesEnabled', label: 'Trading Strategies', desc: 'Allow strategy execution (Default: ON / ACTIVE)', icon: Brain, enabled: stats.systemConfig?.emergencyControls?.tradingStrategiesEnabled !== false },
   ]
 
   if (statsLoading) return <div className="flex items-center justify-center h-64"><Loader2 className="w-5 h-5 animate-spin text-gray-400" /></div>
@@ -56,9 +71,23 @@ export default function AdminEmergency() {
     <div className="space-y-4 max-w-3xl">
       {toast && <div className={`fixed top-4 right-4 z-50 px-4 py-2.5 rounded-lg text-sm font-semibold shadow-lg ${toast.type === 'error' ? 'bg-red-600 text-white' : 'bg-emerald-600 text-white'}`}>{toast.msg}</div>}
 
-      <div>
-        <h1 className="text-lg font-bold text-gray-900">Emergency Controls</h1>
-        <p className="text-xs text-gray-500">Critical platform controls</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h1 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Emergency Controls</h1>
+          <p className="text-xs text-gray-500">Critical platform safety switches (Default: All ON / Active)</p>
+        </div>
+        <button
+          onClick={handleResetDefaults}
+          disabled={loading}
+          className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-xs font-semibold rounded-lg transition-colors shadow-sm"
+        >
+          Restore All Controls to ON (Active)
+        </button>
+      </div>
+
+      <div className={`p-3 rounded-lg text-xs flex items-center gap-2.5 ${isDark ? 'bg-blue-500/10 border border-blue-500/20 text-blue-300' : 'bg-blue-50 border border-blue-200 text-blue-800'}`}>
+        <span>ℹ️</span>
+        <span><strong>Safety Notice:</strong> User Registration is configured to remain <strong>ON (Active)</strong> by default so new clients can always register. Only toggle OFF if you wish to temporarily freeze registrations.</span>
       </div>
 
       {/* Global Emergency Stop */}
@@ -96,10 +125,15 @@ export default function AdminEmergency() {
                   <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{ctrl.desc}</p>
                 </div>
               </div>
-              <button onClick={() => handleToggle(ctrl.key, !ctrl.enabled)} disabled={loading}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${ctrl.enabled ? 'bg-blue-600' : isDark ? 'bg-gray-600' : 'bg-gray-300'}`}>
-                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${ctrl.enabled ? 'translate-x-6' : 'translate-x-1'}`} />
-              </button>
+              <div className="flex items-center gap-3">
+                <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${ctrl.enabled ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
+                  {ctrl.enabled ? 'ON (ACTIVE)' : 'OFF (RESTRICTED)'}
+                </span>
+                <button onClick={() => handleToggle(ctrl.key, !ctrl.enabled)} disabled={loading}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${ctrl.enabled ? 'bg-emerald-600' : isDark ? 'bg-gray-600' : 'bg-gray-300'}`}>
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${ctrl.enabled ? 'translate-x-6' : 'translate-x-1'}`} />
+                </button>
+              </div>
             </div>
           ))}
         </div>
