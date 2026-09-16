@@ -2,7 +2,7 @@
   "maintenanceMode": false,
   "globalEmergencyStop": false,
   "emergencyControls": {
-    "userRegistrationEnabled": false,
+    "userRegistrationEnabled": true,
     "userLoginEnabled": true,
     "tradingStrategiesEnabled": true
   },

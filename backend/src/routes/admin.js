@@ -1051,42 +1051,58 @@ router.post('/clear-test-plan-subscriptions', (req, res) => {
 // Edit Deposit Verification / Plan Payment Request
 router.post('/edit-deposit-request', (req, res) => {
   try {
-    const { requestId, status, price, paymentTxId, paymentProof, notes, adminEmail } = req.body;
-    const subscriptions = db.get('planSubscriptions');
-    const sub = subscriptions.find(s => s.id === requestId);
+    const { requestId, depositId, status, price, amount, paymentTxId, paymentProof, notes, adminEmail } = req.body;
+    const targetId = requestId || depositId;
+    const subscriptions = db.get('planSubscriptions') || [];
+    const sub = subscriptions.find(s => s.id === targetId || s.paymentTxId === targetId);
 
     if (!sub) return res.status(404).json({ error: 'Deposit request not found.' });
 
-    if (status) sub.status = status;
+    const normStatus = status ? status.toUpperCase() : sub.status;
+    sub.status = normStatus;
     if (price) sub.price = price;
+    if (amount) sub.depositAmount = amount;
     if (paymentTxId) sub.paymentTxId = paymentTxId;
     if (paymentProof) sub.paymentProof = paymentProof;
     if (notes !== undefined) sub.notes = notes;
 
     // If approved, also update user plan
-    if (status === 'APPROVED') {
-      const users = db.get('users');
-      const user = users.find(u => u.id === sub.userId || u.email === sub.userEmail);
+    if (normStatus === 'APPROVED') {
+      const users = db.get('users') || [];
+      const user = users.find(u => u.id === sub.userId || (sub.userEmail && u.email && u.email.toLowerCase() === sub.userEmail.toLowerCase()));
       if (user) {
-        user.subscriptionPlan = sub.planName;
+        user.subscriptionPlan = sub.planName || 'Lifetime VIP';
+        user.plan = user.subscriptionPlan;
         let durationDays = 30;
-        if (sub.planName.includes('Basic')) durationDays = 30;
-        else if (sub.planName.includes('Pro')) durationDays = 90;
-        else if (sub.planName.includes('Quantum')) durationDays = 180;
-        else if (sub.planName.includes('Premium')) durationDays = 365;
-        else if (sub.planName.includes('Lifetime')) durationDays = 36500;
+        if (user.subscriptionPlan.includes('Basic')) durationDays = 30;
+        else if (user.subscriptionPlan.includes('Pro')) durationDays = 90;
+        else if (user.subscriptionPlan.includes('Quantum')) durationDays = 180;
+        else if (user.subscriptionPlan.includes('Premium')) durationDays = 365;
+        else if (user.subscriptionPlan.includes('Lifetime') || sub.type === 'free_access') durationDays = 36500;
+
+        if (user.subscriptionPlan.includes('Lifetime') || sub.type === 'free_access') {
+          user.isLifetimeApproved = true;
+          user.depositVerified = true;
+          user.subscriptionPlan = 'Lifetime VIP';
+          user.plan = 'Lifetime VIP';
+        }
+
         user.subExpiresAt = new Date(Date.now() + durationDays * 24 * 60 * 60 * 1000).toISOString();
+        user.planExpiresAt = user.subExpiresAt;
+        user.isFreeTrialExpired = false;
         sub.approvedAt = new Date().toISOString();
       }
     }
 
     // If rejected, reset user plan to Free Trial
-    if (status === 'REJECTED') {
-      const users = db.get('users');
-      const user = users.find(u => u.id === sub.userId || u.email === sub.userEmail);
+    if (normStatus === 'REJECTED') {
+      const users = db.get('users') || [];
+      const user = users.find(u => u.id === sub.userId || (sub.userEmail && u.email && u.email.toLowerCase() === sub.userEmail.toLowerCase()));
       if (user && user.subscriptionPlan === sub.planName) {
         user.subscriptionPlan = 'Free Trial';
+        user.plan = 'Free Trial';
         user.subExpiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+        user.planExpiresAt = user.subExpiresAt;
       }
       sub.rejectedAt = new Date().toISOString();
     }
@@ -1095,7 +1111,7 @@ router.post('/edit-deposit-request', (req, res) => {
       id: `audit-${Date.now()}`,
       action: 'SUBSCRIPTION_EDITED',
       actorEmail: adminEmail || 'Master Admin',
-      details: `Updated subscription ${sub.id}: status=${status || sub.status}, price=${price || sub.price}`,
+      details: `Updated subscription ${sub.id}: status=${normStatus}, price=${price || sub.price}`,
       timestamp: new Date().toISOString()
     });
 

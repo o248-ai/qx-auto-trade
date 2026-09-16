@@ -8,6 +8,10 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: MONGODB_URI
+        value: mongodb+srv://testing:Testing%401234@cluster0.hpcm1wl.mongodb.net/90pips?retryWrites=true&w=majority
+      - key: JWT_SECRET
+        value: qx_auto_trade_secret_key_2026
       - key: SMTP_HOST
         value: smtp.hostinger.com
       - key: SMTP_PORT

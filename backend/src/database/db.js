@@ -1,5 +1,16 @@
 const fs = require('fs');
 const path = require('path');
+const dotenv = require('dotenv');
+dotenv.config({ path: path.join(__dirname, '../../.env') });
+dotenv.config({ path: path.join(__dirname, '../.env') });
+
+const dns = require('dns');
+if (dns.setDefaultResultOrder) {
+  dns.setDefaultResultOrder('ipv4first');
+}
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch (_) {}
 
 const DB_FILE = path.join(__dirname, 'db.json');
 
@@ -473,9 +484,15 @@ class Database {
           tradingStrategiesEnabled: true
         };
       }
+      if (this.data.systemConfig.emergencyControls.userRegistrationEnabled === undefined) {
+        this.data.systemConfig.emergencyControls.userRegistrationEnabled = true;
+      }
 
       if (!this.data.siteConfig.emergencyControls) {
         this.data.siteConfig.emergencyControls = { ...this.data.systemConfig.emergencyControls };
+      }
+      if (this.data.siteConfig.emergencyControls.userRegistrationEnabled === undefined) {
+        this.data.siteConfig.emergencyControls.userRegistrationEnabled = true;
       }
 
       // Referral link & support fallbacks: only if missing/empty
@@ -508,7 +525,8 @@ class Database {
   }
 
   async initMongo() {
-    const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI || process.env.DATABASE_URL;
+    const defaultMongoUri = 'mongodb+srv://testing:Testing%401234@cluster0.hpcm1wl.mongodb.net/90pips?retryWrites=true&w=majority';
+    const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI || process.env.DATABASE_URL || defaultMongoUri;
     if (!mongoUri || (!mongoUri.startsWith('mongodb://') && !mongoUri.startsWith('mongodb+srv://'))) {
       console.log('[DB-Mongo] No MONGODB_URI configured. Running on multi-tier local file persistence.');
       return;
@@ -518,7 +536,7 @@ class Database {
       const mongoose = require('mongoose');
       mongooseInstance = mongoose;
       console.log('[DB-Mongo] Connecting to MongoDB Atlas cloud database...');
-      await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 8000 });
+      await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 10000 });
       this.mongoConnected = true;
       console.log('[DB-Mongo] Connected to MongoDB Atlas successfully! Permanent cloud persistence active.');
 
@@ -534,25 +552,32 @@ class Database {
       if (cloudDoc && cloudDoc.data) {
         console.log('[DB-Mongo] Synced latest snapshot from MongoDB Atlas.');
         const cloudData = cloudDoc.data;
-        if (Array.isArray(cloudData.users)) {
-          this.data.users = this.mergeUserLists(cloudData.users, this.data.users || [], defaultData.users);
-        }
-        if (cloudData.siteConfig) {
-          this.data.siteConfig = { ...defaultData.siteConfig, ...this.data.siteConfig, ...cloudData.siteConfig };
-        }
-        if (cloudData.systemConfig) {
-          this.data.systemConfig = { ...defaultData.systemConfig, ...this.data.systemConfig, ...cloudData.systemConfig };
-        }
-        if (Array.isArray(cloudData.announcements) && cloudData.announcements.length > 0) {
-          this.data.announcements = cloudData.announcements;
-        }
-        if (Array.isArray(cloudData.subscriptionPlans)) {
-          this.data.subscriptionPlans = cloudData.subscriptionPlans;
+
+        // Authoritatively restore all collections/tables from cloudData
+        for (const [key, value] of Object.entries(cloudData)) {
+          if (key === 'users') {
+            this.data.users = this.mergeUserLists(value, this.data.users || [], defaultData.users);
+          } else if (key === 'siteConfig') {
+            this.data.siteConfig = { ...defaultData.siteConfig, ...this.data.siteConfig, ...value };
+          } else if (key === 'systemConfig') {
+            this.data.systemConfig = { ...defaultData.systemConfig, ...this.data.systemConfig, ...value };
+          } else if (Array.isArray(value)) {
+            if (value.length > 0 || !this.data[key]) {
+              this.data[key] = value;
+            }
+          } else if (typeof value === 'object' && value !== null) {
+            this.data[key] = { ...(defaultData[key] || {}), ...(this.data[key] || {}), ...value };
+          } else {
+            this.data[key] = value;
+          }
         }
 
         this.save();
+        console.log(`[DB-Mongo] Cloud state restored. Total users: ${this.data.users?.length || 0}`);
       } else {
+        console.log('[DB-Mongo] No cloud snapshot found. Seeding initial data to MongoDB Atlas...');
         await this.syncToMongo();
+        console.log('[DB-Mongo] Initial data successfully seeded to MongoDB Atlas.');
       }
     } catch (err) {
       console.error('[DB-Mongo] MongoDB connection error:', err.message);
@@ -565,10 +590,11 @@ class Database {
       await AppDataModel.findOneAndUpdate(
         { key: 'qx_app_data' },
         { data: this.data, updatedAt: new Date() },
-        { upsert: true, new: true }
+        { upsert: true, returnDocument: 'after' }
       );
+      console.log('[DB-Mongo] State saved to MongoDB Atlas.');
     } catch (err) {
-      // Non-blocking
+      console.error('[DB-Mongo] Error syncing to MongoDB Atlas:', err.message);
     }
   }
 

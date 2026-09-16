@@ -1,18 +1,21 @@
+const path = require('path');
+const dotenv = require('dotenv');
+dotenv.config({ path: path.join(__dirname, '../.env') });
+
 const dns = require('dns');
 if (dns.setDefaultResultOrder) {
   dns.setDefaultResultOrder('ipv4first');
 }
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch (_) {}
 
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
-const path = require('path');
 const fs = require('fs');
-const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
 const db = require('./database/db');
-
-dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const authRoutes = require('./routes/auth');
 const brokerRoutes = require('./routes/broker');

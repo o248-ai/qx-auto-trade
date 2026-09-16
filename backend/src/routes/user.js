@@ -116,7 +116,7 @@ router.get('/public-plans', (req, res) => {
 
 // Active Announcements Endpoint
 router.get('/announcements', (req, res) => {
-  const announcements = (db.get('announcements') || []).filter(a => a.isActive !== false);
+  const announcements = (db.get('announcements') || []).filter(a => a && a.isActive !== false && a.active !== false);
   return res.json({ announcements });
 });
 

@@ -370,6 +370,19 @@
       "maxTradesPerSession": 15,
       "maxConsecutiveLosses": 3,
       "minBalanceProtection": 50
+    },
+    "test-trader-99": {
+      "mode": "MTG",
+      "amountType": "FIXED",
+      "fixedAmount": 10,
+      "percentageAmount": 2,
+      "mtgMultiplier": 2.1,
+      "maxMtgLevel": 5,
+      "dailyProfitTarget": 100,
+      "dailyStopLoss": 150,
+      "maxTradesPerSession": 15,
+      "maxConsecutiveLosses": 3,
+      "minBalanceProtection": 50
     }
   },
   "tradeLogs": [
@@ -78178,13 +78191,29 @@
     "maintenanceMode": false,
     "globalEmergencyStop": false,
     "emergencyControls": {
-      "userRegistrationEnabled": false,
+      "userRegistrationEnabled": true,
       "userLoginEnabled": true,
       "tradingStrategiesEnabled": true
     },
     "updatedAt": "2026-09-14T20:00:00.000Z"
   },
-  "userNotifications": {},
+  "userNotifications": {
+    "user-demo-1": {
+      "webPush": true,
+      "mobilePush": true,
+      "email": true,
+      "telegram": true,
+      "telegramChatId": "@trader_alex_bot",
+      "tradePlaced": true,
+      "winLoss": true,
+      "targetHit": true,
+      "stopLossHit": true,
+      "brokerDisconnect": true,
+      "lowBalance": true,
+      "subExpiry": true,
+      "newDeviceLogin": true
+    }
+  },
   "userSecurity": {
     "user-demo-1": {
       "is2FAEnabled": false,
@@ -78203,16 +78232,16 @@
   },
   "errorLogs": [],
   "siteConfig": {
-    "telegramLink": "https://t.me/Quotexautotrade_Support",
-    "telegramSupport": "https://t.me/Quotexautotrade_Support",
+    "telegramLink": "https://t.me/QuotexTestSupport",
+    "telegramSupport": "https://t.me/QuotexTestSupport",
     "supportEmail": "support@quotexautotrade.com",
     "instagramLink": "https://instagram.com/quotexautotrade",
     "youtubeLink": "https://youtube.com/c/quotexautotrade",
     "youtubeEmbedCode": "",
-    "referralLink": "https://custom-link.com/ref123",
+    "referralLink": "https://broker-qx.pro/sign-up/?lid=999888",
     "referralDepositAmount": 250,
-    "priceBasic": 49,
-    "pricePro": 129,
+    "priceBasic": 59,
+    "pricePro": 149,
     "priceQuantum": 239,
     "pricePremium": 450,
     "enableUPI": true,
@@ -78241,7 +78270,8 @@
     "updatedAt": "2026-09-14T20:00:00.000Z",
     "liveChatUrl": "",
     "facebookLink": "",
-    "twitterLink": ""
+    "twitterLink": "",
+    "lastPersistenceCheck": "2026-09-15T09:58:48.379Z"
   },
   "planSubscriptions": [],
   "subscriptionPlans": [
