@@ -445,7 +445,7 @@ router.put('/announcements/:id', (req, res) => {
 router.post('/toggle-announcement-active', (req, res) => {
   const { announcementId, isActive, active } = req.body;
   const announcements = db.get('announcements') || [];
-  const ann = announcements.find(a => a.id === announcementId);
+  const ann = announcements.find(a => a.id === announcementId || a._id === announcementId || String(a.id) === String(announcementId) || String(a._id) === String(announcementId));
   if (!ann) return res.status(404).json({ error: 'Announcement not found.' });
 
   const nextState = (isActive !== undefined) ? Boolean(isActive) : (active !== undefined ? Boolean(active) : !(ann.isActive || ann.active));
@@ -454,6 +454,24 @@ router.post('/toggle-announcement-active', (req, res) => {
   syncAnnouncementToSiteConfig(announcements);
   db.save();
   return res.json({ message: `Announcement set to ${nextState ? 'Active' : 'Inactive'}`, announcements, isActive: nextState, active: nextState });
+});
+
+// REST DELETE route for announcement
+router.delete('/announcements/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    let announcements = db.get('announcements') || [];
+    const idx = announcements.findIndex(a => a.id === id || a._id === id || String(a.id) === String(id) || String(a._id) === String(id));
+    if (idx !== -1) {
+      announcements.splice(idx, 1);
+      db.set('announcements', announcements);
+      syncAnnouncementToSiteConfig(announcements);
+      db.save();
+    }
+    return res.json({ message: 'Announcement deleted.' });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
 });
 
 // Add New User by Admin
@@ -1171,7 +1189,7 @@ router.post('/delete-announcement', (req, res) => {
   try {
     const { announcementId } = req.body;
     let announcements = db.get('announcements');
-    const idx = announcements.findIndex(a => a.id === announcementId);
+    const idx = (announcements || []).findIndex(a => a.id === announcementId || a._id === announcementId || String(a.id) === String(announcementId) || String(a._id) === String(announcementId));
     if (idx !== -1) {
       announcements.splice(idx, 1);
       db.set('announcements', announcements);
