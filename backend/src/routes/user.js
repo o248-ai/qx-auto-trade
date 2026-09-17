@@ -252,6 +252,15 @@ router.get('/profile/:userId', (req, res) => {
     const headerExpires = req.headers['x-user-plan-expires'];
     const headerLifetime = req.headers['x-user-lifetime'] === 'true';
 
+    // If account was deleted by admin, reject immediately so app logs out
+    if (db.isUserDeleted(userId) || db.isUserDeleted(headerEmail)) {
+      return res.status(401).json({
+        error: 'Account has been deleted by administrator.',
+        accountDeleted: true,
+        isDeleted: true
+      });
+    }
+
     const users = db.get('users') || [];
     let user = users.find(u => (userId && u.id === userId) || (userId && u.email?.toLowerCase() === userId.toLowerCase()) || (headerEmail && u.email?.toLowerCase() === headerEmail.toLowerCase()));
 
@@ -385,13 +394,23 @@ router.post('/profile', (req, res) => {
 router.get('/subscriptions/:userId', (req, res) => {
   try {
     const { userId } = req.params;
-    const users = db.get('users');
+    const headerEmail = req.headers['x-user-email'];
+
+    if (db.isUserDeleted(userId) || db.isUserDeleted(headerEmail)) {
+      return res.status(401).json({ error: 'Account has been deleted by administrator.', accountDeleted: true, isDeleted: true });
+    }
+
+    const users = db.get('users') || [];
     const user = users.find(u => u.id === userId || u.email?.toLowerCase() === userId?.toLowerCase());
 
-    const userEmail = user?.email?.toLowerCase();
+    const userEmail = user?.email?.toLowerCase() || (headerEmail ? headerEmail.toLowerCase() : null);
+    const deletedIds = new Set(db.get('deletedSubscriptionIds') || []);
 
     const planSubs = (db.get('planSubscriptions') || [])
-      .filter(s => s.userId === userId || (userEmail && s.userEmail?.toLowerCase() === userEmail))
+      .filter(s => {
+        if (deletedIds.has(s.id) || deletedIds.has(s.paymentTxId) || (s.refRequestId && deletedIds.has(s.refRequestId))) return false;
+        return s.userId === userId || (userEmail && s.userEmail?.toLowerCase() === userEmail);
+      })
       .map(s => ({
         id: s.id,
         type: 'PLAN_PURCHASE',
@@ -405,7 +424,10 @@ router.get('/subscriptions/:userId', (req, res) => {
       }));
 
     const refReqs = (db.get('referralRequests') || [])
-      .filter(r => r.userId === userId || (userEmail && r.userEmail?.toLowerCase() === userEmail))
+      .filter(r => {
+        if (deletedIds.has(r.id) || deletedIds.has(r.subId)) return false;
+        return r.userId === userId || (userEmail && r.userEmail?.toLowerCase() === userEmail);
+      })
       .map(r => ({
         id: r.id,
         type: 'LIFETIME_VERIFICATION',
@@ -423,7 +445,7 @@ router.get('/subscriptions/:userId', (req, res) => {
     return res.json({
       history,
       activePlan: user?.subscriptionPlan || 'Free Trial',
-      subExpiresAt: user?.subExpiresAt,
+      subExpiresAt: user?.subExpiresAt || '',
       isLifetimeApproved: Boolean(user?.isLifetimeApproved)
     });
   } catch (err) {

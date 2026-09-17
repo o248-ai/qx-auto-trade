@@ -15,6 +15,7 @@ try {
 const DB_FILE = path.join(__dirname, 'db.json');
 
 const defaultData = {
+  deletedUsers: [],
   users: [
     {
       id: 'admin-1',
@@ -284,6 +285,7 @@ const defaultData = {
 };
 
 const USERS_REGISTRY_FILE = path.join(__dirname, 'users_registry.json');
+const DELETED_USERS_FILE = path.join(__dirname, 'deleted_users.json');
 const BACKUP_FILE = path.join(__dirname, 'db_users_backup.json');
 const SITE_CONFIG_BACKUP_FILE = path.join(__dirname, 'site_config_backup.json');
 const SYSTEM_CONFIG_BACKUP_FILE = path.join(__dirname, 'system_config_backup.json');
@@ -302,6 +304,80 @@ class Database {
     this.initMongo();
   }
 
+  isUserDeleted(identifier) {
+    if (!identifier) return false;
+    const clean = String(identifier).trim().toLowerCase();
+    const list = this.data?.deletedUsers || [];
+    return list.some(item => {
+      if (!item) return false;
+      if (typeof item === 'string') return item.toLowerCase() === clean;
+      if (item.id && item.id.toLowerCase() === clean) return true;
+      if (item.email && item.email.toLowerCase() === clean) return true;
+      return false;
+    });
+  }
+
+  deleteUser(userId, adminEmail = 'Master Admin') {
+    if (!userId) return null;
+    let users = this.get('users') || [];
+    const cleanId = String(userId).trim().toLowerCase();
+    const target = users.find(u => (u.id && u.id.toLowerCase() === cleanId) || (u.email && u.email.toLowerCase() === cleanId));
+    if (!target) return null;
+
+    // 1. Remove from users list
+    this.data.users = users.filter(u => u.id !== target.id && (!u.email || u.email.toLowerCase() !== (target.email || '').toLowerCase()));
+
+    // 2. Track in deletedUsers blacklist
+    if (!Array.isArray(this.data.deletedUsers)) {
+      this.data.deletedUsers = [];
+    }
+    const delRecord = {
+      id: target.id,
+      email: (target.email || '').toLowerCase(),
+      name: target.name || 'Trader',
+      deletedAt: new Date().toISOString(),
+      deletedBy: adminEmail
+    };
+    if (!this.data.deletedUsers.some(d => (d.id && d.id.toLowerCase() === target.id.toLowerCase()) || (d.email && target.email && d.email.toLowerCase() === target.email.toLowerCase()))) {
+      this.data.deletedUsers.push(delRecord);
+    }
+
+    // 3. Purge all related user records
+    if (Array.isArray(this.data.planSubscriptions)) {
+      this.data.planSubscriptions = this.data.planSubscriptions.filter(s => s.userId !== target.id && (!target.email || s.userEmail?.toLowerCase() !== target.email.toLowerCase()));
+    }
+    if (Array.isArray(this.data.referralRequests)) {
+      this.data.referralRequests = this.data.referralRequests.filter(r => r.userId !== target.id && (!target.email || r.userEmail?.toLowerCase() !== target.email.toLowerCase()));
+    }
+    if (Array.isArray(this.data.brokerConnections)) {
+      this.data.brokerConnections = this.data.brokerConnections.filter(c => c.userId !== target.id);
+    }
+    if (this.data.userSecurity && typeof this.data.userSecurity === 'object') {
+      delete this.data.userSecurity[target.id];
+      if (target.email) delete this.data.userSecurity[target.email.toLowerCase()];
+    }
+    if (this.data.riskSettings && typeof this.data.riskSettings === 'object') {
+      delete this.data.riskSettings[target.id];
+    }
+
+    // 4. Save to disk and sync to MongoDB
+    this.save();
+    return target;
+  }
+
+  unmarkDeletedUser(identifier) {
+    if (!identifier || !Array.isArray(this.data.deletedUsers)) return;
+    const clean = String(identifier).trim().toLowerCase();
+    this.data.deletedUsers = this.data.deletedUsers.filter(d => {
+      if (!d) return false;
+      if (typeof d === 'string') return d.toLowerCase() !== clean;
+      if (d.id && d.id.toLowerCase() === clean) return false;
+      if (d.email && d.email.toLowerCase() === clean) return false;
+      return true;
+    });
+    this.save();
+  }
+
   // Merge multiple user arrays ensuring no user is ever lost or downgraded
   mergeUserLists(...lists) {
     const userMap = new Map();
@@ -310,6 +386,7 @@ class Database {
       if (!Array.isArray(list)) continue;
       for (const u of list) {
         if (!u || (!u.id && !u.email)) continue;
+        if (this.isUserDeleted(u.id) || this.isUserDeleted(u.email)) continue;
         const key = (u.email ? u.email.toLowerCase().trim() : u.id);
         const existing = userMap.get(key) || (u.id ? userMap.get(u.id) : null);
 
@@ -340,10 +417,11 @@ class Database {
       }
     }
 
-    // Return unique users array
+    // Return unique users array (excluding any deleted users)
     const seenIds = new Set();
     const uniqueUsers = [];
     for (const user of userMap.values()) {
+      if (this.isUserDeleted(user.id) || this.isUserDeleted(user.email)) continue;
       const uid = user.id || user.email;
       if (!seenIds.has(uid)) {
         seenIds.add(uid);
@@ -426,6 +504,20 @@ class Database {
             }
           } catch (e) {}
         }
+      }
+
+      // Read DELETED_USERS_FILE if available
+      if (fs.existsSync(DELETED_USERS_FILE)) {
+        try {
+          const delParsed = JSON.parse(fs.readFileSync(DELETED_USERS_FILE, 'utf8'));
+          const delUsers = Array.isArray(delParsed) ? delParsed : (delParsed?.deletedUsers || []);
+          if (Array.isArray(delUsers) && delUsers.length > 0) {
+            this.data.deletedUsers = delUsers;
+          }
+        } catch (e) {}
+      }
+      if (!Array.isArray(this.data.deletedUsers)) {
+        this.data.deletedUsers = [];
       }
 
       // Merge all users: loadedUsers from DB_FILE has FIRST priority, defaultData.users last!
@@ -575,6 +667,22 @@ class Database {
           }
         }
 
+        // Restore and sync deletedUsers from cloud snapshot
+        if (Array.isArray(cloudData.deletedUsers)) {
+          const currentDeleted = this.data.deletedUsers || [];
+          cloudData.deletedUsers.forEach(d => {
+            const did = (d.id || d || '').toString().toLowerCase();
+            const demail = (d.email || '').toString().toLowerCase();
+            if (!currentDeleted.some(cd => (cd.id && cd.id.toLowerCase() === did) || (cd.email && demail && cd.email.toLowerCase() === demail))) {
+              currentDeleted.push(d);
+            }
+          });
+          this.data.deletedUsers = currentDeleted;
+        }
+
+        // Purge any deleted users from active user list
+        this.data.users = (this.data.users || []).filter(u => !this.isUserDeleted(u.id) && !this.isUserDeleted(u.email));
+
         // Guarantee userRegistrationEnabled strictly defaults to true
         if (!this.data.systemConfig.emergencyControls) {
           this.data.systemConfig.emergencyControls = {
@@ -653,6 +761,10 @@ class Database {
       fs.writeFileSync(USERS_REGISTRY_FILE, usersJson, 'utf8');
       fs.writeFileSync(BACKUP_FILE, usersJson, 'utf8');
 
+      if (Array.isArray(this.data.deletedUsers)) {
+        fs.writeFileSync(DELETED_USERS_FILE, JSON.stringify({ deletedUsers: this.data.deletedUsers, updatedAt: new Date().toISOString() }, null, 2), 'utf8');
+      }
+
       if (this.data.siteConfig) {
         fs.writeFileSync(SITE_CONFIG_BACKUP_FILE, JSON.stringify(this.data.siteConfig, null, 2), 'utf8');
       }
@@ -682,6 +794,12 @@ class Database {
     const users = this.get('users');
     const lookupId = userData.id;
     const lookupEmail = userData.email ? userData.email.toLowerCase().trim() : null;
+
+    if (!fromAdmin) {
+      if (this.isUserDeleted(lookupId) || this.isUserDeleted(lookupEmail)) {
+        return null;
+      }
+    }
 
     let index = users.findIndex(u => (lookupId && u.id === lookupId) || (lookupEmail && u.email && u.email.toLowerCase() === lookupEmail));
 

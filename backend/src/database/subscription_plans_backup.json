@@ -2,8 +2,8 @@
   {
     "id": "plan-basic",
     "name": "Basic Plan",
-    "price": "$49",
-    "numericPrice": 49,
+    "price": "$59",
+    "numericPrice": 59,
     "period": "/month",
     "features": [
       "All trading strategies",
@@ -20,8 +20,8 @@
   {
     "id": "plan-pro",
     "name": "Pro Plan",
-    "price": "$129",
-    "numericPrice": 129,
+    "price": "$149",
+    "numericPrice": 149,
     "period": "/3 months",
     "features": [
       "5 trading bots",

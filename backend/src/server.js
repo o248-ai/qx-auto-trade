@@ -60,10 +60,23 @@ app.use((req, res, next) => {
     if (!userId && req.query?.userId) userId = req.query.userId;
     if (!userEmail && req.query?.userEmail) userEmail = req.query.userEmail;
 
-    // If userId or userEmail is identified, ensure user is registered in db.users
+    // If userId or userEmail is identified, check if account was deleted or ensure user is registered
     if ((userId && userId !== 'null' && userId !== 'undefined') || (userEmail && userEmail.includes('@'))) {
-      const users = db.get('users');
       const lookupEmail = userEmail ? userEmail.toLowerCase().trim() : null;
+
+      // Block deleted users from being auto-healed, and notify client to clear session
+      if (db.isUserDeleted(userId) || db.isUserDeleted(lookupEmail)) {
+        if (req.path.startsWith('/api/') && !req.path.startsWith('/api/admin') && !req.path.startsWith('/api/auth/register') && !req.path.startsWith('/api/auth/send-otp')) {
+          return res.status(401).json({
+            error: 'Account has been deleted by administrator.',
+            accountDeleted: true,
+            isDeleted: true
+          });
+        }
+        return next();
+      }
+
+      const users = db.get('users');
       const existing = users.find(u => (userId && u.id === userId) || (lookupEmail && u.email && u.email.toLowerCase() === lookupEmail));
 
       if (!existing) {

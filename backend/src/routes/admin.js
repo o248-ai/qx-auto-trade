@@ -877,13 +877,8 @@ router.post('/delete-user', (req, res) => {
     const { userId, adminEmail } = req.body;
     if (!userId) return res.status(400).json({ error: 'User ID is required.' });
 
-    let users = db.get('users');
-    const userIndex = users.findIndex(u => u.id === userId);
-    if (userIndex === -1) return res.status(404).json({ error: 'User not found.' });
-
-    const deletedUser = users[userIndex];
-    users.splice(userIndex, 1);
-    db.set('users', users);
+    const deletedUser = db.deleteUser(userId, adminEmail || 'Master Admin');
+    if (!deletedUser) return res.status(404).json({ error: 'User not found.' });
 
     // Stop active bot session if running
     tradingEngine.stopSession(userId, 'User account deleted by Master Admin');
@@ -898,7 +893,7 @@ router.post('/delete-user', (req, res) => {
     });
 
     db.save();
-    return res.json({ message: `User ${deletedUser.email} deleted successfully.` });
+    return res.json({ message: `User ${deletedUser.email} deleted permanently.` });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
@@ -1020,6 +1015,22 @@ router.post('/delete-plan-subscription', (req, res) => {
     });
     db.set('deletedSubscriptionIds', deletedIds);
 
+    // If target belonged to a user, check if their active plan should revert to Free Trial
+    if (target && (target.userId || target.userEmail)) {
+      const users = db.get('users') || [];
+      const user = users.find(u => (target.userId && u.id === target.userId) || (target.userEmail && u.email && u.email.toLowerCase() === target.userEmail.toLowerCase()));
+      if (user) {
+        const hasOtherApproved = subscriptions.some(s => (s.userId === user.id || (user.email && s.userEmail?.toLowerCase() === user.email.toLowerCase())) && s.status === 'APPROVED');
+        if (!hasOtherApproved) {
+          user.subscriptionPlan = 'Free Trial';
+          user.plan = 'Free Trial';
+          user.isLifetimeApproved = false;
+          user.subExpiresAt = '';
+          user.planExpiresAt = '';
+        }
+      }
+    }
+
     db.get('auditLogs').unshift({
       id: `audit-${Date.now()}`,
       action: 'PLAN_SUBSCRIPTION_DELETED',
@@ -1077,6 +1088,24 @@ router.post('/bulk-delete-plan-subscriptions', (req, res) => {
       if (id && !deletedIds.includes(id)) deletedIds.push(id);
     });
     db.set('deletedSubscriptionIds', deletedIds);
+
+    // Revert user plans if they have no remaining approved subscriptions
+    const users = db.get('users') || [];
+    targets.forEach(t => {
+      if (t.userId || t.userEmail) {
+        const user = users.find(u => (t.userId && u.id === t.userId) || (t.userEmail && u.email && u.email.toLowerCase() === t.userEmail.toLowerCase()));
+        if (user) {
+          const hasOtherApproved = remaining.some(s => (s.userId === user.id || (user.email && s.userEmail?.toLowerCase() === user.email.toLowerCase())) && s.status === 'APPROVED');
+          if (!hasOtherApproved) {
+            user.subscriptionPlan = 'Free Trial';
+            user.plan = 'Free Trial';
+            user.isLifetimeApproved = false;
+            user.subExpiresAt = '';
+            user.planExpiresAt = '';
+          }
+        }
+      }
+    });
 
     db.get('auditLogs').unshift({
       id: `audit-${Date.now()}`,

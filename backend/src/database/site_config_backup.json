@@ -1,9 +1,9 @@
 {
-  "telegramLink": "https://t.me/QuotexTestSupport",
+  "telegramLink": "https://t.me/QuotexTestSupport---o",
   "telegramSupport": "https://t.me/QuotexTestSupport",
   "supportEmail": "support@quotexautotrade.com",
-  "instagramLink": "https://instagram.com/quotexautotrade",
-  "youtubeLink": "https://youtube.com/c/quotexautotrade",
+  "instagramLink": "https://instagram.com",
+  "youtubeLink": "https://youtube.com/quotexauto",
   "youtubeEmbedCode": "",
   "referralLink": "https://broker-qx.pro/sign-up/?lid=1650958",
   "referralDepositAmount": 250,
@@ -11,8 +11,8 @@
   "pricePro": 149,
   "priceQuantum": 239,
   "pricePremium": 450,
-  "enableUPI": true,
-  "enableBankTransfer": true,
+  "enableUPI": false,
+  "enableBankTransfer": false,
   "enableUSDT": true,
   "brokerLinks": {
     "quotex": "https://broker-qx.pro/sign-up/?lid=1650958",
@@ -23,20 +23,24 @@
   "footerText": "QUOTEX AUTO TRADE © 2026. All rights reserved.",
   "paymentUsdt": "TQUOTEXautoTradeAddress1234567890USDT",
   "paymentUpi": "quotexautotrade@upi",
-  "paymentBank": "Bank: QUOTEX Trade Ltd | A/C: 9988776655 | IFSC: QXIN0001234",
+  "paymentBank": "",
   "siteName": "QX AUTO TRADE VIP",
   "siteLogo": "",
   "favicon": "",
-  "announcementText": "Welcome to Quotex Auto Trade! Automated trading bot is active.",
+  "announcementText": "Welcome to Quotex Auto Trade: Official automated trading platform is active. Connect your broker account to start trading!",
   "isAnnouncementActive": true,
   "emergencyControls": {
     "userRegistrationEnabled": true,
     "userLoginEnabled": true,
     "tradingStrategiesEnabled": true
   },
-  "updatedAt": "2026-09-14T20:00:00.000Z",
+  "updatedAt": "2026-09-17T14:45:12.770Z",
   "liveChatUrl": "",
   "facebookLink": "",
   "twitterLink": "",
-  "lastPersistenceCheck": "2026-09-15T09:58:48.379Z"
+  "lastPersistenceCheck": "2026-09-15T09:58:48.379Z",
+  "upiAddress": "quotexautotrade@upi",
+  "usdtAddress": "TQUOTEXautoTradeAddress1234567890USDT",
+  "logoUrl": "",
+  "faviconUrl": ""
 }

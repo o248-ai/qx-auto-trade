@@ -1,0 +1,19 @@
+{
+  "deletedUsers": [
+    {
+      "id": "user-deltest-1789657724730",
+      "email": "deltest_1789657724730@example.com",
+      "name": "Test Delete User",
+      "deletedAt": "2026-09-17T15:08:44.748Z",
+      "deletedBy": "Master Admin Test"
+    },
+    {
+      "id": "user-sub-1789657724776",
+      "email": "subuser_1789657724776@example.com",
+      "name": "Sub Test User",
+      "deletedAt": "2026-09-17T15:08:44.854Z",
+      "deletedBy": "Master Admin"
+    }
+  ],
+  "updatedAt": "2026-09-17T15:08:49.604Z"
+}

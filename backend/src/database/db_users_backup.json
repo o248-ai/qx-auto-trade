@@ -1,6 +1,83 @@
 {
   "users": [
     {
+      "id": "user-1789655630092",
+      "name": "FINA TEST",
+      "email": "qxautotrade@gmail.com",
+      "passwordHash": "$2a$10$hwnxUiflv0SkuMQTixvwcerrek3SOMeVPggPEwb6XRa3FDLBhu1OO",
+      "password": "",
+      "role": "USER",
+      "subscriptionPlan": "Free Trial",
+      "plan": "Free Trial",
+      "subExpiresAt": "2026-09-17T15:45",
+      "planExpiresAt": "2026-09-17T15:45",
+      "isLifetimeApproved": false,
+      "isActive": true,
+      "createdAt": "2026-09-17T14:54:48.864Z",
+      "brokerName": "QUOTEX",
+      "brokerId": "",
+      "telegramId": "",
+      "isFreeTrialExpired": false
+    },
+    {
+      "id": "user-1789627886025",
+      "name": "oktest@gmail.com",
+      "email": "oktest@gmail.com",
+      "passwordHash": "$2a$10$kMXuCc7acsSYd261stsJO.8v/eYDL5SE7aP67a9CGDvsS9LNCLex.",
+      "password": "",
+      "role": "USER",
+      "subscriptionPlan": "Pro Plan (Best Value)",
+      "plan": "Free Trial",
+      "subExpiresAt": "2026-12-16T06:55:04.513Z",
+      "planExpiresAt": "2026-12-16T06:55:04.513Z",
+      "isLifetimeApproved": false,
+      "isActive": true,
+      "createdAt": "2026-09-17T06:51:26.025Z",
+      "brokerName": "QUOTEX",
+      "brokerId": "",
+      "telegramId": "",
+      "isFreeTrialExpired": false,
+      "active": true,
+      "trialStartedAt": "2026-09-17T06:52:48.605Z",
+      "trialStartedAtMs": 1789627968605,
+      "trialExpiresAtMs": 1789631568605
+    },
+    {
+      "id": "yfufu",
+      "name": "Trader",
+      "email": "yfufu@trader.quotex",
+      "passwordHash": "$2a$10$w8T06o3Y0H1KjJ0z4l2a2.0A/Wc9hFq7y1D9e8g7f6e5d4c3b2a1",
+      "password": "",
+      "role": "USER",
+      "subscriptionPlan": "Free Trial",
+      "plan": "Free Trial",
+      "subExpiresAt": "2026-09-16T22:35:39.086Z",
+      "planExpiresAt": "2026-09-16T22:35:39.086Z",
+      "isLifetimeApproved": false,
+      "isActive": true,
+      "createdAt": "2026-09-16T21:35:39.086Z",
+      "brokerName": "QUOTEX",
+      "brokerId": "",
+      "telegramId": "",
+      "isFreeTrialExpired": false
+    },
+    {
+      "id": "user-test-agent",
+      "name": "User 987654321",
+      "email": "agenttest@gmail.com",
+      "role": "USER",
+      "subscriptionPlan": "Free Trial",
+      "isLifetimeApproved": false,
+      "isActive": true,
+      "createdAt": "2026-09-16T21:18:19.264Z",
+      "passwordHash": "$2a$10$s/uYI1TZnv7gF.WdfFrYMevd/vT8HrTW7JUlowZj0qRE4MO0yVx1W",
+      "password": "password123",
+      "plan": "Free Trial",
+      "isFreeTrialExpired": false,
+      "subExpiresAt": "",
+      "planExpiresAt": ""
+    },
+    {
       "id": "user-1789592876507",
       "name": "ok",
       "email": "test@gmail.com",
@@ -13,7 +90,8 @@
       "isActive": true,
       "createdAt": "2026-09-16T21:07:56.507Z",
       "isFreeTrialExpired": false,
-      "passwordHash": "$2a$10$w8T06o3Y0H1KjJ0z4l2a2.0A/Wc9hFq7y1D9e8g7f6e5d4c3b2a1"
+      "passwordHash": "$2a$10$s/uYI1TZnv7gF.WdfFrYMevd/vT8HrTW7JUlowZj0qRE4MO0yVx1W",
+      "password": "password123"
     },
     {
       "id": "qx-1754407",
@@ -118,7 +196,7 @@
       "id": "user-1787424851409",
       "name": "Demo User",
       "email": "demo@qxautotrade.com",
-      "passwordHash": "$2a$10$w8T06o3Y0H1KjJ0z4l2a2.0A/Wc9hFq7y1D9e8g7f6e5d4c3b2a1",
+      "passwordHash": "$2a$10$zTJEP8211BdK7QAJEE5XEur7RxWPGrsA4mr1PYATLPwWYsq1hJUwm",
       "role": "USER",
       "isActive": true,
       "subscriptionPlan": "Free Trial",
@@ -163,5 +241,5 @@
       "isFreeTrialExpired": false
     }
   ],
-  "updatedAt": "2026-09-17T06:57:43.962Z"
+  "updatedAt": "2026-09-17T15:08:49.602Z"
 }

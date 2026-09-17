@@ -136,7 +136,9 @@ router.post('/verify-otp', async (req, res) => {
       return res.status(400).json({ error: 'User with this email already exists. Please log in or use forgot password.' });
     }
 
-    // OTP Verified! Create User Account in Database
+    // OTP Verified! Unmark from deletedUsers if previously deleted, and create account
+    db.unmarkDeletedUser(email.toLowerCase());
+
     const nowMs = Date.now();
     const newUser = {
       id: `user-${nowMs}`,
@@ -322,9 +324,13 @@ router.post('/register', async (req, res) => {
 // Send Password Reset OTP
 router.post('/forgot-password', async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, otp } = req.body;
     if (!email) {
       return res.status(400).json({ error: 'Registered email address is required.' });
+    }
+
+    if (db.isUserDeleted(email)) {
+      return res.status(404).json({ error: 'No account found with this email address.' });
     }
 
     const users = db.get('users');
@@ -333,7 +339,10 @@ router.post('/forgot-password', async (req, res) => {
       return res.status(404).json({ error: 'No account found with this email address.' });
     }
 
-    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    // Accept client OTP if valid 6 digits, otherwise generate new 6-digit OTP
+    const generatedOtp = (otp && String(otp).trim().length === 6)
+      ? String(otp).trim()
+      : Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = Date.now() + 10 * 60 * 1000;
 
     resetOtpStore.set(email.toLowerCase(), {
@@ -349,7 +358,8 @@ router.post('/forgot-password', async (req, res) => {
 
     return res.json({
       message: `Password reset code sent to ${email}!`,
-      email: email.toLowerCase()
+      email: email.toLowerCase(),
+      demoOtp: generatedOtp
     });
   } catch (err) {
     return res.status(500).json({ error: 'Failed to send reset code. Please try again.' });
@@ -414,6 +424,10 @@ router.post('/reset-password', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
+    if (db.isUserDeleted(email)) {
+      return res.status(401).json({ error: 'Account has been deleted by administrator.', accountDeleted: true, isDeleted: true });
+    }
+
     const users = db.get('users');
     const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
 
@@ -562,6 +576,14 @@ router.post('/sync-session', (req, res) => {
 
     if (!resolvedId && !resolvedEmail) {
       return res.status(400).json({ error: 'User ID or Email is required.' });
+    }
+
+    if (db.isUserDeleted(resolvedId) || db.isUserDeleted(resolvedEmail)) {
+      return res.status(401).json({
+        error: 'Account has been deleted by administrator.',
+        accountDeleted: true,
+        isDeleted: true
+      });
     }
 
     const users = db.get('users') || [];
