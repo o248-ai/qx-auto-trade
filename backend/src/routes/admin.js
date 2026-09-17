@@ -899,6 +899,43 @@ router.post('/delete-user', (req, res) => {
   }
 });
 
+// Bulk Delete Users by Master Admin
+router.post('/bulk-delete-users', (req, res) => {
+  try {
+    const userIds = req.body.userIds || req.body.ids || [];
+    const { adminEmail } = req.body;
+    if (!Array.isArray(userIds) || userIds.length === 0) {
+      return res.status(400).json({ error: 'No user IDs provided for deletion.' });
+    }
+
+    const deletedEmails = [];
+    userIds.forEach(uId => {
+      const deleted = db.deleteUser(uId, adminEmail || 'Master Admin');
+      if (deleted) {
+        tradingEngine.stopSession(uId, 'User account deleted by Master Admin');
+        deletedEmails.push(deleted.email || uId);
+      }
+    });
+
+    db.get('auditLogs').unshift({
+      id: `audit-${Date.now()}`,
+      action: 'ADMIN_BULK_DELETE_USERS',
+      actorEmail: adminEmail || 'Master Admin',
+      details: `Master Admin bulk deleted ${deletedEmails.length} user account(s): ${deletedEmails.slice(0, 10).join(', ')}${deletedEmails.length > 10 ? '...' : ''}`,
+      timestamp: new Date().toISOString()
+    });
+
+    db.save();
+    return res.json({
+      message: `Successfully deleted ${deletedEmails.length} user(s) permanently.`,
+      deletedCount: deletedEmails.length,
+      users: db.get('users')
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
 // Toggle Strategy Active Status
 router.post('/toggle-strategy-active', (req, res) => {
   try {

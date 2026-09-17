@@ -50,6 +50,7 @@ export const api = {
   getAdminUsers: () => request('/admin/users'),
   addAdminUser: (data) => request('/admin/add-user', { method: 'POST', body: JSON.stringify(data) }),
   deleteAdminUser: (data) => request('/admin/delete-user', { method: 'POST', body: JSON.stringify(data) }),
+  bulkDeleteAdminUsers: (data) => request('/admin/bulk-delete-users', { method: 'POST', body: JSON.stringify(data) }),
   editUserDetails: (data) => request('/admin/edit-user-details', { method: 'POST', body: JSON.stringify(data) }),
   resetUserPassword: (data) => request('/admin/reset-user-password', { method: 'POST', body: JSON.stringify(data) }),
   toggleUserActive: (data) => request('/admin/toggle-user-active', { method: 'POST', body: JSON.stringify(data) }),

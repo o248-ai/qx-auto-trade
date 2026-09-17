@@ -13,7 +13,98 @@
       "name": "Sub Test User",
       "deletedAt": "2026-09-17T15:08:44.854Z",
       "deletedBy": "Master Admin"
+    },
+    {
+      "id": "user-1789627886025",
+      "email": "oktest@gmail.com",
+      "name": "oktest@gmail.com",
+      "deletedAt": "2026-09-17T15:15:12.938Z",
+      "deletedBy": "Master Admin"
+    },
+    {
+      "id": "yfufu",
+      "email": "yfufu@trader.quotex",
+      "name": "Trader",
+      "deletedAt": "2026-09-17T15:15:15.397Z",
+      "deletedBy": "Master Admin"
+    },
+    {
+      "id": "user-test-agent",
+      "email": "agenttest@gmail.com",
+      "name": "User 987654321",
+      "deletedAt": "2026-09-17T15:15:17.662Z",
+      "deletedBy": "Master Admin"
+    },
+    {
+      "id": "user-1789592876507",
+      "email": "test@gmail.com",
+      "name": "ok",
+      "deletedAt": "2026-09-17T15:15:20.108Z",
+      "deletedBy": "Master Admin"
+    },
+    {
+      "id": "qx-1754407",
+      "email": "qx-1754407@trader.quotex",
+      "name": "Trader qx-17544",
+      "deletedAt": "2026-09-17T15:15:24.882Z",
+      "deletedBy": "Master Admin"
+    },
+    {
+      "id": "trader@quotex.com",
+      "email": "trader@quotex.com",
+      "name": "trader",
+      "deletedAt": "2026-09-17T15:15:28.353Z",
+      "deletedBy": "Master Admin"
+    },
+    {
+      "id": "user-1788612470060",
+      "email": "omchoubey123@gmail.com",
+      "name": "Om",
+      "deletedAt": "2026-09-17T15:15:33.165Z",
+      "deletedBy": "Master Admin"
+    },
+    {
+      "id": "user-1787424851409",
+      "email": "demo@qxautotrade.com",
+      "name": "Demo User",
+      "deletedAt": "2026-09-17T15:15:35.429Z",
+      "deletedBy": "Master Admin"
+    },
+    {
+      "id": "user-1787485286368",
+      "email": "otp-test@qx.com",
+      "name": "Test OTP",
+      "deletedAt": "2026-09-17T15:15:37.728Z",
+      "deletedBy": "Master Admin"
+    },
+    {
+      "id": "user-1",
+      "email": "quotex_trader@qxbroker.com",
+      "name": "Quotex Trader",
+      "deletedAt": "2026-09-17T15:15:39.941Z",
+      "deletedBy": "Master Admin"
+    },
+    {
+      "id": "user-1785352926977",
+      "email": "sarah@qxautotrade.com",
+      "name": "Sarah Trade",
+      "deletedAt": "2026-09-17T15:15:42.291Z",
+      "deletedBy": "Master Admin"
+    },
+    {
+      "id": "admin-1",
+      "email": "admin@qxautotrade.com",
+      "name": "Master Admin",
+      "deletedAt": "2026-09-17T15:15:44.585Z",
+      "deletedBy": "Master Admin"
+    },
+    {
+      "id": "user-demo-1",
+      "email": "alex@qxautotrade.com",
+      "name": "Trader Alex",
+      "deletedAt": "2026-09-17T15:15:46.935Z",
+      "deletedBy": "Master Admin"
     }
   ],
-  "updatedAt": "2026-09-17T15:08:49.604Z"
+  "updatedAt": "2026-09-17T15:24:46.696Z"
 }

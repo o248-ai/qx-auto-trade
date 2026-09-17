@@ -3,7 +3,7 @@ import { api } from '../../api'
 import { useTheme } from '../../ThemeContext'
 import {
   Users as UsersIcon, Plus, Pencil, Trash2, RefreshCw, Search,
-  X, Power, PowerOff, ShieldOff, Key, ChevronDown, Loader2
+  X, Power, PowerOff, ShieldOff, Key, ChevronDown, Loader2, Check
 } from 'lucide-react'
 
 const emptyForm = { name: '', email: '', password: '', subscriptionPlan: 'Free Trial' }
@@ -12,6 +12,8 @@ export default function AdminUsers() {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
+  const [selected, setSelected] = useState([])
+  const [bulkDeleteConfirm, setBulkDeleteConfirm] = useState(false)
   const [showAdd, setShowAdd] = useState(false)
   const [editUser, setEditUser] = useState(null)
   const [deleteUser, setDeleteUser] = useState(null)
@@ -20,8 +22,14 @@ export default function AdminUsers() {
   const [newPassword, setNewPassword] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [toast, setToast] = useState(null)
   const { theme } = useTheme()
   const isDark = theme === 'dark'
+
+  const showToast = (msg, type = 'success') => {
+    setToast({ msg, type })
+    setTimeout(() => setToast(null), 3500)
+  }
 
   const fetchUsers = async () => {
     setLoading(true)
@@ -90,12 +98,43 @@ export default function AdminUsers() {
     setSubmitting(true)
     try {
       await api.deleteAdminUser({ userId: deleteUser.id })
+      setSelected((prev) => prev.filter((id) => id !== deleteUser.id))
       setDeleteUser(null)
+      showToast('User deleted permanently')
       fetchUsers()
     } catch (err) {
       setError(err.message)
     } finally {
       setSubmitting(false)
+    }
+  }
+
+  const handleBulkDelete = async () => {
+    if (selected.length === 0) return
+    setSubmitting(true)
+    setError('')
+    try {
+      await api.bulkDeleteAdminUsers({ userIds: selected })
+      showToast(`Successfully deleted ${selected.length} users permanently`)
+      setBulkDeleteConfirm(false)
+      setSelected([])
+      fetchUsers()
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const toggleSelect = (id) => {
+    setSelected((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]))
+  }
+
+  const toggleSelectAll = () => {
+    if (selected.length === filtered.length && filtered.length > 0) {
+      setSelected([])
+    } else {
+      setSelected(filtered.map((u) => u.id))
     }
   }
 
@@ -162,18 +201,36 @@ export default function AdminUsers() {
 
   return (
     <div className="space-y-6">
+      {/* Toast Notification */}
+      {toast && (
+        <div className={`fixed top-4 right-4 z-50 px-4 py-2.5 rounded-lg text-sm font-semibold shadow-lg transition-all ${
+          toast.type === 'error' ? 'bg-red-600 text-white' : 'bg-emerald-600 text-white'
+        }`}>{toast.msg}</div>
+      )}
+
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className={`text-2xl font-semibold ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>Users</h1>
           <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{users.length} total users</p>
         </div>
-        <button
-          onClick={() => { setForm(emptyForm); setShowAdd(true); setError(''); }}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          Add User
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={fetchUsers}
+            className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
+              isDark ? 'border-gray-700 text-gray-300 hover:bg-gray-700' : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            <RefreshCw className="w-4 h-4" />
+            Refresh
+          </button>
+          <button
+            onClick={() => { setForm(emptyForm); setShowAdd(true); setError(''); }}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            Add User
+          </button>
+        </div>
       </div>
 
       {error && (
@@ -199,10 +256,58 @@ export default function AdminUsers() {
           </div>
         </div>
 
+        {/* Bulk Actions Bar */}
+        {selected.length > 0 && (
+          <div className={`p-3.5 border-b flex flex-wrap items-center justify-between gap-3 ${
+            isDark ? 'bg-blue-900/20 border-blue-800/40 text-blue-300' : 'bg-blue-50 border-blue-200 text-blue-800'
+          }`}>
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-semibold">
+                {selected.length} user{selected.length === 1 ? '' : 's'} selected
+              </span>
+              <button
+                type="button"
+                onClick={toggleSelectAll}
+                className="text-xs underline hover:opacity-80 font-medium cursor-pointer"
+              >
+                {selected.length === filtered.length ? 'Deselect All' : 'Select All Filtered'}
+              </button>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setBulkDeleteConfirm(true)}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                Delete Selected ({selected.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelected([])}
+                className={`text-xs px-2.5 py-1.5 rounded-lg border font-medium transition-colors cursor-pointer ${
+                  isDark ? 'border-gray-600 hover:bg-gray-700 text-gray-300' : 'border-gray-300 hover:bg-gray-100 text-gray-700'
+                }`}
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-100'}`}>
+              <tr className={`border-b ${isDark ? 'border-gray-700 bg-gray-750' : 'border-gray-100 bg-gray-50/50'}`}>
+                <th className="px-4 py-3 w-10 text-center">
+                  <input
+                    type="checkbox"
+                    checked={selected.length === filtered.length && filtered.length > 0}
+                    onChange={toggleSelectAll}
+                    title="Select All"
+                    className="w-4 h-4 rounded cursor-pointer accent-blue-600"
+                  />
+                </th>
                 <th className={`text-left px-4 py-3 font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>User ID</th>
                 <th className={`text-left px-4 py-3 font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Name</th>
                 <th className={`text-left px-4 py-3 font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Email</th>
@@ -215,19 +320,34 @@ export default function AdminUsers() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="7" className={`px-4 py-12 text-center ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                  <td colSpan="8" className={`px-4 py-12 text-center ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
                     <Loader2 className="w-5 h-5 animate-spin mx-auto" />
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className={`px-4 py-12 text-center text-sm ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                  <td colSpan="8" className={`px-4 py-12 text-center text-sm ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
                     No users found
                   </td>
                 </tr>
               ) : (
                 filtered.map((user) => (
-                  <tr key={user.id} className={`border-b ${isDark ? 'border-gray-800 hover:bg-gray-700/50' : 'border-gray-50 hover:bg-gray-50/50'}`}>
+                  <tr
+                    key={user.id}
+                    className={`border-b transition-colors ${
+                      selected.includes(user.id)
+                        ? (isDark ? 'bg-blue-600/15 border-blue-800/40' : 'bg-blue-50/70 border-blue-100')
+                        : (isDark ? 'border-gray-800 hover:bg-gray-700/50' : 'border-gray-50 hover:bg-gray-50/50')
+                    }`}
+                  >
+                    <td className="px-4 py-3 text-center">
+                      <input
+                        type="checkbox"
+                        checked={selected.includes(user.id)}
+                        onChange={() => toggleSelect(user.id)}
+                        className="w-4 h-4 rounded cursor-pointer accent-blue-600"
+                      />
+                    </td>
                     <td className={`px-4 py-3 font-mono text-xs font-semibold ${isDark ? 'text-cyan-400' : 'text-primary-600'}`}>{user.id}</td>
                     <td className={`px-4 py-3 font-medium ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>{user.name}</td>
                     <td className={`px-4 py-3 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{user.email}</td>
@@ -361,9 +481,42 @@ export default function AdminUsers() {
           </p>
           <div className="flex justify-end gap-3">
             <button onClick={() => setDeleteUser(null)} className={`px-4 py-2 text-sm transition-colors ${isDark ? 'text-gray-300 hover:text-gray-100' : 'text-gray-600 hover:text-gray-900'}`}>Cancel</button>
-            <button onClick={handleDelete} disabled={submitting} className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white text-sm font-medium rounded-lg transition-colors">
+            <button onClick={handleDelete} disabled={submitting} className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5">
+              {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
               {submitting ? 'Deleting...' : 'Delete User'}
             </button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Bulk Delete Confirmation */}
+      {bulkDeleteConfirm && (
+        <Modal title="Delete Selected Users" onClose={() => setBulkDeleteConfirm(false)}>
+          <div className="space-y-4">
+            <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+              Are you sure you want to permanently delete <strong className="text-red-500 font-bold">{selected.length}</strong> selected user account(s)?
+            </p>
+            <div className={`p-3 rounded-lg text-xs ${isDark ? 'bg-red-500/10 border border-red-500/30 text-red-300' : 'bg-red-50 border border-red-200 text-red-700'}`}>
+              ⚠️ This action will permanently remove these users from the database, stop any active trading bots, and prevent their accounts from resurrecting.
+            </div>
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setBulkDeleteConfirm(false)}
+                className={`px-4 py-2 text-sm transition-colors ${isDark ? 'text-gray-300 hover:text-gray-100' : 'text-gray-600 hover:text-gray-900'}`}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleBulkDelete}
+                disabled={submitting}
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
+              >
+                {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                {submitting ? 'Deleting...' : `Delete ${selected.length} Users`}
+              </button>
+            </div>
           </div>
         </Modal>
       )}
