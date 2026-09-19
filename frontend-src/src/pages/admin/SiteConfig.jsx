@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { api } from '../../api'
-import { Settings, Save, Loader2, X, Check } from 'lucide-react'
+import { Settings, Save, Loader2, X, Check, Lock, Key, ShieldCheck, Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { useTheme } from '../../ThemeContext'
+import { useAuth } from '../../AuthContext'
 
 export default function AdminSiteConfig() {
   const [config, setConfig] = useState({})
@@ -73,6 +74,16 @@ export default function AdminSiteConfig() {
     { key: 'facebookLink', label: 'Facebook Page Link', type: 'url' },
     { key: 'whatsappLink', label: 'WhatsApp Link', type: 'url' },
     { key: 'twitterLink', label: 'Twitter / X Link', type: 'url' },
+  ]
+
+  const landingVideoFields = [
+    {
+      key: 'youtubeEmbedLink',
+      label: 'YouTube Video Embed Link (Featured on Landing Page)',
+      type: 'url',
+      placeholder: 'https://www.youtube.com/watch?v=... or https://youtu.be/...',
+      helper: 'Paste your YouTube video link. It will automatically embed and display in the video section of your landing page.'
+    },
   ]
 
   const paymentFields = [
@@ -177,6 +188,30 @@ export default function AdminSiteConfig() {
           ))}
         </Section>
 
+        <Section title="Landing Page Video Showcase (YouTube Embed)">
+          {landingVideoFields.map((f) => (
+            <Field key={f.key} field={f} value={config[f.key] !== undefined ? config[f.key] : (config.youtubeEmbedCode || '')} onChange={(v) => handleChange(f.key, v)} />
+          ))}
+          {(config.youtubeEmbedLink || config.youtubeEmbedCode) && (
+            <div className="col-span-1 sm:col-span-2 mt-2">
+              <p className={`text-xs font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Live Video Preview:</p>
+              <div className="aspect-video w-full max-w-xl rounded-xl overflow-hidden border border-gray-300 dark:border-gray-700 shadow-md bg-black">
+                <iframe
+                  src={(function(url) {
+                    if (!url) return '';
+                    const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
+                    return m && m[1] ? `https://www.youtube.com/embed/${m[1]}` : url;
+                  })(config.youtubeEmbedLink || config.youtubeEmbedCode)}
+                  title="YouTube Preview"
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          )}
+        </Section>
+
         <Section title="Social & Community Links">
           {socialFields.map((f) => (
             <Field key={f.key} field={f} value={config[f.key] || ''} onChange={(v) => handleChange(f.key, v)} />
@@ -194,6 +229,189 @@ export default function AdminSiteConfig() {
             className={`inline-flex items-center gap-2 px-5 py-2 bg-blue-600 hover:bg-blue-700 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors ${isDark ? 'disabled:bg-gray-600' : 'disabled:bg-gray-300'}`}>
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             {saving ? 'Saving...' : 'Save Configuration'}
+          </button>
+        </div>
+      </form>
+
+      {/* Admin Login Security & Password Card */}
+      <AdminPasswordSection isDark={isDark} />
+    </div>
+  )
+}
+
+function AdminPasswordSection({ isDark }) {
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [showCurrent, setShowCurrent] = useState(false)
+  const [showNew, setShowNew] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [status, setStatus] = useState(null) // { type: 'success' | 'error', message: '' }
+  const { admin } = useAuth()
+
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault()
+    setStatus(null)
+
+    if (!currentPassword) {
+      setStatus({ type: 'error', message: 'Current password is required.' })
+      return
+    }
+
+    if (!newPassword || newPassword.length < 4) {
+      setStatus({ type: 'error', message: 'New password must be at least 4 characters long.' })
+      return
+    }
+
+    if (newPassword !== confirmPassword) {
+      setStatus({ type: 'error', message: 'New passwords do not match. Please verify.' })
+      return
+    }
+
+    setSaving(true)
+    try {
+      const res = await api.changeAdminPassword({
+        currentPassword,
+        newPassword,
+        adminEmail: admin?.email || 'admin@quotexautotrade.com'
+      })
+      setStatus({
+        type: 'success',
+        message: res.message || 'Admin login password updated successfully! Your new password is now active.'
+      })
+      setCurrentPassword('')
+      setNewPassword('')
+      setConfirmPassword('')
+    } catch (err) {
+      setStatus({
+        type: 'error',
+        message: err.message || 'Failed to update admin password. Please verify your current password.'
+      })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div className={`rounded-xl border p-4 sm:p-6 space-y-4 ${isDark ? 'bg-gray-800 border-gray-700/50' : 'bg-white border-gray-200 shadow-sm'}`}>
+      <div className="flex items-center gap-3">
+        <div className="w-9 h-9 rounded-xl bg-blue-600/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+          <Key className="w-5 h-5" />
+        </div>
+        <div>
+          <h2 className={`text-sm font-bold ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>
+            Admin Login Password & Security
+          </h2>
+          <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+            Change master admin login credentials. All passwords are encrypted with bcrypt.
+          </p>
+        </div>
+      </div>
+
+      {status && (
+        <div
+          className={`p-3 rounded-lg text-xs flex items-start gap-2 ${
+            status.type === 'error'
+              ? 'bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400'
+              : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
+          }`}
+        >
+          {status.type === 'error' ? (
+            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+          ) : (
+            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
+          )}
+          <span>{status.message}</span>
+        </div>
+      )}
+
+      <form onSubmit={handleUpdatePassword} className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label className={`block text-xs font-semibold mb-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+              Current Admin Password
+            </label>
+            <div className="relative">
+              <input
+                type={showCurrent ? 'text' : 'password'}
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                placeholder="Current password"
+                required
+                className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 pr-9 transition-colors ${
+                  isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'
+                }`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowCurrent(!showCurrent)}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+              >
+                {showCurrent ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label className={`block text-xs font-semibold mb-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+              New Admin Password
+            </label>
+            <div className="relative">
+              <input
+                type={showNew ? 'text' : 'password'}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="New password (min 4 chars)"
+                required
+                className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 pr-9 transition-colors ${
+                  isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'
+                }`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowNew(!showNew)}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+              >
+                {showNew ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label className={`block text-xs font-semibold mb-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+              Confirm New Password
+            </label>
+            <div className="relative">
+              <input
+                type={showConfirm ? 'text' : 'password'}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Re-enter new password"
+                required
+                className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 pr-9 transition-colors ${
+                  isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'
+                }`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirm(!showConfirm)}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+              >
+                {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-end">
+          <button
+            type="submit"
+            disabled={saving}
+            className="inline-flex items-center gap-2 px-5 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
+          >
+            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Key className="w-4 h-4" />}
+            {saving ? 'Updating Password...' : 'Update Admin Password'}
           </button>
         </div>
       </form>

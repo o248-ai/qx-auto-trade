@@ -12,7 +12,7 @@ export default function AdminStrategies() {
   const [editStrategy, setEditStrategy] = useState(null)
   const [deleteStrategy, setDeleteStrategy] = useState(null)
   const [form, setForm] = useState({
-    name: '', broker: '', timeframe: '1m',
+    name: '', broker: 'quotex', timeframe: '1m', winRate: 85,
     rsiPeriod: 14, rsiOverbought: 70, rsiOversold: 30,
     emaFast: 9, emaSlow: 21,
     macdFast: 12, macdSlow: 26, macdSignal: 9,
@@ -26,7 +26,7 @@ export default function AdminStrategies() {
   const fetchStrategies = async () => {
     setLoading(true)
     try {
-      const data = await api.getStrategies()
+      const data = await api.getStrategies({ includeInactive: 'true' })
       setStrategies(data.strategies || data || [])
     } catch (err) {
       setError(err.message)
@@ -42,7 +42,21 @@ export default function AdminStrategies() {
     setSubmitting(true)
     setError('')
     try {
-      await api.addStrategy(form)
+      await api.addStrategy({
+        ...form,
+        broker: form.broker || 'quotex',
+        winRate: Number(form.winRate || 85),
+        parameters: {
+          rsiPeriod: Number(form.rsiPeriod || 14),
+          rsiOverbought: Number(form.rsiOverbought || 70),
+          rsiOversold: Number(form.rsiOversold || 30),
+          emaFast: Number(form.emaFast || 9),
+          emaSlow: Number(form.emaSlow || 21),
+          macdFast: Number(form.macdFast || 12),
+          macdSlow: Number(form.macdSlow || 26),
+          macdSignal: Number(form.macdSignal || 9),
+        }
+      })
       setShowAdd(false)
       resetForm()
       fetchStrategies()
@@ -56,7 +70,7 @@ export default function AdminStrategies() {
   const handleDelete = async () => {
     setSubmitting(true)
     try {
-      await api.deleteStrategy({ strategyId: deleteStrategy.id })
+      await api.deleteStrategy({ strategyId: deleteStrategy.id, id: deleteStrategy.id })
       setDeleteStrategy(null)
       fetchStrategies()
     } catch (err) {
@@ -68,7 +82,11 @@ export default function AdminStrategies() {
 
   const handleToggle = async (strategy) => {
     try {
-      await api.toggleStrategyActive({ strategyId: strategy.id })
+      await api.toggleStrategyActive({
+        strategyId: strategy.id,
+        id: strategy.id,
+        isActive: !strategy.isActive
+      })
       fetchStrategies()
     } catch (err) {
       setError(err.message)
@@ -80,16 +98,25 @@ export default function AdminStrategies() {
     setSubmitting(true)
     setError('')
     try {
-      if (params.name) {
-        await api.editStrategy({
-          strategyId: editStrategy.id,
-          name: params.name,
-          description: params.description,
-          winRate: Number(params.winRate || 85),
-          timeframe: params.timeframe
-        })
-      }
-      await api.updateStrategyParameters({ strategyId: editStrategy.id, ...params })
+      await api.editStrategy({
+        strategyId: editStrategy.id,
+        id: editStrategy.id,
+        name: params.name,
+        broker: params.broker || editStrategy.broker || 'quotex',
+        description: params.description,
+        winRate: Number(params.winRate || 85),
+        timeframe: params.timeframe,
+        parameters: {
+          rsiPeriod: Number(params.rsiPeriod || 14),
+          rsiOverbought: Number(params.rsiOverbought || 70),
+          rsiOversold: Number(params.rsiOversold || 30),
+          emaFast: Number(params.emaFast || 9),
+          emaSlow: Number(params.emaSlow || 21),
+          macdFast: Number(params.macdFast || 12),
+          macdSlow: Number(params.macdSlow || 26),
+          macdSignal: Number(params.macdSignal || 9),
+        }
+      })
       setEditStrategy(null)
       fetchStrategies()
     } catch (err) {

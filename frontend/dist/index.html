@@ -114,6 +114,78 @@
         }
       })();
     </script>
+    <script>
+      // Dynamic YouTube Video Showcase Loader for Landing Page
+      (function() {
+        function getEmbedUrl(url) {
+          if (!url) return '';
+          var trimmed = url.trim();
+          if (trimmed.indexOf('<iframe') !== -1) {
+            var m = trimmed.match(/src=["']([^"']+)["']/i);
+            if (m && m[1]) return m[1];
+          }
+          if (trimmed.indexOf('youtube.com/embed/') !== -1) return trimmed;
+          var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+          var match = trimmed.match(regExp);
+          return (match && match[2].length === 11) ? ('https://www.youtube-nocookie.com/embed/' + match[2]) : trimmed;
+        }
+
+        function injectVideo(embedLink) {
+          var embedUrl = getEmbedUrl(embedLink);
+          if (!embedUrl || document.getElementById('landing-youtube-showcase')) return;
+
+          var section = document.createElement('section');
+          section.id = 'landing-youtube-showcase';
+          section.style.cssText = 'padding: 60px 16px; background: rgba(15, 23, 42, 0.95); border-top: 1px solid rgba(6, 182, 212, 0.2); border-bottom: 1px solid rgba(6, 182, 212, 0.2); text-align: center; position: relative; z-index: 10;';
+          section.innerHTML = [
+            '<div style="max-width: 900px; margin: 0 auto;">',
+            '  <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.3); border-radius: 9999px; padding: 6px 16px; margin-bottom: 16px;">',
+            '    <span style="width: 8px; height: 8px; border-radius: 50%; background: #22d3ee; box-shadow: 0 0 10px #22d3ee;"></span>',
+            '    <span style="color: #67e8f9; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Live Video Showcase</span>',
+            '  </div>',
+            '  <h2 style="font-size: 30px; font-weight: 800; color: #fff; margin-bottom: 12px; font-family: Outfit, sans-serif;">See QX Auto Trade In Action</h2>',
+            '  <p style="color: #94a3b8; font-size: 15px; margin-bottom: 28px; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6;">Watch how our automated trading bot executes high-probability signals on Quotex with real-time risk management.</p>',
+            '  <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 16px; border: 1px solid rgba(6,182,212,0.35); box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 30px rgba(6,182,212,0.25); background: #000;">',
+            '    <iframe src="' + embedUrl + '" title="Quotex Auto Trade Video Demonstration" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; top:0; left: 0; width: 100%; height: 100%; border: 0;"></iframe>',
+            '  </div>',
+            '</div>'
+          ].join('');
+
+          var target = document.getElementById('features') || document.querySelector('section[id*="feature"]');
+          if (target && target.parentNode) {
+            target.parentNode.insertBefore(section, target.nextSibling);
+          } else {
+            var root = document.getElementById('root');
+            if (root) {
+              var firstSec = root.querySelector('section');
+              if (firstSec && firstSec.nextSibling) {
+                root.insertBefore(section, firstSec.nextSibling);
+              } else {
+                root.appendChild(section);
+              }
+            }
+          }
+        }
+
+        fetch('/api/user/site-config')
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            var link = data?.siteConfig?.youtubeEmbedLink || data?.siteConfig?.youtubeEmbedCode || data?.youtubeEmbedLink;
+            if (link) {
+              var attempts = 0;
+              var interval = setInterval(function() {
+                attempts++;
+                var ready = document.querySelector('h1') || document.getElementById('features') || (document.getElementById('root') && document.getElementById('root').children.length > 0);
+                if (ready || attempts > 25) {
+                  clearInterval(interval);
+                  injectVideo(link);
+                }
+              }, 250);
+            }
+          })
+          .catch(function() {});
+      })();
+    </script>
   </head>
   <body class="bg-dark-900 text-slate-100 font-sans antialiased selection:bg-brand-cyan/30 selection:text-brand-cyan min-h-screen">
     <div id="root"></div>

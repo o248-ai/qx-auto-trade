@@ -124,6 +124,19 @@ const brokers = [
   { name: 'GuruTrade7', color: 'from-purple-400 to-pink-500' },
 ];
 
+function getYouTubeEmbedUrl(url) {
+  if (!url) return '';
+  const trimmed = url.trim();
+  if (trimmed.startsWith('<iframe')) {
+    const srcMatch = trimmed.match(/src=["']([^"']+)["']/i);
+    if (srcMatch && srcMatch[1]) return srcMatch[1];
+  }
+  if (trimmed.includes('youtube.com/embed/')) return trimmed;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = trimmed.match(regExp);
+  return (match && match[2].length === 11) ? `https://www.youtube-nocookie.com/embed/${match[2]}` : trimmed;
+}
+
 export default function Landing() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -454,6 +467,39 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      {/* ─── Video Showcase ─── */}
+      {(siteConfig.youtubeEmbedLink || siteConfig.youtubeEmbedCode) && (
+        <section id="demo" className="py-20 bg-dark-900/90 relative overflow-hidden border-t border-b border-cyan-500/10">
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-3xl" />
+          </div>
+          <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-4">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+              <span className="text-cyan-300 text-xs font-semibold uppercase tracking-wider">Live Video Guide</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                See QX Auto Trade In Action
+              </span>
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto mb-10 text-sm sm:text-base">
+              Watch how our intelligent automated trading bot executes high-probability signals on Quotex with real-time risk management.
+            </p>
+
+            <div className="relative mx-auto rounded-2xl overflow-hidden border border-cyan-500/30 shadow-[0_0_50px_rgba(0,212,255,0.15)] aspect-video max-w-4xl bg-black">
+              <iframe
+                src={getYouTubeEmbedUrl(siteConfig.youtubeEmbedLink || siteConfig.youtubeEmbedCode)}
+                title="Quotex Auto Trade Video Demonstration"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="w-full h-full border-0"
+              />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ─── Live Trades ─── */}
       <section id="live-trades" className="py-24 bg-dark-900">

@@ -23,6 +23,7 @@ import AdminEmergency from './pages/admin/Emergency'
 import AdminLiveSessions from './pages/admin/LiveSessions'
 import AdminDeposits from './pages/admin/Deposits'
 import AdminLogin from './pages/admin/AdminLogin'
+import Landing from './pages/Landing'
 
 function ProtectedUserRoute({ children }) {
   const { user, loading } = useAuth()
@@ -41,6 +42,9 @@ function ProtectedAdminRoute({ children }) {
 function AppRoutes() {
   return (
     <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/landing" element={<Landing />} />
+
       <Route element={<ProtectedUserRoute><UserLayout /></ProtectedUserRoute>}>
         <Route path="/dashboard" element={<UserDashboard />} />
         <Route path="/strategies" element={<UserStrategies />} />

@@ -3,7 +3,7 @@ import { api } from '../../api'
 import { useTheme } from '../../ThemeContext'
 import {
   Users as UsersIcon, Plus, Pencil, Trash2, RefreshCw, Search,
-  X, Power, PowerOff, ShieldOff, Key, ChevronDown, Loader2, Check
+  X, Power, PowerOff, ShieldOff, Key, ChevronDown, Loader2, Check, Download
 } from 'lucide-react'
 
 const emptyForm = { name: '', email: '', password: '', subscriptionPlan: 'Free Trial' }
@@ -184,6 +184,62 @@ export default function AdminUsers() {
     setEditUser(user)
   }
 
+  const handleExportUsers = () => {
+    if (!users || users.length === 0) {
+      showToast('No users available to export', 'error')
+      return
+    }
+
+    const headers = [
+      'User ID',
+      'Name',
+      'Email',
+      'Role',
+      'Subscription Plan',
+      'Plan Expiration',
+      'Lifetime VIP Approved',
+      'Active Status',
+      'Deposit Verified',
+      'Referral UID',
+      'Phone',
+      'Country',
+      'Created At'
+    ]
+
+    const csvRows = [headers.join(',')]
+
+    users.forEach((u) => {
+      const row = [
+        `"${u.id || ''}"`,
+        `"${(u.name || '').replace(/"/g, '""')}"`,
+        `"${(u.email || '').replace(/"/g, '""')}"`,
+        `"${u.role || 'USER'}"`,
+        `"${u.subscriptionPlan || u.plan || 'Free Trial'}"`,
+        `"${u.planExpiresAt || u.subExpiresAt || ''}"`,
+        `"${u.isLifetimeApproved ? 'YES' : 'NO'}"`,
+        `"${(u.isActive !== false && u.active !== false) ? 'ACTIVE' : 'DEACTIVATED'}"`,
+        `"${u.depositVerified ? 'YES' : 'NO'}"`,
+        `"${u.referralUid || ''}"`,
+        `"${u.phone || ''}"`,
+        `"${u.country || ''}"`,
+        `"${u.createdAt || ''}"`
+      ]
+      csvRows.push(row.join(','))
+    })
+
+    const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    const dateStr = new Date().toISOString().slice(0, 10)
+    link.setAttribute('download', `quotex_users_export_${dateStr}.csv`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+    showToast(`Exported ${users.length} users successfully!`, 'success')
+  }
+
   const handleReactivateTrial = async () => {
     if (!editUser) return;
     setSubmitting(true)
@@ -215,8 +271,18 @@ export default function AdminUsers() {
         </div>
         <div className="flex items-center gap-2">
           <button
+            onClick={handleExportUsers}
+            className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition-colors shadow-sm cursor-pointer ${
+              isDark ? 'border-gray-700 text-emerald-400 hover:bg-gray-700' : 'border-gray-200 text-emerald-600 hover:bg-gray-50'
+            }`}
+            title="Download CSV export of all users"
+          >
+            <Download className="w-4 h-4" />
+            Export Users
+          </button>
+          <button
             onClick={fetchUsers}
-            className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
+            className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
               isDark ? 'border-gray-700 text-gray-300 hover:bg-gray-700' : 'border-gray-200 text-gray-600 hover:bg-gray-50'
             }`}
           >

@@ -4,9 +4,10 @@ import { useAuth } from '../../AuthContext'
 import { useTheme } from '../../ThemeContext'
 import {
   LayoutDashboard, Users, Brain, CreditCard, Wallet, Megaphone,
-  Radio, FileText, Settings, AlertTriangle, Shield, Lock, Activity,
+  Radio, FileText, Settings, AlertTriangle, Shield, Lock, Key, Activity,
   Siren, LogOut, Menu, X, ShieldCheck, Sun, Moon, Package
 } from 'lucide-react'
+import ChangeAdminPasswordModal from '../../components/ChangeAdminPasswordModal'
 
 const navItems = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -21,6 +22,7 @@ const navItems = [
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false)
   const { admin, logoutAdmin } = useAuth()
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
@@ -69,7 +71,14 @@ export default function AdminLayout() {
           </div>
         </nav>
 
-        <div className={`p-2 ${isDark ? 'border-t border-gray-700' : 'border-t border-gray-100'}`}>
+        <div className={`p-2 space-y-1 ${isDark ? 'border-t border-gray-700' : 'border-t border-gray-100'}`}>
+          <button onClick={() => { setSidebarOpen(false); setPasswordModalOpen(true); }}
+            className={`flex items-center gap-2.5 w-full px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${
+              isDark ? 'text-gray-400 hover:bg-gray-700 hover:text-gray-200' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+            }`}>
+            <Key className="w-4 h-4 text-blue-500" />
+            <span>Change Password</span>
+          </button>
           <button onClick={handleLogout}
             className={`flex items-center gap-2.5 w-full px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${
               isDark ? 'text-gray-400 hover:bg-red-500/10 hover:text-red-400' : 'text-gray-600 hover:bg-red-50 hover:text-red-600'
@@ -81,13 +90,27 @@ export default function AdminLayout() {
       </aside>
 
       <div className="flex-1 flex flex-col min-w-0">
-        <header className={`h-14 flex items-center px-4 lg:px-6 gap-4 sticky top-0 z-30 backdrop-blur-md ${
+        <header className={`h-14 flex items-center px-4 lg:px-6 gap-3 sticky top-0 z-30 backdrop-blur-md ${
           isDark ? 'bg-gray-800/80 border-b border-gray-700' : 'bg-white/80 border-b border-gray-200'
         }`}>
           <button onClick={() => setSidebarOpen(true)} className="lg:hidden">
             <Menu className={`w-5 h-5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
           </button>
           <div className="flex-1" />
+
+          <button
+            onClick={() => setPasswordModalOpen(true)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm ${
+              isDark
+                ? 'bg-gray-700/80 hover:bg-gray-600 text-gray-200 border border-gray-600'
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-200'
+            }`}
+            title="Change Admin Password"
+          >
+            <Key className="w-3.5 h-3.5 text-blue-500" />
+            <span>Change Password</span>
+          </button>
+
           <button onClick={toggleTheme}
             className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-gray-700 text-yellow-400' : 'hover:bg-gray-100 text-gray-500'}`}
             title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}>
@@ -105,6 +128,11 @@ export default function AdminLayout() {
           <Outlet />
         </main>
       </div>
+
+      <ChangeAdminPasswordModal
+        isOpen={passwordModalOpen}
+        onClose={() => setPasswordModalOpen(false)}
+      />
     </div>
   )
 }

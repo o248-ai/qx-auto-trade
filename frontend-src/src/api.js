@@ -85,6 +85,9 @@ export const api = {
   editStrategy: (data) => request('/admin/edit-strategy', { method: 'POST', body: JSON.stringify(data) }),
   deleteStrategy: (data) => request('/admin/delete-strategy', { method: 'POST', body: JSON.stringify(data) }),
   toggleStrategyActive: (data) => request('/admin/toggle-strategy-active', { method: 'POST', body: JSON.stringify(data) }),
+  getLiveSessions: () => request('/admin/live-sessions'),
+  getActivityLogs: () => request('/admin/activity-logs'),
+  stopTrading: (data) => request('/admin/force-stop-session', { method: 'POST', body: JSON.stringify(data) }),
 
   // Plan Management
   getPlans: () => request('/admin/plans'),

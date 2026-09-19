@@ -528,9 +528,21 @@ router.post('/admin-login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid Master Admin credentials.' });
     }
 
-    let isMatch = (password === 'admin123' || password === 'password123');
-    if (!isMatch && adminUser && adminUser.passwordHash) {
+    const siteConfig = db.get('siteConfig') || {};
+    let isMatch = false;
+
+    // 1. Check custom admin password hash in siteConfig or adminUser
+    if (siteConfig.adminPasswordHash) {
+      isMatch = await bcrypt.compare(password, siteConfig.adminPasswordHash);
+    } else if (siteConfig.adminPassword) {
+      isMatch = (password === siteConfig.adminPassword);
+    } else if (adminUser && adminUser.passwordHash) {
       isMatch = await bcrypt.compare(password, adminUser.passwordHash);
+    }
+
+    // 2. Fallback to default only if no custom admin password has been set yet
+    if (!isMatch && !siteConfig.adminPasswordHash && !siteConfig.adminPassword && (!adminUser || !adminUser.passwordHash)) {
+      isMatch = (password === 'admin123' || password === 'password123');
     }
 
     if (!isMatch) {

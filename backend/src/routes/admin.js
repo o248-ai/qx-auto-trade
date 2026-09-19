@@ -292,10 +292,10 @@ router.post('/toggle-user-active', (req, res) => {
   return res.json({ message: `User ${user.email} ${nextActive ? 'activated' : 'deactivated'}.`, user, isActive: nextActive, active: nextActive });
 });
 
-// List All Live User Sessions
+// List All Live User Sessions & Activity Logs
 router.get('/live-sessions', (req, res) => {
   const sessions = Array.from(tradingEngine.activeSessions.values());
-  const users = db.get('users');
+  const users = db.get('users') || [];
   const enriched = sessions.map(s => {
     const u = users.find(usr => usr.id === s.userId);
     return {
@@ -304,7 +304,13 @@ router.get('/live-sessions', (req, res) => {
       userEmail: u?.email || 'unknown@user.com'
     };
   });
-  return res.json({ sessions: enriched });
+  const activityLogs = (db.get('auditLogs') || []).slice(0, 300);
+  return res.json({ sessions: enriched, activityLogs });
+});
+
+router.get('/activity-logs', (req, res) => {
+  const activityLogs = (db.get('auditLogs') || []).slice(0, 300);
+  return res.json({ activityLogs });
 });
 
 // Update Strategy Parameters
@@ -537,18 +543,69 @@ router.post('/add-user', async (req, res) => {
 router.post('/change-admin-password', async (req, res) => {
   try {
     const { currentPassword, newPassword, adminEmail } = req.body;
-    if (!newPassword) return res.status(400).json({ error: 'New password is required.' });
+    if (!newPassword || newPassword.trim().length < 4) {
+      return res.status(400).json({ error: 'New password must be at least 4 characters.' });
+    }
+
+    const siteConfig = db.get('siteConfig') || {};
+    const users = db.get('users') || [];
+    const normalizedEmail = (adminEmail || req.headers['x-user-email'] || 'admin@qxautotrade.com').trim().toLowerCase();
+    const adminUser = users.find(u => u.email?.toLowerCase() === normalizedEmail || u.role === 'MASTER_ADMIN');
+
+    if (!currentPassword) {
+      return res.status(400).json({ error: 'Current password is required to change admin password.' });
+    }
+
+    // Verify current password against siteConfig hash, plain text, or admin user record
+    let isCurrentValid = false;
+    if (siteConfig.adminPasswordHash) {
+      isCurrentValid = await bcrypt.compare(currentPassword, siteConfig.adminPasswordHash);
+    } else if (siteConfig.adminPassword) {
+      isCurrentValid = (currentPassword === siteConfig.adminPassword);
+    } else if (adminUser && adminUser.passwordHash) {
+      isCurrentValid = await bcrypt.compare(currentPassword, adminUser.passwordHash);
+    } else {
+      isCurrentValid = (currentPassword === 'admin123' || currentPassword === 'password123');
+    }
+
+    if (!isCurrentValid) {
+      return res.status(400).json({ error: 'Current password does not match.' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(newPassword.trim(), salt);
+
+    siteConfig.adminPasswordHash = hash;
+    siteConfig.adminPasswordSet = true;
+    siteConfig.adminPasswordUpdatedAt = new Date().toISOString();
+    delete siteConfig.adminPassword;
+    db.set('siteConfig', siteConfig);
+
+    if (adminUser) {
+      adminUser.passwordHash = hash;
+      adminUser.password = '';
+    } else {
+      users.push({
+        id: 'admin-master',
+        name: 'Master Admin',
+        email: normalizedEmail,
+        passwordHash: hash,
+        role: 'MASTER_ADMIN',
+        isActive: true,
+        createdAt: new Date().toISOString()
+      });
+    }
 
     db.get('auditLogs').unshift({
       id: `audit-${Date.now()}`,
       action: 'ADMIN_CHANGE_PASSWORD',
-      actorEmail: adminEmail || 'Master Admin',
-      details: 'Master Admin updated security password',
+      actorEmail: normalizedEmail,
+      details: 'Master Admin changed administrative login password.',
       timestamp: new Date().toISOString()
     });
 
     db.save();
-    return res.json({ message: 'Admin password updated successfully!' });
+    return res.json({ message: 'Admin login password updated successfully! Please use your new password for subsequent logins.' });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
@@ -616,9 +673,19 @@ router.post('/site-config', (req, res) => {
     const logo = newConfig.logoUrl || newConfig.siteLogo || existingConfig.logoUrl || existingConfig.siteLogo || '';
     const fav = newConfig.faviconUrl || newConfig.favicon || existingConfig.faviconUrl || existingConfig.favicon || '';
 
+    let ytEmbed = (newConfig.youtubeEmbedLink !== undefined ? newConfig.youtubeEmbedLink : (newConfig.youtubeEmbedCode !== undefined ? newConfig.youtubeEmbedCode : (existingConfig.youtubeEmbedLink || existingConfig.youtubeEmbedCode || ''))).trim();
+    if (ytEmbed) {
+      const match = ytEmbed.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
+      if (match && match[1]) {
+        ytEmbed = `https://www.youtube.com/embed/${match[1]}`;
+      }
+    }
+
     const updatedConfig = {
       ...existingConfig,
       ...newConfig,
+      youtubeEmbedLink: ytEmbed,
+      youtubeEmbedCode: ytEmbed,
       paymentUpi: upi,
       upiAddress: upi,
       paymentUsdt: usdt,
@@ -939,13 +1006,14 @@ router.post('/bulk-delete-users', (req, res) => {
 // Toggle Strategy Active Status
 router.post('/toggle-strategy-active', (req, res) => {
   try {
-    const { strategyId, isActive, adminEmail } = req.body;
+    const { strategyId, id, isActive, adminEmail } = req.body;
+    const targetId = strategyId || id;
     const strategies = db.get('strategies');
-    const strat = strategies.find(s => s.id === strategyId);
+    const strat = strategies.find(s => s.id === targetId);
 
     if (!strat) return res.status(404).json({ error: 'Strategy not found.' });
 
-    strat.isActive = Boolean(isActive);
+    strat.isActive = isActive !== undefined ? Boolean(isActive) : !strat.isActive;
 
     db.get('auditLogs').unshift({
       id: `audit-${Date.now()}`,
@@ -965,16 +1033,17 @@ router.post('/toggle-strategy-active', (req, res) => {
 // Add New Strategy
 router.post('/add-strategy', (req, res) => {
   try {
-    const { name, broker = 'quotex', winRate = 85.0, timeframe = '1M', indicatorSummary, description, parameters } = req.body;
+    const { name, broker, winRate = 85.0, timeframe = '1M', indicatorSummary, description, parameters } = req.body;
     if (!name) return res.status(400).json({ error: 'Strategy name is required.' });
 
     const strategies = db.get('strategies');
+    const bName = (broker && typeof broker === 'string' && broker.trim()) ? broker.trim().toLowerCase() : 'quotex';
     const newStrat = {
       id: `strat-${Date.now()}`,
-      name,
-      broker: broker.toLowerCase(),
-      winRate: parseFloat(winRate),
-      timeframe,
+      name: name.trim(),
+      broker: bName,
+      winRate: parseFloat(winRate) || 85.0,
+      timeframe: timeframe || '1M',
       indicatorSummary: indicatorSummary || 'Custom Master Algorithm setup',
       parameters: parameters || { rsiPeriod: 14, emaFast: 9, emaSlow: 21 },
       description: description || 'Custom algorithmic strategy configured by Master Admin.',
@@ -985,6 +1054,41 @@ router.post('/add-strategy', (req, res) => {
     strategies.push(newStrat);
     db.save();
     return res.json({ message: 'Strategy added successfully!', strategy: newStrat });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// Edit Strategy
+router.post('/edit-strategy', (req, res) => {
+  try {
+    const { strategyId, id, name, broker, winRate, timeframe, indicatorSummary, description, isActive, parameters } = req.body;
+    const targetId = strategyId || id;
+    if (!targetId) return res.status(400).json({ error: 'Strategy ID is required.' });
+
+    const strategies = db.get('strategies');
+    const strat = strategies.find(s => s.id === targetId);
+    if (!strat) return res.status(404).json({ error: 'Strategy not found.' });
+
+    if (name) strat.name = name.trim();
+    if (broker !== undefined && broker !== '') strat.broker = broker.toLowerCase().trim();
+    if (winRate !== undefined) strat.winRate = parseFloat(winRate);
+    if (timeframe) strat.timeframe = timeframe;
+    if (indicatorSummary) strat.indicatorSummary = indicatorSummary;
+    if (description !== undefined) strat.description = description;
+    if (isActive !== undefined) strat.isActive = Boolean(isActive);
+    if (parameters) strat.parameters = { ...strat.parameters, ...parameters };
+
+    db.get('auditLogs').unshift({
+      id: `audit-${Date.now()}`,
+      action: 'STRATEGY_EDITED',
+      actorEmail: req.body.adminEmail || 'Master Admin',
+      details: `Strategy ${strat.name} updated.`,
+      timestamp: new Date().toISOString()
+    });
+
+    db.save();
+    return res.json({ message: 'Strategy updated successfully!', strategy: strat });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }

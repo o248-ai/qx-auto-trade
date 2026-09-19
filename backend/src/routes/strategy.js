@@ -7,7 +7,11 @@ router.get('/', (req, res) => {
   const { broker, includeInactive } = req.query;
   let strategies = db.get('strategies');
   if (broker) {
-    strategies = strategies.filter(s => (s.broker || '').toLowerCase() === broker.toLowerCase());
+    const bLower = broker.toLowerCase().trim();
+    strategies = strategies.filter(s => {
+      const sBroker = (s.broker || '').toLowerCase().trim();
+      return !sBroker || sBroker === bLower || sBroker === 'all' || (bLower === 'quotex' && (sBroker.includes('quotex') || sBroker === ''));
+    });
   }
   if (includeInactive !== 'true') {
     strategies = strategies.filter(s => s.isActive !== false);
