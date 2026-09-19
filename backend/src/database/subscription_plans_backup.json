@@ -2,8 +2,8 @@
   {
     "id": "plan-basic",
     "name": "Basic Plan",
-    "price": "$59",
-    "numericPrice": 59,
+    "price": "$49",
+    "numericPrice": 49,
     "period": "/month",
     "features": [
       "All trading strategies",
@@ -15,7 +15,8 @@
     "icon": "Zap",
     "isActive": true,
     "popular": false,
-    "cta": "Get Started"
+    "cta": "Get Started",
+    "updatedAt": "2026-09-19T11:42:30.484Z"
   },
   {
     "id": "plan-pro",

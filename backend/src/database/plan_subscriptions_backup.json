@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "id": "sub-free-1789840206066",
+    "refRequestId": "ref-req-1789840206066",
+    "userId": "user-1789791095862",
+    "userEmail": "ms9017967@gmail.com",
+    "userName": "salman",
+    "planName": "Lifetime VIP (Free Access)",
+    "price": "$0 (Deposit Proof)",
+    "period": "Lifetime",
+    "paymentTxId": "FREE-93692675-1789840206066",
+    "paymentProof": "Deposit Proof (Quotex)",
+    "status": "REJECTED",
+    "type": "free_access",
+    "notes": "Trader ID: 93692675, Deposit: $10",
+    "createdAt": "2026-09-19T17:50:06.066Z",
+    "rejectedAt": "2026-09-19T18:31:52.360Z"
+  }
+]

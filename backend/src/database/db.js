@@ -307,6 +307,16 @@ class Database {
   isUserDeleted(identifier) {
     if (!identifier) return false;
     const clean = String(identifier).trim().toLowerCase();
+    // Master admin can NEVER be marked as deleted
+    if (
+      clean === 'admin@qxautotrade.com' ||
+      clean === 'admin@quotexautotrade.com' ||
+      clean === 'admin-1' ||
+      clean === 'admin-master' ||
+      clean.startsWith('admin-')
+    ) {
+      return false;
+    }
     const list = this.data?.deletedUsers || [];
     return list.some(item => {
       if (!item) return false;
@@ -321,8 +331,17 @@ class Database {
     if (!userId) return null;
     let users = this.get('users') || [];
     const cleanId = String(userId).trim().toLowerCase();
+    if (
+      cleanId === 'admin-1' ||
+      cleanId === 'admin-master' ||
+      cleanId === 'admin@qxautotrade.com' ||
+      cleanId === 'admin@quotexautotrade.com' ||
+      cleanId.startsWith('admin-')
+    ) {
+      return null; // Master admin can never be deleted
+    }
     const target = users.find(u => (u.id && u.id.toLowerCase() === cleanId) || (u.email && u.email.toLowerCase() === cleanId));
-    if (!target) return null;
+    if (!target || target.role === 'MASTER_ADMIN' || target.role === 'ADMIN') return null;
 
     // 1. Remove from users list
     this.data.users = users.filter(u => u.id !== target.id && (!u.email || u.email.toLowerCase() !== (target.email || '').toLowerCase()));
@@ -654,6 +673,20 @@ class Database {
         for (const [key, value] of Object.entries(cloudData)) {
           if (key === 'users') {
             this.data.users = this.mergeUserLists(value, this.data.users || [], defaultData.users);
+          } else if (key === 'strategies') {
+            // Merge strategies preserving any locally created or updated strategies
+            const stratMap = new Map();
+            if (Array.isArray(value)) {
+              for (const s of value) {
+                if (s && s.id) stratMap.set(s.id, s);
+              }
+            }
+            if (Array.isArray(this.data.strategies)) {
+              for (const s of this.data.strategies) {
+                if (s && s.id) stratMap.set(s.id, { ...(stratMap.get(s.id) || {}), ...s });
+              }
+            }
+            this.data.strategies = Array.from(stratMap.values());
           } else if (key === 'siteConfig') {
             this.data.siteConfig = { ...defaultData.siteConfig, ...this.data.siteConfig, ...value };
           } else if (key === 'systemConfig') {
@@ -667,17 +700,29 @@ class Database {
           }
         }
 
-        // Restore and sync deletedUsers from cloud snapshot
+        // Restore and sync deletedUsers from cloud snapshot (STRICTLY EXCLUDING ADMIN)
         if (Array.isArray(cloudData.deletedUsers)) {
           const currentDeleted = this.data.deletedUsers || [];
           cloudData.deletedUsers.forEach(d => {
             const did = (d.id || d || '').toString().toLowerCase();
             const demail = (d.email || '').toString().toLowerCase();
-            if (!currentDeleted.some(cd => (cd.id && cd.id.toLowerCase() === did) || (cd.email && demail && cd.email.toLowerCase() === demail))) {
-              currentDeleted.push(d);
+            if (
+              did !== 'admin-1' &&
+              did !== 'admin-master' &&
+              !did.startsWith('admin-') &&
+              demail !== 'admin@qxautotrade.com' &&
+              demail !== 'admin@quotexautotrade.com'
+            ) {
+              if (!currentDeleted.some(cd => (cd.id && cd.id.toLowerCase() === did) || (cd.email && demail && cd.email.toLowerCase() === demail))) {
+                currentDeleted.push(d);
+              }
             }
           });
-          this.data.deletedUsers = currentDeleted;
+          this.data.deletedUsers = currentDeleted.filter(d => {
+            const did = (d.id || d || '').toString().toLowerCase();
+            const demail = (d.email || '').toString().toLowerCase();
+            return did !== 'admin-1' && did !== 'admin-master' && !did.startsWith('admin-') && demail !== 'admin@qxautotrade.com' && demail !== 'admin@quotexautotrade.com';
+          });
         }
 
         // Purge any deleted users from active user list

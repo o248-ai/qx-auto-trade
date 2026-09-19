@@ -49,6 +49,10 @@ app.use((req, res, next) => {
       try {
         const decoded = jwt.decode(token);
         if (decoded && typeof decoded === 'object') {
+          // Master Admin and Admin tokens are never restricted by user deletion checks
+          if (decoded.role === 'MASTER_ADMIN' || decoded.role === 'ADMIN') {
+            return next();
+          }
           if (!userId && decoded.id) userId = decoded.id;
           if (!userEmail && decoded.email) userEmail = decoded.email;
           if (!userName && decoded.name) userName = decoded.name;
@@ -66,7 +70,14 @@ app.use((req, res, next) => {
 
       // Block deleted users from being auto-healed, and notify client to clear session
       if (db.isUserDeleted(userId) || db.isUserDeleted(lookupEmail)) {
-        if (req.path.startsWith('/api/') && !req.path.startsWith('/api/admin') && !req.path.startsWith('/api/auth/register') && !req.path.startsWith('/api/auth/send-otp')) {
+        if (
+          req.path.startsWith('/api/') &&
+          !req.path.startsWith('/api/admin') &&
+          !req.path.startsWith('/api/strategy') &&
+          !req.path.startsWith('/api/broker/supported') &&
+          !req.path.startsWith('/api/auth/register') &&
+          !req.path.startsWith('/api/auth/send-otp')
+        ) {
           return res.status(401).json({
             error: 'Account has been deleted by administrator.',
             accountDeleted: true,

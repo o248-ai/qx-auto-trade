@@ -34,7 +34,7 @@ export const api = {
 
   getStrategies: (params) => {
     const q = params ? '?' + new URLSearchParams(params).toString() : ''
-    return request(`/strategy${q}`)
+    return request(`/admin/strategies${q}`).catch(() => request(`/strategy${q}`))
   },
   saveStrategy: (data) => request('/strategy/save', { method: 'POST', body: JSON.stringify(data) }),
 

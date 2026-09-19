@@ -19,12 +19,19 @@ export default function AdminStrategies() {
   })
   const [params, setParams] = useState({})
   const [submitting, setSubmitting] = useState(false)
+  const [toast, setToast] = useState(null)
   const [error, setError] = useState('')
   const { theme } = useTheme()
   const isDark = theme === 'dark'
 
+  const showToast = (msg, type = 'success') => {
+    setToast({ msg, type })
+    setTimeout(() => setToast(null), 3500)
+  }
+
   const fetchStrategies = async () => {
     setLoading(true)
+    setError('')
     try {
       const data = await api.getStrategies({ includeInactive: 'true' })
       setStrategies(data.strategies || data || [])
@@ -43,8 +50,10 @@ export default function AdminStrategies() {
     setError('')
     try {
       await api.addStrategy({
-        ...form,
+        name: form.name,
         broker: form.broker || 'quotex',
+        timeframe: form.timeframe || '1m',
+        description: form.description || '',
         winRate: Number(form.winRate || 85),
         parameters: {
           rsiPeriod: Number(form.rsiPeriod || 14),
@@ -59,6 +68,7 @@ export default function AdminStrategies() {
       })
       setShowAdd(false)
       resetForm()
+      showToast('Strategy added successfully!')
       fetchStrategies()
     } catch (err) {
       setError(err.message)
@@ -72,6 +82,7 @@ export default function AdminStrategies() {
     try {
       await api.deleteStrategy({ strategyId: deleteStrategy.id, id: deleteStrategy.id })
       setDeleteStrategy(null)
+      showToast('Strategy deleted successfully!')
       fetchStrategies()
     } catch (err) {
       setError(err.message)
@@ -87,6 +98,7 @@ export default function AdminStrategies() {
         id: strategy.id,
         isActive: !strategy.isActive
       })
+      showToast(`Strategy ${!strategy.isActive ? 'activated' : 'deactivated'} successfully!`)
       fetchStrategies()
     } catch (err) {
       setError(err.message)
@@ -118,6 +130,7 @@ export default function AdminStrategies() {
         }
       })
       setEditStrategy(null)
+      showToast('Strategy updated successfully!')
       fetchStrategies()
     } catch (err) {
       setError(err.message)
@@ -146,7 +159,8 @@ export default function AdminStrategies() {
 
   const resetForm = () => {
     setForm({
-      name: '', broker: '', timeframe: '1m',
+      name: '', broker: 'quotex', timeframe: '1m', description: '',
+      winRate: 85,
       rsiPeriod: 14, rsiOverbought: 70, rsiOversold: 30,
       emaFast: 9, emaSlow: 21,
       macdFast: 12, macdSlow: 26, macdSignal: 9,
@@ -155,24 +169,47 @@ export default function AdminStrategies() {
 
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className={`fixed top-4 right-4 z-50 px-4 py-2.5 rounded-lg text-sm font-semibold shadow-lg transition-all ${
+          toast.type === 'error' ? 'bg-red-600 text-white' : 'bg-emerald-600 text-white'
+        }`}>
+          {toast.msg}
+        </div>
+      )}
+
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className={`text-2xl font-semibold ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>Strategies</h1>
           <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{strategies.length} strategies configured</p>
         </div>
-        <button
-          onClick={() => { resetForm(); setShowAdd(true); setError(''); }}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          Add Strategy
-        </button>
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={fetchStrategies}
+            disabled={loading}
+            className={`inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border transition-colors ${
+              isDark
+                ? 'bg-gray-700 hover:bg-gray-600 text-gray-200 border-gray-600'
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-200'
+            }`}
+            title="Refresh strategies"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            <span>Refresh</span>
+          </button>
+          <button
+            onClick={() => { resetForm(); setShowAdd(true); setError(''); }}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            Add Strategy
+          </button>
+        </div>
       </div>
 
       {error && (
         <div className={`p-3 rounded-lg flex items-center justify-between ${isDark ? 'bg-red-500/10 border border-red-500/30 text-sm text-red-400' : 'bg-red-50 border border-red-200 text-sm text-red-700'}`}>
-          {error}
-          <button onClick={() => setError('')}><X className="w-4 h-4" /></button>
+          <span>{error}</span>
+          <button onClick={() => setError('')} className="p-1 hover:opacity-80"><X className="w-4 h-4" /></button>
         </div>
       )}
 

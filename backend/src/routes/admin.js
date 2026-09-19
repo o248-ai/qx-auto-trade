@@ -203,34 +203,6 @@ router.post('/reactivate-free-trial', (req, res) => {
   }
 });
 
-// Edit & Rename Strategy by Admin
-router.post('/edit-strategy', (req, res) => {
-  try {
-    const { strategyId, name, description, winRate, timeframe, adminEmail } = req.body;
-    const strategies = db.get('strategies') || [];
-    const strat = strategies.find(s => s.id === strategyId);
-    if (!strat) return res.status(404).json({ error: 'Strategy not found.' });
-
-    if (name) strat.name = name;
-    if (description !== undefined) strat.description = description;
-    if (winRate !== undefined) strat.winRate = parseFloat(winRate);
-    if (timeframe) strat.timeframe = timeframe;
-
-    db.get('auditLogs').unshift({
-      id: `audit-${Date.now()}`,
-      action: 'ADMIN_EDIT_STRATEGY',
-      actorEmail: adminEmail || 'Master Admin',
-      details: `Renamed/Updated strategy ${strat.name}`,
-      timestamp: new Date().toISOString()
-    });
-
-    db.save();
-    return res.json({ message: 'Strategy updated successfully!', strategy: strat, strategies });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
-});
-
 // Reset User Password by Master Admin
 router.post('/reset-user-password', async (req, res) => {
   try {
@@ -606,6 +578,169 @@ router.post('/change-admin-password', async (req, res) => {
 
     db.save();
     return res.json({ message: 'Admin login password updated successfully! Please use your new password for subsequent logins.' });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// Master Admin: Get All Strategies
+router.get('/strategies', (req, res) => {
+  try {
+    const { broker, includeInactive } = req.query;
+    let strategies = db.get('strategies') || [];
+    if (broker) {
+      const bLower = broker.toLowerCase().trim();
+      strategies = strategies.filter(s => {
+        const sBroker = (s.broker || '').toLowerCase().trim();
+        return !sBroker || sBroker === bLower || sBroker === 'all' || (bLower === 'quotex' && (sBroker.includes('quotex') || sBroker === ''));
+      });
+    }
+    if (includeInactive !== 'true') {
+      strategies = strategies.filter(s => s.isActive !== false);
+    }
+    return res.json({ strategies });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// Master Admin: Add Strategy
+router.post('/add-strategy', (req, res) => {
+  try {
+    const { name, broker, winRate, timeframe, indicatorSummary, description, parameters, isActive } = req.body;
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: 'Strategy name is required.' });
+    }
+
+    let strategies = db.get('strategies');
+    if (!Array.isArray(strategies)) {
+      strategies = [];
+      db.set('strategies', strategies);
+    }
+
+    const newStrategy = {
+      id: `strat-${Date.now()}`,
+      name: name.trim(),
+      broker: (broker || 'quotex').toLowerCase().trim(),
+      winRate: parseFloat(winRate || 85),
+      timeframe: (timeframe || '1m').toUpperCase(),
+      indicatorSummary: indicatorSummary || 'Custom Algorithmic Setup',
+      description: description || 'Master Admin configured trading algorithm.',
+      parameters: parameters || {},
+      isActive: isActive !== false,
+      createdAt: new Date().toISOString(),
+      createdBy: 'Master Admin'
+    };
+
+    strategies.push(newStrategy);
+    db.get('auditLogs')?.unshift({
+      id: `audit-${Date.now()}`,
+      action: 'ADMIN_ADD_STRATEGY',
+      details: `Added new strategy "${newStrategy.name}" (${newStrategy.broker})`,
+      timestamp: new Date().toISOString()
+    });
+
+    db.save();
+    return res.json({ message: 'Strategy added successfully!', strategy: newStrategy, strategies });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// Master Admin: Edit Strategy
+router.post('/edit-strategy', (req, res) => {
+  try {
+    const { id, strategyId, name, broker, winRate, timeframe, indicatorSummary, description, parameters, isActive } = req.body;
+    const targetId = id || strategyId;
+    if (!targetId) {
+      return res.status(400).json({ error: 'Strategy ID is required.' });
+    }
+
+    const strategies = db.get('strategies') || [];
+    const idx = strategies.findIndex(s => String(s.id).trim().toLowerCase() === String(targetId).trim().toLowerCase());
+    if (idx === -1) {
+      return res.status(404).json({ error: 'Strategy not found.' });
+    }
+
+    strategies[idx] = {
+      ...strategies[idx],
+      name: name !== undefined ? name.trim() : strategies[idx].name,
+      broker: broker !== undefined ? broker.toLowerCase().trim() : strategies[idx].broker,
+      winRate: winRate !== undefined ? parseFloat(winRate) : strategies[idx].winRate,
+      timeframe: timeframe !== undefined ? timeframe.toUpperCase() : strategies[idx].timeframe,
+      indicatorSummary: indicatorSummary !== undefined ? indicatorSummary : strategies[idx].indicatorSummary,
+      description: description !== undefined ? description : strategies[idx].description,
+      parameters: parameters !== undefined ? parameters : (strategies[idx].parameters || {}),
+      isActive: isActive !== undefined ? Boolean(isActive) : strategies[idx].isActive,
+      updatedAt: new Date().toISOString()
+    };
+
+    db.get('auditLogs')?.unshift({
+      id: `audit-${Date.now()}`,
+      action: 'ADMIN_EDIT_STRATEGY',
+      details: `Updated strategy "${strategies[idx].name}" (${targetId})`,
+      timestamp: new Date().toISOString()
+    });
+
+    db.save();
+    return res.json({ message: 'Strategy updated successfully!', strategy: strategies[idx], strategies });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// Master Admin: Delete Strategy
+router.post('/delete-strategy', (req, res) => {
+  try {
+    const { id, strategyId } = req.body;
+    const targetId = id || strategyId;
+    if (!targetId) {
+      return res.status(400).json({ error: 'Strategy ID is required.' });
+    }
+
+    let strategies = db.get('strategies') || [];
+    const initialLen = strategies.length;
+    const filtered = strategies.filter(s => s.id !== targetId);
+
+    if (filtered.length === initialLen) {
+      return res.status(404).json({ error: 'Strategy not found.' });
+    }
+
+    db.set('strategies', filtered);
+    db.get('auditLogs')?.unshift({
+      id: `audit-${Date.now()}`,
+      action: 'ADMIN_DELETE_STRATEGY',
+      details: `Deleted strategy with ID ${targetId}`,
+      timestamp: new Date().toISOString()
+    });
+
+    db.save();
+    return res.json({ message: 'Strategy deleted successfully!', strategies: filtered });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// Master Admin: Toggle Strategy Active
+router.post('/toggle-strategy-active', (req, res) => {
+  try {
+    const { id, strategyId, isActive } = req.body;
+    const targetId = id || strategyId;
+    if (!targetId) {
+      return res.status(400).json({ error: 'Strategy ID is required.' });
+    }
+
+    const strategies = db.get('strategies') || [];
+    const strat = strategies.find(s => s.id === targetId);
+    if (!strat) {
+      return res.status(404).json({ error: 'Strategy not found.' });
+    }
+
+    strat.isActive = (isActive !== undefined) ? Boolean(isActive) : !strat.isActive;
+    strat.updatedAt = new Date().toISOString();
+
+    db.save();
+    return res.json({ message: `Strategy "${strat.name}" is now ${strat.isActive ? 'active' : 'inactive'}.`, strategy: strat, strategies });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
@@ -998,116 +1133,6 @@ router.post('/bulk-delete-users', (req, res) => {
       deletedCount: deletedEmails.length,
       users: db.get('users')
     });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
-});
-
-// Toggle Strategy Active Status
-router.post('/toggle-strategy-active', (req, res) => {
-  try {
-    const { strategyId, id, isActive, adminEmail } = req.body;
-    const targetId = strategyId || id;
-    const strategies = db.get('strategies');
-    const strat = strategies.find(s => s.id === targetId);
-
-    if (!strat) return res.status(404).json({ error: 'Strategy not found.' });
-
-    strat.isActive = isActive !== undefined ? Boolean(isActive) : !strat.isActive;
-
-    db.get('auditLogs').unshift({
-      id: `audit-${Date.now()}`,
-      action: 'STRATEGY_TOGGLED',
-      actorEmail: adminEmail || 'Master Admin',
-      details: `Strategy ${strat.name} set to ${strat.isActive ? 'ACTIVE' : 'INACTIVE'}`,
-      timestamp: new Date().toISOString()
-    });
-
-    db.save();
-    return res.json({ message: `Strategy ${strat.name} is now ${strat.isActive ? 'Active' : 'Inactive'}.`, strategy: strat });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
-});
-
-// Add New Strategy
-router.post('/add-strategy', (req, res) => {
-  try {
-    const { name, broker, winRate = 85.0, timeframe = '1M', indicatorSummary, description, parameters } = req.body;
-    if (!name) return res.status(400).json({ error: 'Strategy name is required.' });
-
-    const strategies = db.get('strategies');
-    const bName = (broker && typeof broker === 'string' && broker.trim()) ? broker.trim().toLowerCase() : 'quotex';
-    const newStrat = {
-      id: `strat-${Date.now()}`,
-      name: name.trim(),
-      broker: bName,
-      winRate: parseFloat(winRate) || 85.0,
-      timeframe: timeframe || '1M',
-      indicatorSummary: indicatorSummary || 'Custom Master Algorithm setup',
-      parameters: parameters || { rsiPeriod: 14, emaFast: 9, emaSlow: 21 },
-      description: description || 'Custom algorithmic strategy configured by Master Admin.',
-      isActive: true,
-      createdBy: 'Master Admin'
-    };
-
-    strategies.push(newStrat);
-    db.save();
-    return res.json({ message: 'Strategy added successfully!', strategy: newStrat });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
-});
-
-// Edit Strategy
-router.post('/edit-strategy', (req, res) => {
-  try {
-    const { strategyId, id, name, broker, winRate, timeframe, indicatorSummary, description, isActive, parameters } = req.body;
-    const targetId = strategyId || id;
-    if (!targetId) return res.status(400).json({ error: 'Strategy ID is required.' });
-
-    const strategies = db.get('strategies');
-    const strat = strategies.find(s => s.id === targetId);
-    if (!strat) return res.status(404).json({ error: 'Strategy not found.' });
-
-    if (name) strat.name = name.trim();
-    if (broker !== undefined && broker !== '') strat.broker = broker.toLowerCase().trim();
-    if (winRate !== undefined) strat.winRate = parseFloat(winRate);
-    if (timeframe) strat.timeframe = timeframe;
-    if (indicatorSummary) strat.indicatorSummary = indicatorSummary;
-    if (description !== undefined) strat.description = description;
-    if (isActive !== undefined) strat.isActive = Boolean(isActive);
-    if (parameters) strat.parameters = { ...strat.parameters, ...parameters };
-
-    db.get('auditLogs').unshift({
-      id: `audit-${Date.now()}`,
-      action: 'STRATEGY_EDITED',
-      actorEmail: req.body.adminEmail || 'Master Admin',
-      details: `Strategy ${strat.name} updated.`,
-      timestamp: new Date().toISOString()
-    });
-
-    db.save();
-    return res.json({ message: 'Strategy updated successfully!', strategy: strat });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
-});
-
-// Delete Strategy
-router.post('/delete-strategy', (req, res) => {
-  try {
-    const { strategyId, adminEmail } = req.body;
-    let strategies = db.get('strategies');
-    const idx = strategies.findIndex(s => s.id === strategyId);
-    if (idx === -1) return res.status(404).json({ error: 'Strategy not found.' });
-
-    const deleted = strategies[idx];
-    strategies.splice(idx, 1);
-    db.set('strategies', strategies);
-
-    db.save();
-    return res.json({ message: `Strategy ${deleted.name} deleted.` });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }

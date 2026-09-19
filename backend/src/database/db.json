@@ -1,16 +1,256 @@
 {
   "users": [
     {
+      "id": "user-1789825227122",
+      "name": "prakash",
+      "email": "jayasundarijai@gmail.com",
+      "passwordHash": "$2a$10$HxdjgeDCBbvO0vAMNhQCb.5jhAs1BAAMMWztQMiwcNZ79yeW1nKkC",
+      "role": "USER",
+      "isActive": true,
+      "country": "India 🇮🇳",
+      "phone": "9003668061",
+      "trialStartedAt": "2026-09-19T13:40:27.122Z",
+      "trialStartedAtMs": 1789825227122,
+      "trialExpiresAtMs": 1789828827122,
+      "isFreeTrialExpired": false,
+      "subscriptionPlan": "Free Trial",
+      "subExpiresAt": "2026-09-19T14:40:27.122Z",
+      "planExpiresAt": "2026-09-19T14:40:27.122Z",
+      "isLifetimeApproved": false,
+      "referralUid": "APP-USER",
+      "depositVerified": false,
+      "createdAt": "2026-09-19T13:40:27.122Z",
+      "plan": "Free Trial"
+    },
+    {
+      "id": "user-1789821896767",
+      "name": "josh",
+      "email": "tejaofficial2001@gmail.com",
+      "passwordHash": "$2a$10$Vs39NjV4.pmj27HJ009IEOGRj.2IT8j2lYeY9qVAjaQ.Ufyy66VSG",
+      "role": "USER",
+      "isActive": true,
+      "country": "India 🇮🇳",
+      "phone": "9959792510",
+      "trialStartedAt": "2026-09-19T12:44:56.767Z",
+      "trialStartedAtMs": 1789821896767,
+      "trialExpiresAtMs": 1789825496767,
+      "isFreeTrialExpired": false,
+      "subscriptionPlan": "Free Trial",
+      "subExpiresAt": "2026-09-19T13:44:56.767Z",
+      "planExpiresAt": "2026-09-19T13:44:56.767Z",
+      "isLifetimeApproved": false,
+      "referralUid": "APP-USER",
+      "depositVerified": false,
+      "createdAt": "2026-09-19T12:44:56.767Z",
+      "plan": "Free Trial"
+    },
+    {
+      "id": "user-1789375157581",
+      "name": "ravi",
+      "email": "joshnehemiah01@gmail.com",
+      "passwordHash": "$2a$10$w8T06o3Y0H1KjJ0z4l2a2.0A/Wc9hFq7y1D9e8g7f6e5d4c3b2a1",
+      "password": "",
+      "role": "USER",
+      "subscriptionPlan": "Free Trial",
+      "plan": "Free Trial",
+      "subExpiresAt": "2026-09-14T09:39:17.581Z",
+      "planExpiresAt": "2026-09-14T09:39:17.581Z",
+      "isLifetimeApproved": false,
+      "isActive": true,
+      "createdAt": "2026-09-19T12:44:25.342Z",
+      "brokerName": "QUOTEX",
+      "brokerId": "",
+      "telegramId": "",
+      "isFreeTrialExpired": false
+    },
+    {
+      "id": "user-1789816974708",
+      "name": "krishan kumar",
+      "email": "kkomal9164@gmail.com",
+      "passwordHash": "$2a$10$2pCUG0VncyZSflATqlizgelMTBAOn/cGVzpUxCGRTUQBTtTwU.uee",
+      "role": "USER",
+      "isActive": true,
+      "country": "India 🇮🇳",
+      "phone": "9935857215",
+      "trialStartedAt": "2026-09-19T11:22:54.708Z",
+      "trialStartedAtMs": 1789816974708,
+      "trialExpiresAtMs": 1789820574708,
+      "isFreeTrialExpired": false,
+      "subscriptionPlan": "Free Trial",
+      "subExpiresAt": "2026-09-19T12:22:54.708Z",
+      "planExpiresAt": "2026-09-19T12:22:54.708Z",
+      "isLifetimeApproved": false,
+      "referralUid": "APP-USER",
+      "depositVerified": false,
+      "createdAt": "2026-09-19T11:22:54.708Z",
+      "plan": "Free Trial"
+    },
+    {
+      "id": "user-1789809886382",
+      "name": "MD SOLAIMAN",
+      "email": "mdabir44800@gmail.com",
+      "passwordHash": "$2a$10$/q/ujaFD8EbkSCzR/pKGbuOvwpIEESU7AuQuGR.RDx4CbuwswBYIa",
+      "role": "USER",
+      "isActive": true,
+      "country": "Bangladesh 🇧🇩",
+      "phone": "556818650",
+      "trialStartedAt": "2026-09-19T09:24:46.382Z",
+      "trialStartedAtMs": 1789809886382,
+      "trialExpiresAtMs": 1789813486382,
+      "isFreeTrialExpired": false,
+      "subscriptionPlan": "Free Trial",
+      "subExpiresAt": "2026-09-19T10:24:46.382Z",
+      "planExpiresAt": "2026-09-19T10:24:46.382Z",
+      "isLifetimeApproved": false,
+      "referralUid": "APP-USER",
+      "depositVerified": false,
+      "createdAt": "2026-09-19T09:24:46.382Z",
+      "plan": "Free Trial"
+    },
+    {
+      "id": "user-1789792534952",
+      "name": "Prince Kumar",
+      "email": "prince9155194804@gmail.com",
+      "passwordHash": "$2a$10$21Ni1myWCFLjNuBBoZ4LZenqCX.wsByQldTCIPFwH/PjIUio.2Mdy",
+      "role": "USER",
+      "isActive": true,
+      "country": "India 🇮🇳",
+      "phone": "7973357872",
+      "trialStartedAt": "2026-09-19T04:35:34.952Z",
+      "trialStartedAtMs": 1789792534952,
+      "trialExpiresAtMs": 1789796134952,
+      "isFreeTrialExpired": false,
+      "subscriptionPlan": "Free Trial",
+      "subExpiresAt": "2026-09-19T05:35:34.952Z",
+      "planExpiresAt": "2026-09-19T05:35:34.952Z",
+      "isLifetimeApproved": false,
+      "referralUid": "APP-USER",
+      "depositVerified": false,
+      "createdAt": "2026-09-19T04:35:34.952Z",
+      "plan": "Free Trial"
+    },
+    {
+      "id": "user-1789791557041",
+      "name": "KAZI",
+      "email": "hoqueirfan25@gmail.com",
+      "passwordHash": "$2a$10$ts2fqlm3w9u68BIDpLCmwexHR2db.C1RccuYVwoFjtltvA.o5770C",
+      "role": "USER",
+      "isActive": true,
+      "country": "Bangladesh 🇧🇩",
+      "phone": "01840091662",
+      "trialStartedAt": "2026-09-19T04:19:17.041Z",
+      "trialStartedAtMs": 1789791557041,
+      "trialExpiresAtMs": 1789795157041,
+      "isFreeTrialExpired": false,
+      "subscriptionPlan": "Free Trial",
+      "subExpiresAt": "2026-09-19T05:19:17.041Z",
+      "planExpiresAt": "2026-09-19T05:19:17.041Z",
+      "isLifetimeApproved": false,
+      "referralUid": "APP-USER",
+      "depositVerified": false,
+      "createdAt": "2026-09-19T04:19:17.041Z",
+      "plan": "Free Trial"
+    },
+    {
+      "id": "user-1789791492864",
+      "name": "Adil Islam",
+      "email": "adeelislam03443692@gmail.com",
+      "passwordHash": "$2a$10$DlaJBY2Ywi7qELckRMYX2utHgS5YJd2.DL1Q/Pa/e3U6nrj/20zeG",
+      "role": "USER",
+      "isActive": true,
+      "country": "Pakistan 🇵🇰",
+      "phone": "+923497049996",
+      "trialStartedAt": "2026-09-19T04:18:12.864Z",
+      "trialStartedAtMs": 1789791492864,
+      "trialExpiresAtMs": 1789795092864,
+      "isFreeTrialExpired": false,
+      "subscriptionPlan": "Free Trial",
+      "subExpiresAt": "2026-09-19T05:18:12.864Z",
+      "planExpiresAt": "2026-09-19T05:18:12.864Z",
+      "isLifetimeApproved": false,
+      "referralUid": "APP-USER",
+      "depositVerified": false,
+      "createdAt": "2026-09-19T04:18:12.864Z",
+      "plan": "Free Trial"
+    },
+    {
+      "id": "user-1789791305546",
+      "name": "John wesli",
+      "email": "algoai6372@gmail.com",
+      "passwordHash": "$2a$10$MMpRSWeeNhBxLLsinesxAeFOwgTwwdxie1ycMN3mG1Pu.jFRrtpF6",
+      "role": "USER",
+      "isActive": true,
+      "country": "India 🇮🇳",
+      "phone": "6372833302",
+      "trialStartedAt": "2026-09-19T04:15:05.546Z",
+      "trialStartedAtMs": 1789791305546,
+      "trialExpiresAtMs": 1789794905546,
+      "isFreeTrialExpired": false,
+      "subscriptionPlan": "Free Trial",
+      "subExpiresAt": "2026-09-19T05:15:05.546Z",
+      "planExpiresAt": "2026-09-19T05:15:05.546Z",
+      "isLifetimeApproved": false,
+      "referralUid": "APP-USER",
+      "depositVerified": false,
+      "createdAt": "2026-09-19T04:15:05.546Z",
+      "plan": "Free Trial"
+    },
+    {
+      "id": "user-1789791095862",
+      "name": "salman",
+      "email": "ms9017967@gmail.com",
+      "passwordHash": "$2a$10$BSDGOK34JchBhHSr.QP70.IBikJSrDVr.1.X7KMLTQ2m6cmr0Zxi6",
+      "role": "USER",
+      "isActive": true,
+      "country": "India 🇮🇳",
+      "phone": "9058486820",
+      "trialStartedAt": "2026-09-19T04:11:35.862Z",
+      "trialStartedAtMs": 1789791095862,
+      "trialExpiresAtMs": 1789794695862,
+      "isFreeTrialExpired": false,
+      "subscriptionPlan": "Free Trial",
+      "subExpiresAt": "2026-09-19T05:11:35.862Z",
+      "planExpiresAt": "2026-09-19T05:11:35.862Z",
+      "isLifetimeApproved": false,
+      "referralUid": "APP-USER",
+      "depositVerified": false,
+      "createdAt": "2026-09-19T04:11:35.862Z",
+      "plan": "Free Trial"
+    },
+    {
+      "id": "user-1789662925902",
+      "name": "Name test",
+      "email": "quotexarmytrade@gmail.com",
+      "passwordHash": "$2a$10$iWzEfzcphFSNW19hGnNW.eun1uYn5rkpChbS58rwtCHDKJDzJS7jS",
+      "role": "USER",
+      "isActive": true,
+      "country": "India 🇮🇳",
+      "phone": "8484",
+      "trialStartedAt": "2026-09-19T06:33:50.013Z",
+      "trialStartedAtMs": 1789799630013,
+      "trialExpiresAtMs": 1789803230013,
+      "isFreeTrialExpired": false,
+      "subscriptionPlan": "Premium Plan",
+      "subExpiresAt": "",
+      "planExpiresAt": "",
+      "isLifetimeApproved": false,
+      "referralUid": "APP-USER",
+      "depositVerified": false,
+      "createdAt": "2026-09-17T16:35:25.902Z",
+      "plan": "Premium Plan",
+      "active": true
+    },
+    {
       "id": "user-1789658228289",
       "name": "Final Test",
       "email": "qxautotrade@gmail.com",
       "passwordHash": "$2a$10$G.ws.8ylk2ypUx10zLZ0semfEMis9uY.py31HodQ95xh8eezvyTsq",
       "password": "",
       "role": "USER",
-      "subscriptionPlan": "Free Trial",
-      "plan": "Free Trial",
-      "subExpiresAt": "2026-09-17T15:45",
-      "planExpiresAt": "2026-09-17T15:45",
+      "subscriptionPlan": "Quantum Plan",
+      "plan": "Quantum Plan",
+      "subExpiresAt": "2026-09-17T10:15",
+      "planExpiresAt": "2026-09-17T10:15",
       "isLifetimeApproved": false,
       "isActive": true,
       "createdAt": "2026-09-17T15:17:08.289Z",
@@ -24,7 +264,28 @@
       "trialStartedAtMs": 1789658228289,
       "trialExpiresAtMs": 1789661828289,
       "referralUid": "APP-USER",
-      "depositVerified": true
+      "depositVerified": true,
+      "active": true
+    },
+    {
+      "id": "admin-master",
+      "name": "Master Admin",
+      "email": "admin@qxautotrade.com",
+      "passwordHash": "$2a$10$FXWqhCbLyveg1AR880lQ/ewM8ZTZbnitVUU3hejC3OmQzltnqGiYq",
+      "role": "MASTER_ADMIN",
+      "isActive": true,
+      "trialStartedAt": "2026-07-29T19:04:24.670Z",
+      "subscriptionPlan": "Lifetime Free",
+      "subExpiresAt": "2076-09-19T23:58",
+      "isLifetimeApproved": true,
+      "referralUid": "REF-MASTER-001",
+      "depositVerified": true,
+      "createdAt": "2026-09-19T18:24:55.557Z",
+      "password": "",
+      "plan": "Lifetime Free",
+      "isFreeTrialExpired": false,
+      "planExpiresAt": "2076-09-19T23:58",
+      "active": true
     }
   ],
   "brokerConnections": [],
@@ -71,6 +332,147 @@
       "indicatorSummary": "Support/Resistance Breakout + ADX > 25",
       "description": "Breakout momentum capturer for index and currency pairs.",
       "isActive": true,
+      "createdBy": "Master Admin"
+    },
+    {
+      "id": "strat-1789659655432",
+      "name": "Quotex Trent Master",
+      "broker": "quotex",
+      "winRate": 85,
+      "timeframe": "1m",
+      "indicatorSummary": "Custom Master Algorithm setup",
+      "parameters": {
+        "rsiPeriod": 14,
+        "emaFast": 9,
+        "emaSlow": 21
+      },
+      "description": "Custom algorithmic strategy configured by Master Admin.",
+      "isActive": true,
+      "createdBy": "Master Admin"
+    },
+    {
+      "id": "strat-1789659684960",
+      "name": "name",
+      "broker": "quotex",
+      "winRate": 85,
+      "timeframe": "1m",
+      "indicatorSummary": "Custom Master Algorithm setup",
+      "parameters": {
+        "rsiPeriod": 14,
+        "emaFast": 9,
+        "emaSlow": 21
+      },
+      "description": "Custom algorithmic strategy configured by Master Admin.",
+      "isActive": true,
+      "createdBy": "Master Admin"
+    },
+    {
+      "id": "strat-1789800957253",
+      "name": "Quotex Patten Master",
+      "broker": "quotex",
+      "winRate": 85,
+      "timeframe": "1m",
+      "indicatorSummary": "Custom Master Algorithm setup",
+      "parameters": {
+        "rsiPeriod": 14,
+        "emaFast": 9,
+        "emaSlow": 21
+      },
+      "description": "Custom algorithmic strategy configured by Master Admin.",
+      "isActive": true,
+      "createdBy": "Master Admin"
+    },
+    {
+      "id": "strat-1789842656730",
+      "name": "Trend Reversal",
+      "broker": "quotex",
+      "winRate": 85,
+      "timeframe": "1m",
+      "indicatorSummary": "Custom Master Algorithm setup",
+      "parameters": {
+        "rsiPeriod": 14,
+        "rsiOverbought": 70,
+        "rsiOversold": 30,
+        "emaFast": 9,
+        "emaSlow": 21,
+        "macdFast": 12,
+        "macdSlow": 26,
+        "macdSignal": 9
+      },
+      "description": "Custom algorithmic strategy configured by Master Admin.",
+      "isActive": true,
+      "createdBy": "Master Admin"
+    },
+    {
+      "id": "strat-1789843240284",
+      "name": "Revesal trend",
+      "broker": "quotex",
+      "winRate": 85,
+      "timeframe": "1m",
+      "indicatorSummary": "Custom Master Algorithm setup",
+      "parameters": {
+        "rsiPeriod": 14,
+        "rsiOverbought": 70,
+        "rsiOversold": 30,
+        "emaFast": 9,
+        "emaSlow": 21,
+        "macdFast": 12,
+        "macdSlow": 26,
+        "macdSignal": 9
+      },
+      "description": "Custom algorithmic strategy configured by Master Admin.",
+      "isActive": true,
+      "createdBy": "Master Admin"
+    },
+    {
+      "id": "strat-1789843529728",
+      "name": "Automated Test Strategy Pro",
+      "broker": "quotex",
+      "winRate": 89,
+      "timeframe": "1M",
+      "indicatorSummary": "Custom Algorithmic Setup",
+      "description": "Test description for auto verification",
+      "parameters": {
+        "rsiPeriod": 14,
+        "emaFast": 9,
+        "emaSlow": 21
+      },
+      "isActive": true,
+      "createdAt": "2026-09-19T18:45:29.728Z",
+      "createdBy": "Master Admin"
+    },
+    {
+      "id": "strat-1789843560137",
+      "name": "Automated Test Strategy Pro",
+      "broker": "quotex",
+      "winRate": 89,
+      "timeframe": "1M",
+      "indicatorSummary": "Custom Algorithmic Setup",
+      "description": "Test description for auto verification",
+      "parameters": {
+        "rsiPeriod": 14,
+        "emaFast": 9,
+        "emaSlow": 21
+      },
+      "isActive": true,
+      "createdAt": "2026-09-19T18:46:00.137Z",
+      "createdBy": "Master Admin"
+    },
+    {
+      "id": "strat-1789843600104",
+      "name": "Automated Test Strategy Pro",
+      "broker": "quotex",
+      "winRate": 89,
+      "timeframe": "1M",
+      "indicatorSummary": "Custom Algorithmic Setup",
+      "description": "Test description for auto verification",
+      "parameters": {
+        "rsiPeriod": 14,
+        "emaFast": 9,
+        "emaSlow": 21
+      },
+      "isActive": true,
+      "createdAt": "2026-09-19T18:46:40.104Z",
       "createdBy": "Master Admin"
     }
   ],
@@ -318,6 +720,170 @@
       "maxTradesPerSession": 15,
       "maxConsecutiveLosses": 3,
       "minBalanceProtection": 50
+    },
+    "user-1789662353052": {
+      "mode": "MTG",
+      "amountType": "FIXED",
+      "fixedAmount": 10,
+      "percentageAmount": 2,
+      "mtgMultiplier": 2.1,
+      "maxMtgLevel": 5,
+      "dailyProfitTarget": 100,
+      "dailyStopLoss": 150,
+      "maxTradesPerSession": 15,
+      "maxConsecutiveLosses": 3,
+      "minBalanceProtection": 50
+    },
+    "user-1789662925902": {
+      "mode": "MTG",
+      "amountType": "FIXED",
+      "fixedAmount": 10,
+      "percentageAmount": 2,
+      "mtgMultiplier": 2.1,
+      "maxMtgLevel": 5,
+      "dailyProfitTarget": 100,
+      "dailyStopLoss": 150,
+      "maxTradesPerSession": 15,
+      "maxConsecutiveLosses": 3,
+      "minBalanceProtection": 50
+    },
+    "user-1789791095862": {
+      "mode": "MTG",
+      "amountType": "FIXED",
+      "fixedAmount": 10,
+      "percentageAmount": 2,
+      "mtgMultiplier": 2.1,
+      "maxMtgLevel": 5,
+      "dailyProfitTarget": 100,
+      "dailyStopLoss": 150,
+      "maxTradesPerSession": 15,
+      "maxConsecutiveLosses": 3,
+      "minBalanceProtection": 50
+    },
+    "user-1789791305546": {
+      "mode": "MTG",
+      "amountType": "FIXED",
+      "fixedAmount": 10,
+      "percentageAmount": 2,
+      "mtgMultiplier": 2.1,
+      "maxMtgLevel": 5,
+      "dailyProfitTarget": 100,
+      "dailyStopLoss": 150,
+      "maxTradesPerSession": 15,
+      "maxConsecutiveLosses": 3,
+      "minBalanceProtection": 50
+    },
+    "user-1789791492864": {
+      "mode": "MTG",
+      "amountType": "FIXED",
+      "fixedAmount": 10,
+      "percentageAmount": 2,
+      "mtgMultiplier": 2.1,
+      "maxMtgLevel": 5,
+      "dailyProfitTarget": 100,
+      "dailyStopLoss": 150,
+      "maxTradesPerSession": 15,
+      "maxConsecutiveLosses": 3,
+      "minBalanceProtection": 50
+    },
+    "user-1789791557041": {
+      "mode": "MTG",
+      "amountType": "FIXED",
+      "fixedAmount": 10,
+      "percentageAmount": 2,
+      "mtgMultiplier": 2.1,
+      "maxMtgLevel": 5,
+      "dailyProfitTarget": 100,
+      "dailyStopLoss": 150,
+      "maxTradesPerSession": 15,
+      "maxConsecutiveLosses": 3,
+      "minBalanceProtection": 50
+    },
+    "user-1789792534952": {
+      "mode": "MTG",
+      "amountType": "FIXED",
+      "fixedAmount": 10,
+      "percentageAmount": 2,
+      "mtgMultiplier": 2.1,
+      "maxMtgLevel": 5,
+      "dailyProfitTarget": 100,
+      "dailyStopLoss": 150,
+      "maxTradesPerSession": 15,
+      "maxConsecutiveLosses": 3,
+      "minBalanceProtection": 50
+    },
+    "user-1789809886382": {
+      "mode": "MTG",
+      "amountType": "FIXED",
+      "fixedAmount": 10,
+      "percentageAmount": 2,
+      "mtgMultiplier": 2.1,
+      "maxMtgLevel": 5,
+      "dailyProfitTarget": 100,
+      "dailyStopLoss": 150,
+      "maxTradesPerSession": 15,
+      "maxConsecutiveLosses": 3,
+      "minBalanceProtection": 50
+    },
+    "user-1789816974708": {
+      "mode": "MTG",
+      "amountType": "FIXED",
+      "fixedAmount": 10,
+      "percentageAmount": 2,
+      "mtgMultiplier": 2.1,
+      "maxMtgLevel": 5,
+      "dailyProfitTarget": 100,
+      "dailyStopLoss": 150,
+      "maxTradesPerSession": 15,
+      "maxConsecutiveLosses": 3,
+      "minBalanceProtection": 50
+    },
+    "user-1789375157581": {
+      "mode": "MTG",
+      "amountType": "FIXED",
+      "fixedAmount": 10,
+      "percentageAmount": 2,
+      "mtgMultiplier": 2.1,
+      "maxMtgLevel": 5,
+      "dailyProfitTarget": 100,
+      "dailyStopLoss": 150,
+      "maxTradesPerSession": 15,
+      "maxConsecutiveLosses": 3,
+      "minBalanceProtection": 50
+    },
+    "user-1789821896767": {
+      "mode": "MTG",
+      "amountType": "FIXED",
+      "fixedAmount": 10,
+      "percentageAmount": 2,
+      "mtgMultiplier": 2.1,
+      "maxMtgLevel": 5,
+      "dailyProfitTarget": 100,
+      "dailyStopLoss": 150,
+      "maxTradesPerSession": 15,
+      "maxConsecutiveLosses": 3,
+      "minBalanceProtection": 50
+    },
+    "user-1789825227122": {
+      "mode": "MTG",
+      "amountType": "FIXED",
+      "fixedAmount": 10,
+      "percentageAmount": 2,
+      "mtgMultiplier": 2.1,
+      "maxMtgLevel": 5,
+      "dailyProfitTarget": 100,
+      "dailyStopLoss": 150,
+      "maxTradesPerSession": 15,
+      "maxConsecutiveLosses": 3,
+      "minBalanceProtection": 50
+    },
+    "admin-master": {
+      "mode": "MTG",
+      "fixedAmount": 10,
+      "mtgMultiplier": 2.1,
+      "maxMtgLevel": 5,
+      "dailyProfitTarget": 100,
+      "dailyStopLoss": 150
     }
   },
   "tradeLogs": [
@@ -1072,8 +1638,561 @@
       "timestamp": "2026-08-12T17:07:41.351Z"
     }
   ],
-  "referralRequests": [],
+  "referralRequests": [
+    {
+      "id": "ref-req-1789840206066",
+      "subId": "sub-free-1789840206066",
+      "userId": "user-1789791095862",
+      "userEmail": "ms9017967@gmail.com",
+      "userName": "salman",
+      "referralUid": "93692675",
+      "depositAmount": 10,
+      "proofUrl": "Deposit Proof (Quotex)",
+      "status": "REJECTED",
+      "createdAt": "2026-09-19T17:50:06.066Z"
+    }
+  ],
   "auditLogs": [
+    {
+      "id": "audit-1789843560351",
+      "action": "MASTER_ADMIN_LOGIN",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Master Admin authenticated into /admin portal.",
+      "timestamp": "2026-09-19T18:46:00.351Z"
+    },
+    {
+      "id": "audit-1789842960845",
+      "action": "ADMIN_UPDATE_SITE_CONFIG",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Updated site configuration, plan pricing, and links",
+      "timestamp": "2026-09-19T18:36:00.845Z"
+    },
+    {
+      "id": "audit-1789842712360",
+      "action": "PLAN_SUBSCRIPTION_REJECTED",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789791095862",
+      "details": "Rejected subscription request sub-free-1789840206066 for ms9017967@gmail.com",
+      "timestamp": "2026-09-19T18:31:52.360Z"
+    },
+    {
+      "id": "audit-1789842530555",
+      "action": "ADMIN_EDIT_USER_DETAILS",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789662925902",
+      "details": "Updated details for quotexarmytrade@gmail.com: Plan=Premium Plan, Active=true, Mode=MTG",
+      "timestamp": "2026-09-19T18:28:50.555Z"
+    },
+    {
+      "id": "audit-1789842511195",
+      "action": "ADMIN_EDIT_USER_DETAILS",
+      "actorEmail": "Master Admin",
+      "targetUserId": "admin-master",
+      "details": "Updated details for admin@qxautotrade.com: Plan=Lifetime Free, Active=true, Mode=MTG",
+      "timestamp": "2026-09-19T18:28:31.195Z"
+    },
+    {
+      "id": "audit-1789842355353",
+      "action": "ADMIN_CHANGE_PASSWORD",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Master Admin changed administrative login password.",
+      "timestamp": "2026-09-19T18:25:55.353Z"
+    },
+    {
+      "id": "audit-1789842329958",
+      "action": "MASTER_ADMIN_LOGIN",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Master Admin authenticated into /admin portal.",
+      "timestamp": "2026-09-19T18:25:29.958Z"
+    },
+    {
+      "id": "audit-1789842295557",
+      "action": "ADMIN_CHANGE_PASSWORD",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Master Admin changed administrative login password.",
+      "timestamp": "2026-09-19T18:24:55.557Z"
+    },
+    {
+      "id": "audit-1789842208460",
+      "action": "MASTER_ADMIN_LOGIN",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Master Admin authenticated into /admin portal.",
+      "timestamp": "2026-09-19T18:23:28.460Z"
+    },
+    {
+      "id": "audit-1789841910026",
+      "action": "PLAN_SUBSCRIPTION_DELETED",
+      "actorEmail": "Master Admin",
+      "details": "Permanently deleted subscription request: sub-free-1789841808512",
+      "timestamp": "2026-09-19T18:18:30.026Z"
+    },
+    {
+      "id": "audit-1789841879566",
+      "action": "PLAN_SUBSCRIPTION_REJECTED",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789662925902",
+      "details": "Rejected subscription request sub-free-1789841808512 for quotexarmytrade@gmail.com",
+      "timestamp": "2026-09-19T18:17:59.566Z"
+    },
+    {
+      "id": "audit-1789841763484",
+      "action": "ADMIN_EDIT_USER_DETAILS",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789662925902",
+      "details": "Updated details for quotexarmytrade@gmail.com: Plan=Free Trial, Active=true, Mode=MTG",
+      "timestamp": "2026-09-19T18:16:03.484Z"
+    },
+    {
+      "id": "audit-1789840792440",
+      "action": "MASTER_ADMIN_LOGIN",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Master Admin authenticated into /admin portal.",
+      "timestamp": "2026-09-19T17:59:52.440Z"
+    },
+    {
+      "id": "audit-1789840724944",
+      "action": "MASTER_ADMIN_LOGIN",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Master Admin authenticated into /admin portal.",
+      "timestamp": "2026-09-19T17:58:44.944Z"
+    },
+    {
+      "id": "audit-1789825227122",
+      "action": "EMAIL_OTP_VERIFIED_REGISTER",
+      "actorEmail": "jayasundarijai@gmail.com",
+      "details": "New mobile app user registered: prakash (jayasundarijai@gmail.com)",
+      "timestamp": "2026-09-19T13:40:27.122Z"
+    },
+    {
+      "id": "audit-1789821896767",
+      "action": "EMAIL_OTP_VERIFIED_REGISTER",
+      "actorEmail": "tejaofficial2001@gmail.com",
+      "details": "New mobile app user registered: josh (tejaofficial2001@gmail.com)",
+      "timestamp": "2026-09-19T12:44:56.767Z"
+    },
+    {
+      "id": "audit-1789821371494",
+      "action": "MASTER_ADMIN_LOGIN",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Master Admin authenticated into /admin portal.",
+      "timestamp": "2026-09-19T12:36:11.494Z"
+    },
+    {
+      "id": "audit-1789818762195",
+      "action": "ADMIN_EDIT_USER_DETAILS",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789662925902",
+      "details": "Updated details for quotexarmytrade@gmail.com: Plan=Quantum Plan, Active=true, Mode=MTG",
+      "timestamp": "2026-09-19T11:52:42.195Z"
+    },
+    {
+      "id": "audit-1789818150488",
+      "action": "PLAN_UPDATED",
+      "actorEmail": "Master Admin",
+      "details": "Updated plan: Basic Plan ($$49)",
+      "timestamp": "2026-09-19T11:42:30.488Z"
+    },
+    {
+      "id": "audit-1789818146667",
+      "action": "PLAN_UPDATED",
+      "actorEmail": "Master Admin",
+      "details": "Updated plan: Basic Plan ($$49)",
+      "timestamp": "2026-09-19T11:42:26.667Z"
+    },
+    {
+      "id": "audit-1789818146506",
+      "action": "PLAN_UPDATED",
+      "actorEmail": "Master Admin",
+      "details": "Updated plan: Basic Plan ($$49)",
+      "timestamp": "2026-09-19T11:42:26.506Z"
+    },
+    {
+      "id": "audit-1789816974708",
+      "action": "EMAIL_OTP_VERIFIED_REGISTER",
+      "actorEmail": "kkomal9164@gmail.com",
+      "details": "New mobile app user registered: krishan kumar (kkomal9164@gmail.com)",
+      "timestamp": "2026-09-19T11:22:54.708Z"
+    },
+    {
+      "id": "audit-1789809886382",
+      "action": "EMAIL_OTP_VERIFIED_REGISTER",
+      "actorEmail": "mdabir44800@gmail.com",
+      "details": "New mobile app user registered: MD SOLAIMAN (mdabir44800@gmail.com)",
+      "timestamp": "2026-09-19T09:24:46.382Z"
+    },
+    {
+      "id": "audit-1789799630013",
+      "action": "ADMIN_REACTIVATE_FREE_TRIAL",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789662925902",
+      "details": "Reactivated 1-Hour Free Trial for Name test (quotexarmytrade@gmail.com)",
+      "timestamp": "2026-09-19T06:33:50.013Z"
+    },
+    {
+      "id": "audit-1789799468509",
+      "action": "USER_LOGIN",
+      "actorEmail": "quotexarmytrade@gmail.com",
+      "details": "Logged in successfully",
+      "timestamp": "2026-09-19T06:31:08.509Z"
+    },
+    {
+      "id": "audit-1789799404849",
+      "action": "ADMIN_EDIT_USER_DETAILS",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789662925902",
+      "details": "Updated details for quotexarmytrade@gmail.com: Plan=Free Trial, Active=true, Mode=MTG",
+      "timestamp": "2026-09-19T06:30:04.849Z"
+    },
+    {
+      "id": "audit-1789794893600",
+      "action": "ADMIN_UPDATE_SITE_CONFIG",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Updated site configuration, plan pricing, and links",
+      "timestamp": "2026-09-19T05:14:53.600Z"
+    },
+    {
+      "id": "audit-1789794875811",
+      "action": "ADMIN_UPDATE_SITE_CONFIG",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Updated site configuration, plan pricing, and links",
+      "timestamp": "2026-09-19T05:14:35.811Z"
+    },
+    {
+      "id": "audit-1789792534952",
+      "action": "EMAIL_OTP_VERIFIED_REGISTER",
+      "actorEmail": "prince9155194804@gmail.com",
+      "details": "New mobile app user registered: Prince Kumar (prince9155194804@gmail.com)",
+      "timestamp": "2026-09-19T04:35:34.952Z"
+    },
+    {
+      "id": "audit-1789791557041",
+      "action": "EMAIL_OTP_VERIFIED_REGISTER",
+      "actorEmail": "hoqueirfan25@gmail.com",
+      "details": "New mobile app user registered: KAZI (hoqueirfan25@gmail.com)",
+      "timestamp": "2026-09-19T04:19:17.041Z"
+    },
+    {
+      "id": "audit-1789791492864",
+      "action": "EMAIL_OTP_VERIFIED_REGISTER",
+      "actorEmail": "adeelislam03443692@gmail.com",
+      "details": "New mobile app user registered: Adil Islam (adeelislam03443692@gmail.com)",
+      "timestamp": "2026-09-19T04:18:12.864Z"
+    },
+    {
+      "id": "audit-1789791305546",
+      "action": "EMAIL_OTP_VERIFIED_REGISTER",
+      "actorEmail": "algoai6372@gmail.com",
+      "details": "New mobile app user registered: John wesli (algoai6372@gmail.com)",
+      "timestamp": "2026-09-19T04:15:05.546Z"
+    },
+    {
+      "id": "audit-1789791095862",
+      "action": "EMAIL_OTP_VERIFIED_REGISTER",
+      "actorEmail": "ms9017967@gmail.com",
+      "details": "New mobile app user registered: salman (ms9017967@gmail.com)",
+      "timestamp": "2026-09-19T04:11:35.862Z"
+    },
+    {
+      "id": "audit-1789791065201",
+      "action": "MASTER_ADMIN_LOGIN",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Master Admin authenticated into /admin portal.",
+      "timestamp": "2026-09-19T04:11:05.201Z"
+    },
+    {
+      "id": "audit-1789785787437",
+      "action": "ADMIN_UPDATE_SITE_CONFIG",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Updated site configuration, plan pricing, and links",
+      "timestamp": "2026-09-19T02:43:07.437Z"
+    },
+    {
+      "id": "audit-1789719057224",
+      "action": "MASTER_ADMIN_LOGIN",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Master Admin authenticated into /admin portal.",
+      "timestamp": "2026-09-18T08:10:57.224Z"
+    },
+    {
+      "id": "audit-1789667360894",
+      "action": "ADMIN_EDIT_USER_DETAILS",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789662925902",
+      "details": "Updated details for quotexarmytrade@gmail.com: Plan=Pro Plan, Active=true, Mode=MTG",
+      "timestamp": "2026-09-17T17:49:20.894Z"
+    },
+    {
+      "id": "audit-1789667330101",
+      "action": "ADMIN_EDIT_USER_DETAILS",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789662925902",
+      "details": "Updated details for quotexarmytrade@gmail.com: Plan=Free Trial, Active=true, Mode=MTG",
+      "timestamp": "2026-09-17T17:48:50.101Z"
+    },
+    {
+      "id": "audit-1789667195697",
+      "action": "PLAN_SUBSCRIPTION_DELETED",
+      "actorEmail": "Master Admin",
+      "details": "Permanently deleted subscription request: sub-free-1789666777795",
+      "timestamp": "2026-09-17T17:46:35.697Z"
+    },
+    {
+      "id": "audit-1789666846093",
+      "action": "ADMIN_EDIT_USER_DETAILS",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789662925902",
+      "details": "Updated details for quotexarmytrade@gmail.com: Plan=Premium Plan, Active=true, Mode=MTG",
+      "timestamp": "2026-09-17T17:40:46.093Z"
+    },
+    {
+      "id": "audit-1789666817835",
+      "action": "ADMIN_EDIT_USER_DETAILS",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789658228289",
+      "details": "Updated details for qxautotrade@gmail.com: Plan=Quantum Plan, Active=true, Mode=MTG",
+      "timestamp": "2026-09-17T17:40:17.835Z"
+    },
+    {
+      "id": "audit-1789666266710",
+      "action": "MASTER_ADMIN_LOGIN",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Master Admin authenticated into /admin portal.",
+      "timestamp": "2026-09-17T17:31:06.710Z"
+    },
+    {
+      "id": "audit-1789666070084",
+      "action": "MASTER_ADMIN_LOGIN",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Master Admin authenticated into /admin portal.",
+      "timestamp": "2026-09-17T17:27:50.084Z"
+    },
+    {
+      "id": "audit-1789664280525",
+      "action": "ADMIN_UPDATE_SITE_CONFIG",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Updated site configuration, plan pricing, and links",
+      "timestamp": "2026-09-17T16:58:00.525Z"
+    },
+    {
+      "id": "audit-1789662925903",
+      "action": "EMAIL_OTP_VERIFIED_REGISTER",
+      "actorEmail": "quotexarmytrade@gmail.com",
+      "details": "New mobile app user registered: name (quotexarmytrade@gmail.com)",
+      "timestamp": "2026-09-17T16:35:25.903Z"
+    },
+    {
+      "id": "audit-1789662353052",
+      "action": "USER_REGISTERED_FROM_APP",
+      "actorEmail": "quotexarmytrade@gmail.com",
+      "details": "New mobile app user registered: Second Test (quotexarmytrade@gmail.com)",
+      "timestamp": "2026-09-17T16:25:53.052Z"
+    },
+    {
+      "id": "audit-1789662289827",
+      "action": "ADMIN_DELETE_USER",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789662201153",
+      "details": "Deleted user quotexarmytrade@gmail.com (Second Test)",
+      "timestamp": "2026-09-17T16:24:49.827Z"
+    },
+    {
+      "id": "audit-1789662223957",
+      "action": "USER_LOGIN",
+      "actorEmail": "quotexarmytrade@gmail.com",
+      "details": "Logged in successfully",
+      "timestamp": "2026-09-17T16:23:43.957Z"
+    },
+    {
+      "id": "audit-1789662201155",
+      "action": "ADMIN_ADD_USER",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789662201153",
+      "details": "Master Admin created user account for quotexarmytrade@gmail.com",
+      "timestamp": "2026-09-17T16:23:21.155Z"
+    },
+    {
+      "id": "audit-1789662036913",
+      "action": "ADMIN_UPDATE_SITE_CONFIG",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Updated site configuration, plan pricing, and links",
+      "timestamp": "2026-09-17T16:20:36.913Z"
+    },
+    {
+      "id": "audit-1789661982418",
+      "action": "ADMIN_UPDATE_SITE_CONFIG",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Updated site configuration, plan pricing, and links",
+      "timestamp": "2026-09-17T16:19:42.418Z"
+    },
+    {
+      "id": "audit-1789661638652",
+      "action": "ADMIN_EDIT_USER_DETAILS",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789658228289",
+      "details": "Updated details for qxautotrade@gmail.com: Plan=Free Trial, Active=true, Mode=MTG",
+      "timestamp": "2026-09-17T16:13:58.652Z"
+    },
+    {
+      "id": "audit-1789661112321",
+      "action": "ADMIN_EDIT_USER_DETAILS",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789658228289",
+      "details": "Updated details for qxautotrade@gmail.com: Plan=Quantum Plan, Active=true, Mode=MTG",
+      "timestamp": "2026-09-17T16:05:12.321Z"
+    },
+    {
+      "id": "audit-1789661094362",
+      "action": "MASTER_ADMIN_LOGIN",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Master Admin authenticated into /admin portal.",
+      "timestamp": "2026-09-17T16:04:54.362Z"
+    },
+    {
+      "id": "audit-1789660096203",
+      "action": "ADMIN_UPDATE_SITE_CONFIG",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Updated site configuration, plan pricing, and links",
+      "timestamp": "2026-09-17T15:48:16.203Z"
+    },
+    {
+      "id": "audit-1789660064716",
+      "action": "ADMIN_UPDATE_SITE_CONFIG",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Updated site configuration, plan pricing, and links",
+      "timestamp": "2026-09-17T15:47:44.716Z"
+    },
+    {
+      "id": "audit-1789659744378",
+      "action": "ADMIN_UPDATE_SITE_CONFIG",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Updated site configuration, plan pricing, and links",
+      "timestamp": "2026-09-17T15:42:24.378Z"
+    },
+    {
+      "id": "audit-1789659349591",
+      "action": "ADMIN_EDIT_USER_DETAILS",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789658228289",
+      "details": "Updated details for qxautotrade@gmail.com: Plan=Free Trial, Active=true, Mode=MTG",
+      "timestamp": "2026-09-17T15:35:49.591Z"
+    },
+    {
+      "id": "audit-1789659334797",
+      "action": "ADMIN_EDIT_USER_DETAILS",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789658228289",
+      "details": "Updated details for qxautotrade@gmail.com: Plan=Basic Plan, Active=true, Mode=MTG",
+      "timestamp": "2026-09-17T15:35:34.797Z"
+    },
+    {
+      "id": "audit-1789659316034",
+      "action": "PLAN_SUBSCRIPTION_DELETED",
+      "actorEmail": "Master Admin",
+      "details": "Permanently deleted subscription request: sub-free-1789659289506",
+      "timestamp": "2026-09-17T15:35:16.034Z"
+    },
+    {
+      "id": "audit-1789659300870",
+      "action": "PLAN_SUBSCRIPTION_APPROVED",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789658228289",
+      "details": "Approved subscription Lifetime VIP (Free Access) ($$0 (Deposit Proof)) for qxautotrade@gmail.com",
+      "timestamp": "2026-09-17T15:35:00.870Z"
+    },
+    {
+      "id": "audit-1789659267666",
+      "action": "PLAN_SUBSCRIPTION_DELETED",
+      "actorEmail": "Master Admin",
+      "details": "Permanently deleted subscription request: sub-free-1789659220627",
+      "timestamp": "2026-09-17T15:34:27.666Z"
+    },
+    {
+      "id": "audit-1789659253730",
+      "action": "PLAN_SUBSCRIPTION_REJECTED",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789658228289",
+      "details": "Rejected subscription request sub-free-1789659220627 for qxautotrade@gmail.com",
+      "timestamp": "2026-09-17T15:34:13.730Z"
+    },
+    {
+      "id": "audit-1789659116823",
+      "action": "MAINTENANCE_MODE_DISABLED",
+      "actorEmail": "Master Admin",
+      "details": "Master Admin set Maintenance Mode to false",
+      "timestamp": "2026-09-17T15:31:56.823Z"
+    },
+    {
+      "id": "audit-1789659034234",
+      "action": "MAINTENANCE_MODE_ENABLED",
+      "actorEmail": "Master Admin",
+      "details": "Master Admin set Maintenance Mode to true",
+      "timestamp": "2026-09-17T15:30:34.234Z"
+    },
+    {
+      "id": "audit-1789659023854",
+      "action": "USER_LOGIN",
+      "actorEmail": "qxautotrade@gmail.com",
+      "details": "Logged in successfully",
+      "timestamp": "2026-09-17T15:30:23.854Z"
+    },
+    {
+      "id": "audit-1789659019668",
+      "action": "TOGGLE_EMERGENCY_CONTROL",
+      "actorEmail": "Master Admin",
+      "details": "Emergency control userLoginEnabled set to true",
+      "timestamp": "2026-09-17T15:30:19.668Z"
+    },
+    {
+      "id": "audit-1789658992466",
+      "action": "TOGGLE_EMERGENCY_CONTROL",
+      "actorEmail": "Master Admin",
+      "details": "Emergency control userLoginEnabled set to false",
+      "timestamp": "2026-09-17T15:29:52.466Z"
+    },
+    {
+      "id": "audit-1789658989991",
+      "action": "TOGGLE_EMERGENCY_CONTROL",
+      "actorEmail": "Master Admin",
+      "details": "Emergency control userRegistrationEnabled set to true",
+      "timestamp": "2026-09-17T15:29:49.991Z"
+    },
+    {
+      "id": "audit-1789658843954",
+      "action": "TOGGLE_EMERGENCY_CONTROL",
+      "actorEmail": "Master Admin",
+      "details": "Emergency control userRegistrationEnabled set to false",
+      "timestamp": "2026-09-17T15:27:23.954Z"
+    },
+    {
+      "id": "audit-1789658824851",
+      "action": "ADMIN_DELETE_USER",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789658789559",
+      "details": "Deleted user demo@gmail.com (name )",
+      "timestamp": "2026-09-17T15:27:04.851Z"
+    },
+    {
+      "id": "audit-1789658789561",
+      "action": "ADMIN_ADD_USER",
+      "actorEmail": "Master Admin",
+      "targetUserId": "user-1789658789559",
+      "details": "Master Admin created user account for demo@gmail.com",
+      "timestamp": "2026-09-17T15:26:29.561Z"
+    },
+    {
+      "id": "audit-1789658748246",
+      "action": "MASTER_ADMIN_LOGIN",
+      "actorEmail": "admin@qxautotrade.com",
+      "details": "Master Admin authenticated into /admin portal.",
+      "timestamp": "2026-09-17T15:25:48.246Z"
+    },
+    {
+      "id": "audit-1789658683293",
+      "action": "PLAN_UPDATED",
+      "actorEmail": "Master Admin",
+      "details": "Updated plan: Basic Plan ($$49)",
+      "timestamp": "2026-09-17T15:24:43.293Z"
+    },
     {
       "id": "audit-1789658589116",
       "action": "MASTER_ADMIN_LOGIN",
@@ -1274,555 +2393,6 @@
       "targetUserId": "user-1789655630092",
       "details": "Deleted user qxautotrade@gmail.com (FINA TEST)",
       "timestamp": "2026-09-17T14:54:07.193Z"
-    },
-    {
-      "id": "audit-1789656777096",
-      "action": "ADMIN_DELETE_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789655630092",
-      "details": "Deleted user qxautotrade@gmail.com (FINA TEST)",
-      "timestamp": "2026-09-17T14:52:57.096Z"
-    },
-    {
-      "id": "audit-1789656729330",
-      "action": "ADMIN_DELETE_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789655630092",
-      "details": "Deleted user qxautotrade@gmail.com (FINA TEST)",
-      "timestamp": "2026-09-17T14:52:09.330Z"
-    },
-    {
-      "id": "audit-1789656678731",
-      "action": "ADMIN_DELETE_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789655630092",
-      "details": "Deleted user qxautotrade@gmail.com (FINA TEST)",
-      "timestamp": "2026-09-17T14:51:18.731Z"
-    },
-    {
-      "id": "audit-1789656510802",
-      "action": "USER_LOGIN",
-      "actorEmail": "qxautotrade@gmail.com",
-      "details": "Logged in successfully",
-      "timestamp": "2026-09-17T14:48:30.802Z"
-    },
-    {
-      "id": "audit-1789656490559",
-      "action": "ADMIN_EDIT_USER_DETAILS",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789655630092",
-      "details": "Updated details for qxautotrade@gmail.com: Plan=Free Trial, Active=true, Mode=MTG",
-      "timestamp": "2026-09-17T14:48:10.559Z"
-    },
-    {
-      "id": "audit-1789656463894",
-      "action": "USER_LOGIN",
-      "actorEmail": "testfinal@gmail.com",
-      "details": "Logged in successfully",
-      "timestamp": "2026-09-17T14:47:43.894Z"
-    },
-    {
-      "id": "audit-1789656426498",
-      "action": "USER_LOGIN",
-      "actorEmail": "demo@qxautotrade.com",
-      "details": "Logged in successfully",
-      "timestamp": "2026-09-17T14:47:06.498Z"
-    },
-    {
-      "id": "audit-1789656420890",
-      "action": "ADMIN_RESET_USER_PASSWORD",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1787424851409",
-      "details": "Master Admin reset password for demo@qxautotrade.com",
-      "timestamp": "2026-09-17T14:47:00.890Z"
-    },
-    {
-      "id": "audit-1789656319846",
-      "action": "ADMIN_REACTIVATE_FREE_TRIAL",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789655630092",
-      "details": "Reactivated 1-Hour Free Trial for FINA TEST (testfinal@gmail.com)",
-      "timestamp": "2026-09-17T14:45:19.846Z"
-    },
-    {
-      "id": "audit-1789656312773",
-      "action": "ADMIN_UPDATE_SITE_CONFIG",
-      "actorEmail": "admin@qxautotrade.com",
-      "details": "Updated site configuration, plan pricing, and links",
-      "timestamp": "2026-09-17T14:45:12.773Z"
-    },
-    {
-      "id": "audit-1789656248419",
-      "action": "ADMIN_UPDATE_SITE_CONFIG",
-      "actorEmail": "admin@qxautotrade.com",
-      "details": "Updated site configuration, plan pricing, and links",
-      "timestamp": "2026-09-17T14:44:08.419Z"
-    },
-    {
-      "id": "audit-1789655776166",
-      "action": "PLAN_SUBSCRIPTION_DELETED",
-      "actorEmail": "Master Admin",
-      "details": "Permanently deleted subscription request: sub-req-1789655731902",
-      "timestamp": "2026-09-17T14:36:16.166Z"
-    },
-    {
-      "id": "audit-1789655743689",
-      "action": "PLAN_SUBSCRIPTION_APPROVED",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789655630092",
-      "details": "Approved subscription Basic Plan ($$59 / 1 Month) for testfinal@gmail.com",
-      "timestamp": "2026-09-17T14:35:43.689Z"
-    },
-    {
-      "id": "audit-1789655670408",
-      "action": "ADMIN_EDIT_USER_DETAILS",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789655630092",
-      "details": "Updated details for testfinal@gmail.com: Plan=Quantum Plan, Active=true, Mode=MTG",
-      "timestamp": "2026-09-17T14:34:30.408Z"
-    },
-    {
-      "id": "audit-1789655632986",
-      "action": "USER_LOGIN",
-      "actorEmail": "testfinal@gmail.com",
-      "details": "Logged in successfully",
-      "timestamp": "2026-09-17T14:33:52.986Z"
-    },
-    {
-      "id": "audit-1789655630094",
-      "action": "ADMIN_ADD_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789655630092",
-      "details": "Master Admin created user account for testfinal@gmail.com",
-      "timestamp": "2026-09-17T14:33:50.094Z"
-    },
-    {
-      "id": "audit-1789655599080",
-      "action": "ADMIN_DELETE_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789655436091",
-      "details": "Deleted user testfinal@gmail.com (FINAL TEXT)",
-      "timestamp": "2026-09-17T14:33:19.080Z"
-    },
-    {
-      "id": "audit-1789655591625",
-      "action": "MASTER_ADMIN_LOGIN",
-      "actorEmail": "admin@qxautotrade.com",
-      "details": "Master Admin authenticated into /admin portal.",
-      "timestamp": "2026-09-17T14:33:11.625Z"
-    },
-    {
-      "id": "audit-1789655436093",
-      "action": "ADMIN_ADD_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789655436091",
-      "details": "Master Admin created user account for testfinal@gmail.com",
-      "timestamp": "2026-09-17T14:30:36.093Z"
-    },
-    {
-      "id": "audit-1789655381835",
-      "action": "ADMIN_DELETE_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789655287786",
-      "details": "Deleted user qxautotrade@gmail.com (test final)",
-      "timestamp": "2026-09-17T14:29:41.835Z"
-    },
-    {
-      "id": "audit-1789655362494",
-      "action": "ADMIN_RESET_USER_PASSWORD",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789655287786",
-      "details": "Master Admin reset password for qxautotrade@gmail.com",
-      "timestamp": "2026-09-17T14:29:22.494Z"
-    },
-    {
-      "id": "audit-1789655350504",
-      "action": "SINGLE_BOT_FORCE_STOP",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789655287786",
-      "details": "Master Admin force stopped bot session for user user-1789655287786",
-      "timestamp": "2026-09-17T14:29:10.504Z"
-    },
-    {
-      "id": "audit-1789655287788",
-      "action": "ADMIN_ADD_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789655287786",
-      "details": "Master Admin created user account for qxautotrade@gmail.com",
-      "timestamp": "2026-09-17T14:28:07.788Z"
-    },
-    {
-      "id": "audit-1789655196489",
-      "action": "MASTER_ADMIN_LOGIN",
-      "actorEmail": "admin@qxautotrade.com",
-      "details": "Master Admin authenticated into /admin portal.",
-      "timestamp": "2026-09-17T14:26:36.489Z"
-    },
-    {
-      "id": "audit-1789628118594",
-      "action": "PLAN_SUBSCRIPTION_DELETED",
-      "actorEmail": "Master Admin",
-      "details": "Permanently deleted subscription request: sub-req-1789627995510",
-      "timestamp": "2026-09-17T06:55:18.594Z"
-    },
-    {
-      "id": "audit-1789628104513",
-      "action": "PLAN_SUBSCRIPTION_APPROVED",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789627886025",
-      "details": "Approved subscription Pro Plan (Best Value) ($$149 / 3 Months) for oktest@gmail.com",
-      "timestamp": "2026-09-17T06:55:04.513Z"
-    },
-    {
-      "id": "audit-1789627968605",
-      "action": "ADMIN_REACTIVATE_FREE_TRIAL",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789627886025",
-      "details": "Reactivated 1-Hour Free Trial for oktest@gmail.com (oktest@gmail.com)",
-      "timestamp": "2026-09-17T06:52:48.605Z"
-    },
-    {
-      "id": "audit-1789627929779",
-      "action": "ADMIN_EDIT_USER_DETAILS",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789627886025",
-      "details": "Updated details for oktest@gmail.com: Plan=Pro Plan, Active=true, Mode=MTG",
-      "timestamp": "2026-09-17T06:52:09.779Z"
-    },
-    {
-      "id": "audit-1789627907736",
-      "action": "USER_LOGIN",
-      "actorEmail": "oktest@gmail.com",
-      "details": "Logged in successfully",
-      "timestamp": "2026-09-17T06:51:47.736Z"
-    },
-    {
-      "id": "audit-1789627886027",
-      "action": "ADMIN_ADD_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789627886025",
-      "details": "Master Admin created user account for oktest@gmail.com",
-      "timestamp": "2026-09-17T06:51:26.027Z"
-    },
-    {
-      "id": "audit-1789593979863",
-      "action": "ADMIN_DELETE_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789593974665",
-      "details": "Deleted user admintest_live@gmail.com (Admin Created Trader)",
-      "timestamp": "2026-09-16T21:26:19.863Z"
-    },
-    {
-      "id": "audit-1789593975764",
-      "action": "USER_LOGIN",
-      "actorEmail": "admintest_live@gmail.com",
-      "details": "Logged in successfully",
-      "timestamp": "2026-09-16T21:26:15.764Z"
-    },
-    {
-      "id": "audit-1789593974667",
-      "action": "ADMIN_ADD_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789593974665",
-      "details": "Master Admin created user account for admintest_live@gmail.com",
-      "timestamp": "2026-09-16T21:26:14.667Z"
-    },
-    {
-      "id": "audit-1789593969368",
-      "action": "USER_LOGIN",
-      "actorEmail": "test@gmail.com",
-      "details": "Logged in successfully",
-      "timestamp": "2026-09-16T21:26:09.368Z"
-    },
-    {
-      "id": "audit-1789593514173",
-      "action": "PLAN_SUBSCRIPTION_DELETED",
-      "actorEmail": "Master Admin",
-      "details": "Permanently deleted subscription request: sub-free-1789593499266",
-      "timestamp": "2026-09-16T21:18:34.173Z"
-    },
-    {
-      "id": "audit-1789592876508",
-      "action": "ADMIN_ADD_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1789592876507",
-      "details": "Master Admin created user account for test@gmail.com",
-      "timestamp": "2026-09-16T21:07:56.508Z"
-    },
-    {
-      "id": "audit-1789592811260",
-      "action": "ADMIN_EDIT_USER_DETAILS",
-      "actorEmail": "Master Admin",
-      "targetUserId": "trader@quotex.com",
-      "details": "Updated details for trader@quotex.com: Plan=Basic Plan, Active=true, Mode=MTG",
-      "timestamp": "2026-09-16T21:06:51.260Z"
-    },
-    {
-      "id": "audit-1789592542675",
-      "action": "ADMIN_DELETE_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1788612470060",
-      "details": "Deleted user omchoubey123@gmail.com (Om)",
-      "timestamp": "2026-09-16T21:02:22.675Z"
-    },
-    {
-      "id": "audit-1789592526481",
-      "action": "MASTER_ADMIN_LOGIN",
-      "actorEmail": "admin@qxautotrade.com",
-      "details": "Master Admin authenticated into /admin portal.",
-      "timestamp": "2026-09-16T21:02:06.481Z"
-    },
-    {
-      "id": "audit-1788752206490",
-      "action": "ADMIN_DELETE_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1787424851409",
-      "details": "Deleted user demo@qxautotrade.com (Demo User)",
-      "timestamp": "2026-09-07T03:36:46.490Z"
-    },
-    {
-      "id": "audit-1788752203453",
-      "action": "ADMIN_DELETE_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1787485286368",
-      "details": "Deleted user otp-test@qx.com (Test OTP)",
-      "timestamp": "2026-09-07T03:36:43.453Z"
-    },
-    {
-      "id": "audit-1788752199618",
-      "action": "ADMIN_DELETE_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1786373135759",
-      "details": "Deleted user admin@qxautotrade.comtestuser2@gmail.com (Test Test)",
-      "timestamp": "2026-09-07T03:36:39.618Z"
-    },
-    {
-      "id": "audit-1788752196875",
-      "action": "ADMIN_DELETE_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1786368902656",
-      "details": "Deleted user admin@qxautotrade.comtestuser@gmail.com (Test User)",
-      "timestamp": "2026-09-07T03:36:36.875Z"
-    },
-    {
-      "id": "audit-1788752193810",
-      "action": "ADMIN_DELETE_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1785352926977",
-      "details": "Deleted user sarah@qxautotrade.com (Sarah Trade)",
-      "timestamp": "2026-09-07T03:36:33.810Z"
-    },
-    {
-      "id": "audit-1788752189640",
-      "action": "ADMIN_DELETE_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-demo-1",
-      "details": "Deleted user alex@qxautotrade.com (Trader Alex)",
-      "timestamp": "2026-09-07T03:36:29.640Z"
-    },
-    {
-      "id": "audit-1788751628520",
-      "action": "ADMIN_DELETE_USER",
-      "actorEmail": "Master Admin",
-      "targetUserId": "user-1788612470060",
-      "details": "Deleted user omchoubey123@gmail.com (Om)",
-      "timestamp": "2026-09-07T03:27:08.520Z"
-    },
-    {
-      "id": "audit-1788751611523",
-      "action": "MASTER_ADMIN_LOGIN",
-      "actorEmail": "admin@qxautotrade.com",
-      "details": "Master Admin authenticated into /admin portal.",
-      "timestamp": "2026-09-07T03:26:51.523Z"
-    },
-    {
-      "id": "audit-1788751511819",
-      "action": "MASTER_ADMIN_LOGIN",
-      "actorEmail": "admin@qxautotrade.com",
-      "details": "Master Admin authenticated into /admin portal.",
-      "timestamp": "2026-09-07T03:25:11.819Z"
-    },
-    {
-      "id": "audit-1788751499149",
-      "action": "MASTER_ADMIN_LOGIN",
-      "actorEmail": "admin@qxautotrade.com",
-      "details": "Master Admin authenticated into /admin portal.",
-      "timestamp": "2026-09-07T03:24:59.149Z"
-    },
-    {
-      "id": "audit-1788612478331",
-      "action": "USER_LOGIN",
-      "actorEmail": "omchoubey123@gmail.com",
-      "details": "Logged in successfully",
-      "timestamp": "2026-09-05T12:47:58.331Z"
-    },
-    {
-      "id": "audit-1788612470060",
-      "action": "EMAIL_OTP_VERIFIED_REGISTER",
-      "actorEmail": "omchoubey123@gmail.com",
-      "details": "Email OTP verified successfully. 1-Hour Free Trial account activated.",
-      "timestamp": "2026-09-05T12:47:50.060Z"
-    },
-    {
-      "id": "audit-1788588747220",
-      "action": "USER_LOGIN",
-      "actorEmail": "admin@qxautotrade.com",
-      "details": "Logged in successfully",
-      "timestamp": "2026-09-05T06:12:27.220Z"
-    },
-    {
-      "id": "audit-1788537943331",
-      "action": "ADMIN_UPDATE_SITE_CONFIG",
-      "actorEmail": "admin@qxautotrade.com",
-      "details": "Updated site configuration, links, and referral settings",
-      "timestamp": "2026-09-04T16:05:43.331Z"
-    },
-    {
-      "id": "audit-1788537886329",
-      "action": "MASTER_ADMIN_LOGIN",
-      "actorEmail": "admin@qxautotrade.com",
-      "details": "Master Admin authenticated into /admin portal.",
-      "timestamp": "2026-09-04T16:04:46.329Z"
-    },
-    {
-      "id": "audit-1788523358162",
-      "action": "MASTER_ADMIN_LOGIN",
-      "actorEmail": "admin@qxautotrade.com",
-      "details": "Master Admin authenticated into /admin portal.",
-      "timestamp": "2026-09-04T12:02:38.162Z"
-    },
-    {
-      "id": "audit-1787497128988",
-      "action": "BROKER_DISCONNECTED",
-      "actorEmail": "user-1787424851409",
-      "details": "Disconnected QUOTEX account",
-      "timestamp": "2026-08-23T14:58:48.988Z"
-    },
-    {
-      "id": "audit-1787497122732",
-      "action": "BROKER_DISCONNECTED",
-      "actorEmail": "user-1787424851409",
-      "details": "Disconnected QUOTEX account",
-      "timestamp": "2026-08-23T14:58:42.732Z"
-    },
-    {
-      "id": "audit-1787497121192",
-      "action": "BROKER_DISCONNECTED",
-      "actorEmail": "user-1787424851409",
-      "details": "Disconnected QUOTEX account",
-      "timestamp": "2026-08-23T14:58:41.192Z"
-    },
-    {
-      "id": "audit-1787489696011",
-      "action": "USER_LOGIN",
-      "actorEmail": "demo@qxautotrade.com",
-      "details": "Logged in successfully",
-      "timestamp": "2026-08-23T12:54:56.011Z"
-    },
-    {
-      "id": "audit-1787489695839",
-      "action": "ADMIN_UPDATE_SITE_CONFIG",
-      "actorEmail": "admin@qxautotrade.com",
-      "details": "Updated site configuration, links, and referral settings",
-      "timestamp": "2026-08-23T12:54:55.839Z"
-    },
-    {
-      "id": "audit-1787486282280",
-      "action": "QUOTEX_ACCOUNT_SYNCED",
-      "actorEmail": "demo@qxautogggtrade.com",
-      "details": "Synced Quotex (LIVE) account: QX-LIVE-884184, balance: $1450.5",
-      "timestamp": "2026-08-23T11:58:02.280Z"
-    },
-    {
-      "id": "audit-1787486282204",
-      "action": "BROKER_CONNECTED",
-      "actorEmail": "user-1787424851409",
-      "details": "Connected QUOTEX (undefined) account: QUOTEX-91259",
-      "timestamp": "2026-08-23T11:58:02.204Z"
-    },
-    {
-      "id": "audit-1787486167130",
-      "action": "QUOTEX_ACCOUNT_SYNCED",
-      "actorEmail": "demo@qxautotrade.com",
-      "details": "Synced Quotex (LIVE) account: QX-LIVE-884184, balance: $1450.5",
-      "timestamp": "2026-08-23T11:56:07.130Z"
-    },
-    {
-      "id": "audit-1787486167061",
-      "action": "BROKER_CONNECTED",
-      "actorEmail": "user-1787424851409",
-      "details": "Connected QUOTEX (undefined) account: QUOTEX-66454",
-      "timestamp": "2026-08-23T11:56:07.061Z"
-    },
-    {
-      "id": "audit-1787486156323",
-      "action": "QUOTEX_ACCOUNT_SYNCED",
-      "actorEmail": "demo@qxautotrade.com",
-      "details": "Synced Quotex (LIVE) account: QX-LIVE-884184, balance: $1450.5",
-      "timestamp": "2026-08-23T11:55:56.323Z"
-    },
-    {
-      "id": "audit-1787486156258",
-      "action": "BROKER_CONNECTED",
-      "actorEmail": "user-1787424851409",
-      "details": "Connected QUOTEX (undefined) account: QUOTEX-80563",
-      "timestamp": "2026-08-23T11:55:56.258Z"
-    },
-    {
-      "id": "audit-1787485838572",
-      "action": "QUOTEX_ACCOUNT_SYNCED",
-      "actorEmail": "test@quotex.com",
-      "details": "Synced Quotex (LIVE) account: QX-LIVE-884184, balance: $1450.5",
-      "timestamp": "2026-08-23T11:50:38.573Z"
-    },
-    {
-      "id": "audit-1787485838539",
-      "action": "BROKER_CONNECTED",
-      "actorEmail": "user-1787424851409",
-      "details": "Connected QUOTEX (undefined) account: QUOTEX-62769",
-      "timestamp": "2026-08-23T11:50:38.539Z"
-    },
-    {
-      "id": "audit-1787485838472",
-      "action": "USER_LOGIN",
-      "actorEmail": "demo@qxautotrade.com",
-      "details": "Logged in successfully",
-      "timestamp": "2026-08-23T11:50:38.472Z"
-    },
-    {
-      "id": "audit-1787485286501",
-      "action": "BROKER_CONNECTED",
-      "actorEmail": "user-1787424851409",
-      "details": "Connected QUOTEX (undefined) account: QUOTEX-53630",
-      "timestamp": "2026-08-23T11:41:26.501Z"
-    },
-    {
-      "id": "audit-1787485286455",
-      "action": "USER_LOGIN",
-      "actorEmail": "demo@qxautotrade.com",
-      "details": "Logged in successfully",
-      "timestamp": "2026-08-23T11:41:26.455Z"
-    },
-    {
-      "id": "audit-1787485286368",
-      "action": "EMAIL_OTP_VERIFIED_REGISTER",
-      "actorEmail": "otp-test@qx.com",
-      "details": "Email OTP verified successfully. 1-Hour Free Trial account activated.",
-      "timestamp": "2026-08-23T11:41:26.368Z"
-    },
-    {
-      "id": "audit-1787484666881",
-      "action": "BROKER_CONNECTED",
-      "actorEmail": "user-1787424851409",
-      "details": "Connected QUOTEX (undefined) account: QUOTEX-84395",
-      "timestamp": "2026-08-23T11:31:06.881Z"
-    },
-    {
-      "id": "audit-1787484081001",
-      "action": "USER_CHANGE_PASSWORD",
-      "actorEmail": "demo@qxautotrade.com",
-      "details": "User updated account password successfully",
-      "timestamp": "2026-08-23T11:21:21.001Z"
     }
   ],
   "announcements": [
@@ -1848,7 +2418,7 @@
       "userLoginEnabled": true,
       "tradingStrategiesEnabled": true
     },
-    "updatedAt": "2026-09-14T20:00:00.000Z"
+    "updatedAt": "2026-09-17T15:31:56.820Z"
   },
   "userNotifications": {
     "user-demo-1": {
@@ -1885,15 +2455,15 @@
   },
   "errorLogs": [],
   "siteConfig": {
-    "telegramLink": "https://t.me/QuotexTestSupport---o",
-    "telegramSupport": "https://t.me/QuotexTestSupport",
+    "telegramLink": "https://t.me/+EuXBCdhCy41hYTE1",
+    "telegramSupport": "https://t.me/algoaisupport",
     "supportEmail": "support@quotexautotrade.com",
-    "instagramLink": "https://instagram.com",
-    "youtubeLink": "https://youtube.com/quotexauto",
-    "youtubeEmbedCode": "",
+    "instagramLink": "https://facebook.com/algoaisignals",
+    "youtubeLink": "https://youtube.com/@algoaisignals",
+    "youtubeEmbedCode": "https://www.youtube.com/embed/5xO0H2vnO7E",
     "referralLink": "https://broker-qx.pro/sign-up/?lid=1650958",
-    "referralDepositAmount": 250,
-    "priceBasic": 59,
+    "referralDepositAmount": "150",
+    "priceBasic": 49,
     "pricePro": 149,
     "priceQuantum": 239,
     "pricePremium": 450,
@@ -1907,10 +2477,10 @@
       "olympTrade": "https://olymptrade.com/register"
     },
     "footerText": "QUOTEX AUTO TRADE © 2026. All rights reserved.",
-    "paymentUsdt": "TQUOTEXautoTradeAddress1234567890USDT",
-    "paymentUpi": "quotexautotrade@upi",
+    "paymentUsdt": "TPg1W813stbx4GcrxGMJs6tJHiG3xjALdW",
+    "paymentUpi": "not available",
     "paymentBank": "",
-    "siteName": "QX AUTO TRADE VIP",
+    "siteName": "QUOTEX AI AUTO TRADING SOFTWARE",
     "siteLogo": "",
     "favicon": "",
     "announcementText": "Welcome to Quotex Auto Trade: Official automated trading platform is active. Connect your broker account to start trading!",
@@ -1920,24 +2490,51 @@
       "userLoginEnabled": true,
       "tradingStrategiesEnabled": true
     },
-    "updatedAt": "2026-09-17T14:45:12.770Z",
+    "updatedAt": "2026-09-19T18:36:00.841Z",
     "liveChatUrl": "",
-    "facebookLink": "",
+    "facebookLink": "https://facebook.com/algoaisignals",
     "twitterLink": "",
     "lastPersistenceCheck": "2026-09-15T09:58:48.379Z",
-    "upiAddress": "quotexautotrade@upi",
-    "usdtAddress": "TQUOTEXautoTradeAddress1234567890USDT",
+    "upiAddress": "not available",
+    "usdtAddress": "TPg1W813stbx4GcrxGMJs6tJHiG3xjALdW",
     "logoUrl": "",
     "faviconUrl": "",
-    "youtubeEmbedLink": ""
+    "youtubeEmbedLink": "https://www.youtube.com/embed/5xO0H2vnO7E",
+    "maintenanceMode": false,
+    "minReferralWithdrawal": "100",
+    "pocketOptionLink": "https://broker-qx.pro/sign-up/?lid=1650958",
+    "expertOptionLink": "https://broker-qx.pro/sign-up/?lid=1650958",
+    "binomoLink": "https://broker-qx.pro/sign-up/?lid=1650958",
+    "olympTradeLink": "https://broker-qx.pro/sign-up/?lid=1650958",
+    "adminPasswordHash": "$2a$10$FXWqhCbLyveg1AR880lQ/ewM8ZTZbnitVUU3hejC3OmQzltnqGiYq",
+    "adminPasswordSet": true,
+    "adminPasswordUpdatedAt": "2026-09-19T18:25:55.351Z"
   },
-  "planSubscriptions": [],
+  "planSubscriptions": [
+    {
+      "id": "sub-free-1789840206066",
+      "refRequestId": "ref-req-1789840206066",
+      "userId": "user-1789791095862",
+      "userEmail": "ms9017967@gmail.com",
+      "userName": "salman",
+      "planName": "Lifetime VIP (Free Access)",
+      "price": "$0 (Deposit Proof)",
+      "period": "Lifetime",
+      "paymentTxId": "FREE-93692675-1789840206066",
+      "paymentProof": "Deposit Proof (Quotex)",
+      "status": "REJECTED",
+      "type": "free_access",
+      "notes": "Trader ID: 93692675, Deposit: $10",
+      "createdAt": "2026-09-19T17:50:06.066Z",
+      "rejectedAt": "2026-09-19T18:31:52.360Z"
+    }
+  ],
   "subscriptionPlans": [
     {
       "id": "plan-basic",
       "name": "Basic Plan",
-      "price": "$59",
-      "numericPrice": 59,
+      "price": "$49",
+      "numericPrice": 49,
       "period": "/month",
       "features": [
         "All trading strategies",
@@ -1949,7 +2546,8 @@
       "icon": "Zap",
       "isActive": true,
       "popular": false,
-      "cta": "Get Started"
+      "cta": "Get Started",
+      "updatedAt": "2026-09-19T11:42:30.484Z"
     },
     {
       "id": "plan-pro",
@@ -2037,7 +2635,27 @@
     "1789658416189",
     "ref-req-1789658416189",
     "sub-free-1789658416189",
-    "sub-free-ref-req-1789658416189"
+    "sub-free-ref-req-1789658416189",
+    "sub-free-1789659220627",
+    "FREE-1212-1789659220627",
+    "ref-req-1789659220627",
+    "1789659220627",
+    "sub-free-ref-req-1789659220627",
+    "sub-free-1789659289506",
+    "FREE-121313-1789659289506",
+    "ref-req-1789659289506",
+    "1789659289506",
+    "sub-free-ref-req-1789659289506",
+    "sub-free-1789666777795",
+    "FREE-2514-1789666777795",
+    "ref-req-1789666777795",
+    "1789666777795",
+    "sub-free-ref-req-1789666777795",
+    "sub-free-1789841808512",
+    "FREE-1234567890-1789841808512",
+    "ref-req-1789841808512",
+    "1789841808512",
+    "sub-free-ref-req-1789841808512"
   ],
   "commissionWithdrawals": [],
   "deletedUsers": [
@@ -2133,17 +2751,17 @@
       "deletedBy": "Master Admin"
     },
     {
-      "id": "admin-1",
-      "email": "admin@qxautotrade.com",
-      "name": "Master Admin",
-      "deletedAt": "2026-09-17T15:15:44.585Z",
-      "deletedBy": "Master Admin"
-    },
-    {
       "id": "user-demo-1",
       "email": "alex@qxautotrade.com",
       "name": "Trader Alex",
       "deletedAt": "2026-09-17T15:15:46.935Z",
+      "deletedBy": "Master Admin"
+    },
+    {
+      "id": "user-1789658789559",
+      "email": "demo@gmail.com",
+      "name": "name ",
+      "deletedAt": "2026-09-17T15:27:04.848Z",
       "deletedBy": "Master Admin"
     }
   ]

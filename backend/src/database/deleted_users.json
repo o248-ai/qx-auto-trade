@@ -92,19 +92,19 @@
       "deletedBy": "Master Admin"
     },
     {
-      "id": "admin-1",
-      "email": "admin@qxautotrade.com",
-      "name": "Master Admin",
-      "deletedAt": "2026-09-17T15:15:44.585Z",
-      "deletedBy": "Master Admin"
-    },
-    {
       "id": "user-demo-1",
       "email": "alex@qxautotrade.com",
       "name": "Trader Alex",
       "deletedAt": "2026-09-17T15:15:46.935Z",
       "deletedBy": "Master Admin"
+    },
+    {
+      "id": "user-1789658789559",
+      "email": "demo@gmail.com",
+      "name": "name ",
+      "deletedAt": "2026-09-17T15:27:04.848Z",
+      "deletedBy": "Master Admin"
     }
   ],
-  "updatedAt": "2026-09-19T18:14:27.936Z"
+  "updatedAt": "2026-09-19T18:48:12.664Z"
 }
