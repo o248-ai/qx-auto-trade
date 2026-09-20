@@ -351,22 +351,6 @@
       "createdBy": "Master Admin"
     },
     {
-      "id": "strat-1789659684960",
-      "name": "name",
-      "broker": "quotex",
-      "winRate": 85,
-      "timeframe": "1m",
-      "indicatorSummary": "Custom Master Algorithm setup",
-      "parameters": {
-        "rsiPeriod": 14,
-        "emaFast": 9,
-        "emaSlow": 21
-      },
-      "description": "Custom algorithmic strategy configured by Master Admin.",
-      "isActive": true,
-      "createdBy": "Master Admin"
-    },
-    {
       "id": "strat-1789800957253",
       "name": "Quotex Patten Master",
       "broker": "quotex",
@@ -422,57 +406,6 @@
       },
       "description": "Custom algorithmic strategy configured by Master Admin.",
       "isActive": true,
-      "createdBy": "Master Admin"
-    },
-    {
-      "id": "strat-1789843529728",
-      "name": "Automated Test Strategy Pro",
-      "broker": "quotex",
-      "winRate": 89,
-      "timeframe": "1M",
-      "indicatorSummary": "Custom Algorithmic Setup",
-      "description": "Test description for auto verification",
-      "parameters": {
-        "rsiPeriod": 14,
-        "emaFast": 9,
-        "emaSlow": 21
-      },
-      "isActive": true,
-      "createdAt": "2026-09-19T18:45:29.728Z",
-      "createdBy": "Master Admin"
-    },
-    {
-      "id": "strat-1789843560137",
-      "name": "Automated Test Strategy Pro",
-      "broker": "quotex",
-      "winRate": 89,
-      "timeframe": "1M",
-      "indicatorSummary": "Custom Algorithmic Setup",
-      "description": "Test description for auto verification",
-      "parameters": {
-        "rsiPeriod": 14,
-        "emaFast": 9,
-        "emaSlow": 21
-      },
-      "isActive": true,
-      "createdAt": "2026-09-19T18:46:00.137Z",
-      "createdBy": "Master Admin"
-    },
-    {
-      "id": "strat-1789843600104",
-      "name": "Automated Test Strategy Pro",
-      "broker": "quotex",
-      "winRate": 89,
-      "timeframe": "1M",
-      "indicatorSummary": "Custom Algorithmic Setup",
-      "description": "Test description for auto verification",
-      "parameters": {
-        "rsiPeriod": 14,
-        "emaFast": 9,
-        "emaSlow": 21
-      },
-      "isActive": true,
-      "createdAt": "2026-09-19T18:46:40.104Z",
       "createdBy": "Master Admin"
     }
   ],
@@ -2764,5 +2697,11 @@
       "deletedAt": "2026-09-17T15:27:04.848Z",
       "deletedBy": "Master Admin"
     }
+  ],
+  "deletedStrategyIds": [
+    "strat-1789843529728",
+    "strat-1789843560137",
+    "strat-1789843600104",
+    "strat-1789659684960"
   ]
 }

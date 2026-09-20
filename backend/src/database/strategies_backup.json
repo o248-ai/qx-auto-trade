@@ -1,0 +1,123 @@
+{
+  "strategies": [
+    {
+      "id": "strat-1",
+      "name": "Quotex OTC Volatility Scalper v3",
+      "broker": "quotex",
+      "winRate": 88.5,
+      "timeframe": "1M",
+      "indicatorSummary": "RSI(14) Oversold + EMA(9/21) Crossover + Bollinger Squeeze",
+      "description": "High-frequency binary option setup designed for OTC pairs on Quotex.",
+      "isActive": true,
+      "createdBy": "Master Admin"
+    },
+    {
+      "id": "strat-2",
+      "name": "Pocket Option Trend Rider Pro",
+      "broker": "pocketoption",
+      "winRate": 91.2,
+      "timeframe": "5M",
+      "indicatorSummary": "MACD Zero-lag + SuperTrend (10,3) + Stochastic RSI",
+      "description": "Momentum trend following algorithm tuned for Pocket Option live assets.",
+      "isActive": true,
+      "createdBy": "Master Admin"
+    },
+    {
+      "id": "strat-3",
+      "name": "Olymp Trade Reversal Master",
+      "broker": "olymptrade",
+      "winRate": 86.4,
+      "timeframe": "1M",
+      "indicatorSummary": "Pivot Point Reversal + Parabolic SAR + Volume Surge",
+      "description": "Mean reversion strategy targeting instant price bounces.",
+      "isActive": true,
+      "createdBy": "Master Admin"
+    },
+    {
+      "id": "strat-4",
+      "name": "GuruTrade7 Smart Breakout",
+      "broker": "gurutrade7",
+      "winRate": 84,
+      "timeframe": "2M",
+      "indicatorSummary": "Support/Resistance Breakout + ADX > 25",
+      "description": "Breakout momentum capturer for index and currency pairs.",
+      "isActive": true,
+      "createdBy": "Master Admin"
+    },
+    {
+      "id": "strat-1789659655432",
+      "name": "Quotex Trent Master",
+      "broker": "quotex",
+      "winRate": 85,
+      "timeframe": "1m",
+      "indicatorSummary": "Custom Master Algorithm setup",
+      "parameters": {
+        "rsiPeriod": 14,
+        "emaFast": 9,
+        "emaSlow": 21
+      },
+      "description": "Custom algorithmic strategy configured by Master Admin.",
+      "isActive": true,
+      "createdBy": "Master Admin"
+    },
+    {
+      "id": "strat-1789800957253",
+      "name": "Quotex Patten Master",
+      "broker": "quotex",
+      "winRate": 85,
+      "timeframe": "1m",
+      "indicatorSummary": "Custom Master Algorithm setup",
+      "parameters": {
+        "rsiPeriod": 14,
+        "emaFast": 9,
+        "emaSlow": 21
+      },
+      "description": "Custom algorithmic strategy configured by Master Admin.",
+      "isActive": true,
+      "createdBy": "Master Admin"
+    },
+    {
+      "id": "strat-1789842656730",
+      "name": "Trend Reversal",
+      "broker": "quotex",
+      "winRate": 85,
+      "timeframe": "1m",
+      "indicatorSummary": "Custom Master Algorithm setup",
+      "parameters": {
+        "rsiPeriod": 14,
+        "rsiOverbought": 70,
+        "rsiOversold": 30,
+        "emaFast": 9,
+        "emaSlow": 21,
+        "macdFast": 12,
+        "macdSlow": 26,
+        "macdSignal": 9
+      },
+      "description": "Custom algorithmic strategy configured by Master Admin.",
+      "isActive": true,
+      "createdBy": "Master Admin"
+    },
+    {
+      "id": "strat-1789843240284",
+      "name": "Revesal trend",
+      "broker": "quotex",
+      "winRate": 85,
+      "timeframe": "1m",
+      "indicatorSummary": "Custom Master Algorithm setup",
+      "parameters": {
+        "rsiPeriod": 14,
+        "rsiOverbought": 70,
+        "rsiOversold": 30,
+        "emaFast": 9,
+        "emaSlow": 21,
+        "macdFast": 12,
+        "macdSlow": 26,
+        "macdSignal": 9
+      },
+      "description": "Custom algorithmic strategy configured by Master Admin.",
+      "isActive": true,
+      "createdBy": "Master Admin"
+    }
+  ],
+  "updatedAt": "2026-09-20T09:14:34.222Z"
+}

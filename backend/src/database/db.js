@@ -16,6 +16,7 @@ const DB_FILE = path.join(__dirname, 'db.json');
 
 const defaultData = {
   deletedUsers: [],
+  deletedStrategyIds: [],
   users: [
     {
       id: 'admin-1',
@@ -292,6 +293,8 @@ const SYSTEM_CONFIG_BACKUP_FILE = path.join(__dirname, 'system_config_backup.jso
 const ANNOUNCEMENTS_BACKUP_FILE = path.join(__dirname, 'announcements_backup.json');
 const PLAN_SUBSCRIPTIONS_BACKUP_FILE = path.join(__dirname, 'plan_subscriptions_backup.json');
 const SUBSCRIPTION_PLANS_BACKUP_FILE = path.join(__dirname, 'subscription_plans_backup.json');
+const STRATEGIES_BACKUP_FILE = path.join(__dirname, 'strategies_backup.json');
+const DELETED_STRATEGIES_FILE = path.join(__dirname, 'deleted_strategies.json');
 
 let mongooseInstance = null;
 let AppDataModel = null;
@@ -566,6 +569,31 @@ class Database {
         } catch (e) {}
       }
 
+      // 9. Read DELETED_STRATEGIES_FILE if available
+      if (fs.existsSync(DELETED_STRATEGIES_FILE)) {
+        try {
+          const delStratParsed = JSON.parse(fs.readFileSync(DELETED_STRATEGIES_FILE, 'utf8'));
+          const delStrats = Array.isArray(delStratParsed) ? delStratParsed : (delStratParsed?.deletedStrategyIds || []);
+          if (Array.isArray(delStrats) && delStrats.length > 0) {
+            this.data.deletedStrategyIds = delStrats;
+          }
+        } catch (e) {}
+      }
+      if (!Array.isArray(this.data.deletedStrategyIds)) {
+        this.data.deletedStrategyIds = [];
+      }
+
+      // 10. Read STRATEGIES_BACKUP_FILE if available
+      if (fs.existsSync(STRATEGIES_BACKUP_FILE)) {
+        try {
+          const stratBackup = JSON.parse(fs.readFileSync(STRATEGIES_BACKUP_FILE, 'utf8'));
+          const stratList = Array.isArray(stratBackup) ? stratBackup : (stratBackup?.strategies || []);
+          if (Array.isArray(stratList) && stratList.length > 0) {
+            this.data.strategies = stratList;
+          }
+        } catch (e) {}
+      }
+
       // Ensure critical tables exist
       if (!this.data.userNotifications) this.data.userNotifications = defaultData.userNotifications;
       if (!this.data.userSecurity) this.data.userSecurity = defaultData.userSecurity;
@@ -578,6 +606,12 @@ class Database {
       if (!this.data.riskSettings) this.data.riskSettings = defaultData.riskSettings;
       if (!this.data.brokerConnections) this.data.brokerConnections = defaultData.brokerConnections;
       if (!this.data.strategies) this.data.strategies = defaultData.strategies;
+
+      // Filter out any strategies in deletedStrategyIds
+      if (Array.isArray(this.data.strategies) && this.data.deletedStrategyIds.length > 0) {
+        const delSet = new Set(this.data.deletedStrategyIds.map(id => String(id).toLowerCase().trim()));
+        this.data.strategies = this.data.strategies.filter(s => s && s.id && !delSet.has(String(s.id).toLowerCase().trim()));
+      }
       if (!this.data.tradeLogs) this.data.tradeLogs = defaultData.tradeLogs;
       if (!this.data.auditLogs) this.data.auditLogs = [];
       if (!Array.isArray(this.data.announcements) || this.data.announcements.length === 0) {
@@ -673,20 +707,20 @@ class Database {
         for (const [key, value] of Object.entries(cloudData)) {
           if (key === 'users') {
             this.data.users = this.mergeUserLists(value, this.data.users || [], defaultData.users);
-          } else if (key === 'strategies') {
-            // Merge strategies preserving any locally created or updated strategies
-            const stratMap = new Map();
+          } else if (key === 'deletedStrategyIds') {
             if (Array.isArray(value)) {
-              for (const s of value) {
-                if (s && s.id) stratMap.set(s.id, s);
-              }
+              const currentDeleted = new Set((this.data.deletedStrategyIds || []).map(id => String(id).toLowerCase().trim()));
+              value.forEach(id => {
+                if (id) currentDeleted.add(String(id).toLowerCase().trim());
+              });
+              this.data.deletedStrategyIds = Array.from(currentDeleted);
             }
-            if (Array.isArray(this.data.strategies)) {
-              for (const s of this.data.strategies) {
-                if (s && s.id) stratMap.set(s.id, { ...(stratMap.get(s.id) || {}), ...s });
-              }
+          } else if (key === 'strategies') {
+            // Authoritatively restore strategies from MongoDB cloud snapshot, filtering out deleted ones
+            if (Array.isArray(value)) {
+              const delSet = new Set((this.data.deletedStrategyIds || []).map(id => String(id).toLowerCase().trim()));
+              this.data.strategies = value.filter(s => s && s.id && !delSet.has(String(s.id).toLowerCase().trim()));
             }
-            this.data.strategies = Array.from(stratMap.values());
           } else if (key === 'siteConfig') {
             this.data.siteConfig = { ...defaultData.siteConfig, ...this.data.siteConfig, ...value };
           } else if (key === 'systemConfig') {
@@ -824,6 +858,12 @@ class Database {
       }
       if (Array.isArray(this.data.subscriptionPlans)) {
         fs.writeFileSync(SUBSCRIPTION_PLANS_BACKUP_FILE, JSON.stringify(this.data.subscriptionPlans, null, 2), 'utf8');
+      }
+      if (Array.isArray(this.data.strategies)) {
+        fs.writeFileSync(STRATEGIES_BACKUP_FILE, JSON.stringify({ strategies: this.data.strategies, updatedAt: new Date().toISOString() }, null, 2), 'utf8');
+      }
+      if (Array.isArray(this.data.deletedStrategyIds)) {
+        fs.writeFileSync(DELETED_STRATEGIES_FILE, JSON.stringify({ deletedStrategyIds: this.data.deletedStrategyIds, updatedAt: new Date().toISOString() }, null, 2), 'utf8');
       }
     } catch (e) {
       // Non-fatal

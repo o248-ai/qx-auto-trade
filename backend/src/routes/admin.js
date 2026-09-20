@@ -702,11 +702,17 @@ router.post('/delete-strategy', (req, res) => {
     const initialLen = strategies.length;
     const filtered = strategies.filter(s => s.id !== targetId);
 
-    if (filtered.length === initialLen) {
-      return res.status(404).json({ error: 'Strategy not found.' });
+    db.set('strategies', filtered);
+
+    // Permanently record in deletedStrategyIds so it is NEVER resurrected on reboot or sync
+    if (!Array.isArray(db.data.deletedStrategyIds)) {
+      db.data.deletedStrategyIds = [];
+    }
+    const cleanStratId = String(targetId).trim().toLowerCase();
+    if (!db.data.deletedStrategyIds.some(id => String(id).trim().toLowerCase() === cleanStratId)) {
+      db.data.deletedStrategyIds.push(targetId);
     }
 
-    db.set('strategies', filtered);
     db.get('auditLogs')?.unshift({
       id: `audit-${Date.now()}`,
       action: 'ADMIN_DELETE_STRATEGY',
